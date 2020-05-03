@@ -17,25 +17,21 @@
   <meta http-equiv="window-target" content="_top">
   
   
-  <title>如何上传文件至远程服务器 | 可乐加冰</title>
-  <meta name="description" content="本博客 hjy-xh，转载请申明出处  当我们在自己的电脑上完成开发工作后,常常需要把项目打包上传到远程服务器上部署,那如何进行操作呢?本文提供一种相对简便的方法用以解决该问题. 本文实践具体场景:本地上传文件至华为云服务器,用Xshell这个强大的安全终端模拟软件来验证是否成功 通过FTP工具FTP（File Transfer Protocol）是Internet上用来传送文件的协议（文件传输">
-<meta name="keywords" content="服务器">
+  <title>JavaScript中的防抖和节流 | 可乐加冰</title>
+  <meta name="description" content="本博客 hjy-xh，转载请申明出处  概述防抖和节流是优化前端性能的一种手段。以下情况可以考虑使用防抖和节流：  DOM 频繁重绘 频繁请求后端接口 浏览器的 resize、scroll（适合用节流） 鼠标的 mounsemove、mouseover（适合用节流） input 输入框的 keypress（适合用防抖）  防抖(debounce)核心思想：当事件被触发，延迟 n 秒后执行回调函数">
+<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何上传文件至远程服务器">
-<meta property="og:url" content="https://hjy-xh.github.io/2019/11/22/如何上传文件至远程服务器/index.html">
+<meta property="og:title" content="JavaScript中的防抖和节流">
+<meta property="og:url" content="https://hjy-xh.github.io/2020/04/28/JavaScript中的防抖和节流/index.html">
 <meta property="og:site_name" content="可乐加冰">
-<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  当我们在自己的电脑上完成开发工作后,常常需要把项目打包上传到远程服务器上部署,那如何进行操作呢?本文提供一种相对简便的方法用以解决该问题. 本文实践具体场景:本地上传文件至华为云服务器,用Xshell这个强大的安全终端模拟软件来验证是否成功 通过FTP工具FTP（File Transfer Protocol）是Internet上用来传送文件的协议（文件传输">
+<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  概述防抖和节流是优化前端性能的一种手段。以下情况可以考虑使用防抖和节流：  DOM 频繁重绘 频繁请求后端接口 浏览器的 resize、scroll（适合用节流） 鼠标的 mounsemove、mouseover（适合用节流） input 输入框的 keypress（适合用防抖）  防抖(debounce)核心思想：当事件被触发，延迟 n 秒后执行回调函数">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://hjy-xh.github.io/2019/11/22/如何上传文件至远程服务器/ftp1.png">
-<meta property="og:image" content="https://hjy-xh.github.io/2019/11/22/如何上传文件至远程服务器/ftp2.png">
-<meta property="og:image" content="https://hjy-xh.github.io/2019/11/22/如何上传文件至远程服务器/ftp3.png">
-<meta property="og:updated_time" content="2019-12-18T02:34:35.706Z">
+<meta property="og:updated_time" content="2020-04-28T14:18:52.453Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何上传文件至远程服务器">
-<meta name="twitter:description" content="本博客 hjy-xh，转载请申明出处  当我们在自己的电脑上完成开发工作后,常常需要把项目打包上传到远程服务器上部署,那如何进行操作呢?本文提供一种相对简便的方法用以解决该问题. 本文实践具体场景:本地上传文件至华为云服务器,用Xshell这个强大的安全终端模拟软件来验证是否成功 通过FTP工具FTP（File Transfer Protocol）是Internet上用来传送文件的协议（文件传输">
-<meta name="twitter:image" content="https://hjy-xh.github.io/2019/11/22/如何上传文件至远程服务器/ftp1.png">
+<meta name="twitter:title" content="JavaScript中的防抖和节流">
+<meta name="twitter:description" content="本博客 hjy-xh，转载请申明出处  概述防抖和节流是优化前端性能的一种手段。以下情况可以考虑使用防抖和节流：  DOM 频繁重绘 频繁请求后端接口 浏览器的 resize、scroll（适合用节流） 鼠标的 mounsemove、mouseover（适合用节流） input 输入框的 keypress（适合用防抖）  防抖(debounce)核心思想：当事件被触发，延迟 n 秒后执行回调函数">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://hjy-xh.github.io/2019/11/22/如何上传文件至远程服务器/index.html">
+  <link rel="canonical" href="https://hjy-xh.github.io/2020/04/28/JavaScript中的防抖和节流/index.html">
   
     <link rel="alternate" href="/atom.xml" title="可乐加冰" type="application/atom+xml">
   
@@ -333,14 +329,14 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="post-如何上传文件至远程服务器" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-JavaScript中的防抖和节流" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      如何上传文件至远程服务器
+      JavaScript中的防抖和节流
     </h1>
   
 
@@ -348,8 +344,8 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2019/11/22/如何上传文件至远程服务器/" class="article-date">
-	  <time datetime="2019-11-22T14:04:20.000Z" itemprop="datePublished">2019-11-22</time>
+	<a href="/2020/04/28/JavaScript中的防抖和节流/" class="article-date">
+	  <time datetime="2020-04-28T14:18:41.000Z" itemprop="datePublished">2020-04-28</time>
 	</a>
 </span>
         
@@ -361,7 +357,7 @@
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link" href="/tags/服务器/">服务器</a>
+	<a class="article-tag-link" href="/tags/JavaScript/">JavaScript</a>
   </span>
 
 
@@ -374,10 +370,10 @@
 	</span>
 
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/11/22/如何上传文件至远程服务器/#comments" class="article-comment-link">评论</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/04/28/JavaScript中的防抖和节流/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 210(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 338(字)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
@@ -390,20 +386,23 @@
         <blockquote>
 <p>本博客 <a href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p>
 </blockquote>
-<p>当我们在自己的电脑上完成开发工作后,常常需要把项目打包上传到远程服务器上部署,那如何进行操作呢?<br>本文提供一种相对简便的方法用以解决该问题.</p>
-<p><strong>本文实践具体场景:本地上传文件至华为云服务器,用Xshell这个强大的安全终端模拟软件来验证是否成功</strong></p>
-<h3 id="通过FTP工具"><a href="#通过FTP工具" class="headerlink" title="通过FTP工具"></a>通过FTP工具</h3><p>FTP（File Transfer Protocol）是Internet上用来传送文件的协议（文件传输协议）.</p>
-<p>现在有很多FTP工具 : FlashFXP、FileZilla、xFTP等等,操作都不复杂,这里用FlashFXP做演示</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>防抖和节流是优化前端性能的一种手段。<br>以下情况可以考虑使用防抖和节流：</p>
 <ul>
-<li>打开FlashFXP进行操作</li>
+<li>DOM 频繁重绘</li>
+<li>频繁请求后端接口</li>
+<li>浏览器的 resize、scroll（适合用节流）</li>
+<li>鼠标的 mounsemove、mouseover（适合用节流）</li>
+<li>input 输入框的 keypress（适合用防抖）</li>
 </ul>
-<p><img src="/2019/11/22/如何上传文件至远程服务器/ftp1.png" alt="如何上传文件至远程服务器.md"></p>
-<p><img src="/2019/11/22/如何上传文件至远程服务器/ftp2.png" alt="如何上传文件至远程服务器.md"></p>
-<ul>
-<li>打开Xshell验证是否上传成功</li>
-</ul>
-<p><img src="/2019/11/22/如何上传文件至远程服务器/ftp3.png" alt="如何上传文件至远程服务器.md"></p>
-<p>可以看到终端输出的”哈哈哈”,说明文件上传成功.</p>
+<h2 id="防抖-debounce"><a href="#防抖-debounce" class="headerlink" title="防抖(debounce)"></a>防抖(debounce)</h2><p>核心思想：当事件被触发，延迟 n 秒后执行回调函数，如果在 n 秒内再次被触发，则重新计时延迟时间。</p>
+<p>代码实现：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">debounce</span>(<span class="params">fn, delay</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> timer;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> that = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">var</span> args = <span class="built_in">arguments</span>;</span><br><span class="line">    timer &amp;&amp; clearTimeout(timer);</span><br><span class="line">    timer = setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      fn.apply(that, args);</span><br><span class="line">    &#125;, delay);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="节流"><a href="#节流" class="headerlink" title="节流"></a>节流</h2><p>核心思想：在规定的一个单位时间内只能触发一次函数，如果在这个单位时间内出发多次函数，只有一次生效。</p>
+<p>代码实现:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">fn, delay</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> timer;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> that = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">var</span> args = <span class="built_in">arguments</span>;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    timer = setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      fn.apply(that, args);</span><br><span class="line">      <span class="comment">// 在执行完fn后清空timer,throttle触发可以进入计时器</span></span><br><span class="line">      timer = <span class="literal">null</span>;</span><br><span class="line">    &#125;, delay);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="节流与防抖的异同"><a href="#节流与防抖的异同" class="headerlink" title="节流与防抖的异同"></a>节流与防抖的异同</h2><p>相同：在一段时间内防止函数被频繁调用，减少资源浪费，提升性能。<br>不同：防抖是固定时间内只执行一次，节流是间隔固定时间后执行。</p>
 
       
     </div>
@@ -413,7 +412,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://hjy-xh.github.io/2019/11/22/如何上传文件至远程服务器/" title="如何上传文件至远程服务器" target="_blank" rel="external">https://hjy-xh.github.io/2019/11/22/如何上传文件至远程服务器/</a>
+      <a href="https://hjy-xh.github.io/2020/04/28/JavaScript中的防抖和节流/" title="JavaScript中的防抖和节流" target="_blank" rel="external">https://hjy-xh.github.io/2020/04/28/JavaScript中的防抖和节流/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -460,12 +459,12 @@
   <ul class="pager pull-left">
     
     <li class="prev">
-      <a href="/2020/01/11/读书笔记--人生海海/" title="人生海海——读书笔记"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+      <a href="/2020/04/30/JavaScript中Object常用方法/" title="JavaScript中Object常用方法"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
     </li>
     
     
     <li class="next">
-      <a href="/2019/10/21/SpringBoot+MySQL+MyBatis的入门教程/" title="SpringBoot+MySQL+MyBatis的入门教程"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2020/04/26/MQTT协议详解/" title="MQTT协议详解"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
