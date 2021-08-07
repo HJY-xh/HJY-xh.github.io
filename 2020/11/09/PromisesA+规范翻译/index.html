@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Promise规范翻译 | 可乐加冰</title>
+  <meta name="description" content="本博客 hjy-xh，转载请申明出处  原文 一个开放标准,通用的 JavaScript promise ,由开发者制定，供开发者使用。 Promise 用于表示一个异步操作的最终结果。与 Promise 交互的主要方式为then方法,该方法注册回调函数以接收 promise 的成功的结果或者失败的原因。 该规范详细说明了then方法的行为,所有基于 Promise&#x2F;A+规范实现的 Promis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Promise规范翻译">
+<meta property="og:url" content="http://example.com/2020/11/09/PromisesA+%E8%A7%84%E8%8C%83%E7%BF%BB%E8%AF%91/index.html">
+<meta property="og:site_name" content="可乐加冰">
+<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  原文 一个开放标准,通用的 JavaScript promise ,由开发者制定，供开发者使用。 Promise 用于表示一个异步操作的最终结果。与 Promise 交互的主要方式为then方法,该方法注册回调函数以接收 promise 的成功的结果或者失败的原因。 该规范详细说明了then方法的行为,所有基于 Promise&#x2F;A+规范实现的 Promis">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-11-09T13:30:40.000Z">
+<meta property="article:modified_time" content="2021-08-07T05:59:13.910Z">
+<meta property="article:author" content="HJY">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2020/11/09/PromisesA+%E8%A7%84%E8%8C%83%E7%BF%BB%E8%AF%91/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="可乐加冰" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/HJY-xh" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">可乐加冰</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanghai, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>跑起来会有风</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%8D%8F%E8%AE%AE/">协议</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">24</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">解决方案</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">16</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NoSQL/" rel="tag">NoSQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag">Web安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">关系型数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E8%AE%AE/" rel="tag">协议</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">服务器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" rel="tag">编程原理相关</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" rel="tag">网络攻击</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/ES6/" style="font-size: 13px;">ES6</a> <a href="/tags/Java/" style="font-size: 13px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/MongoDB/" style="font-size: 13px;">MongoDB</a> <a href="/tags/NoSQL/" style="font-size: 13px;">NoSQL</a> <a href="/tags/Web%E5%AE%89%E5%85%A8/" style="font-size: 13px;">Web安全</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13px;">关系型数据库</a> <a href="/tags/%E5%8D%8F%E8%AE%AE/" style="font-size: 13px;">协议</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 13.5px;">文学</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 13px;">服务器</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 13px;">浏览器</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" style="font-size: 13px;">编程原理相关</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" style="font-size: 13px;">网络攻击</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.5px;">读书笔记</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/11/09/PromisesA+%E8%A7%84%E8%8C%83%E7%BF%BB%E8%AF%91/" class="title">Promise规范翻译</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-11-09T13:30:40.000Z" itemprop="datePublished">2020-11-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/10/26/margin%E5%90%88%E5%B9%B6/" class="title">margin 合并</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-10-26T10:42:31.000Z" itemprop="datePublished">2020-10-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/08/16/Babel%E8%BD%AC%E8%AF%91%E4%B8%8B%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8/" class="title">Babel转译下的装饰器</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-08-16T11:40:50.000Z" itemprop="datePublished">2020-08-16</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/06/10/JavaScript%E4%B8%ADoffset%E3%80%81client%E3%80%81scroll/" class="title">JavaScript中offset、client、scroll</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-06-10T13:49:20.000Z" itemprop="datePublished">2020-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/05/03/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0--%E7%9B%B4%E5%87%BB%E6%9C%AC%E8%B4%A8/" class="title">直击本质——读书笔记</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-05-03T07:19:12.000Z" itemprop="datePublished">2020-05-03</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-PromisesA+规范翻译" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Promise规范翻译
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/11/09/PromisesA+%E8%A7%84%E8%8C%83%E7%BF%BB%E8%AF%91/" class="article-date">
+	  <time datetime="2020-11-09T13:30:40.000Z" itemprop="datePublished">2020-11-09</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/11/09/PromisesA+%E8%A7%84%E8%8C%83%E7%BF%BB%E8%AF%91/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.2k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 8(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p>本博客 <a target="_blank" rel="noopener" href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://promisesaplus.com/">原文</a></p>
+<p>一个开放标准,通用的 JavaScript promise ,由开发者制定，供开发者使用。</p>
+<p>Promise 用于表示一个异步操作的最终结果。与 Promise 交互的主要方式为<code>then</code>方法,该方法注册回调函数以接收 promise 的成功的结果或者失败的原因。</p>
+<p>该规范详细说明了<code>then</code>方法的行为,所有基于 Promise/A+规范实现的 Promise 都必须以此为基础实现。因此规范应该非常稳定。尽管 Promises/A+组织可能会偶尔修改此规范以向后兼容,只有经过仔细考虑，讨论和测试后，我们才会集成大型或不向后兼容的更改。</p>
+<p>从其发展过程来看，Promises/A+其实是把之前的<code>Promises/A提案</code>归纳总结为标准。扩展了一些现有的行为规范，并删除了一些有问题的、未明确的部分。</p>
+<p>最终，Promises/A+规范核心内容不包括怎样处理 promises 的创建（create）,完成（fulfill）和拒绝（reject），而是选择专注于提供一个通用的，具备可互操作的<code>then</code>方法。上述的操作方法可能会在未来修改该规范时提及。</p>
+<h3 id="1-术语"><a href="#1-术语" class="headerlink" title="1. 术语"></a>1. 术语</h3><p>1.1 “promise” 是一个拥有<code>then</code>方法的对象或函数，其行为符合本规范<br>1.2 “thenable” 是一个定义了<code>then</code>方法的对象或函数<br>1.3 “value” 可以是任何 JavaScript 的合法值（包括 undefined, thenable 和 promise）<br>1.4 “exception” 是一个使用<code>throw</code>语句抛出的值。<br>1.5 “reason”是一个表示 promise 失败的原因</p>
+<h3 id="2-要求"><a href="#2-要求" class="headerlink" title="2. 要求"></a>2. 要求</h3><h4 id="2-1-Promise-要求"><a href="#2-1-Promise-要求" class="headerlink" title="2.1 Promise 要求"></a>2.1 Promise 要求</h4><p>一个 Promise 必须处于以下三种状态中的其中一种: pending（等待）, fulfilled（完成）, 或 rejected（拒绝）。</p>
+<p>2.1.1 当 promise 处于 pending 状态</p>
+<ul>
+<li><p>2.1.1.1. 可以转换到 fulfilled 或 rejected 的状态。</p>
+<p>2.1.2 当 promise 处于 fulfilled 状态</p>
+</li>
+<li><p>2.1.2.1 不能再转换状态。</p>
+</li>
+<li><p>2.1.2.2 必须有一个值(value),且不可改变。</p>
+<p>2.1.3 当 promise 处于 rejected 状态</p>
+</li>
+<li><p>2.1.3.1 不能再转换状态。</p>
+</li>
+<li><p>2.1.3.2 必须有一个原因(reason),且不可改变。</p>
+</li>
+</ul>
+<p>这里的不可改变指的是恒等（即 <code>===</code> ），而不是意味着其内部的不可变（即仅仅是其引用地址不变，但属性值可被更改）。</p>
+<h4 id="2-2-then-方法"><a href="#2-2-then-方法" class="headerlink" title="2.2 then 方法"></a>2.2 then 方法</h4><p>一个 promise 必须提供一个<code>then</code>方法以读取其当前值、终值和失败原因。<br>一个 promise 的<code>then</code>方法接收两个参数:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">promise.then(onFullfilled, onRejected);</span><br></pre></td></tr></table></figure>
+
+<p>2.2.1 <code>onFulfilled</code>和<code>onRejected</code>都是可选的参数:</p>
+<ul>
+<li><p>2.2.1.1 如果<code>onFullfilled</code>不是一个函数，则它会被忽略</p>
+</li>
+<li><p>2.2.1.2 如果<code>onRejected</code>不是一个函数，则它会被忽略</p>
+<p>2.2.2 如果<code>onFulfilled</code>是一个函数</p>
+</li>
+<li><p>2.2.2.1 必须在 <code>promise</code> 执行结束后执行，<code>promise</code>的 value 作为第一个参数</p>
+</li>
+<li><p>2.2.2.2 在 <code>promise</code> 执行结束前不可被调用</p>
+</li>
+<li><p>2.2.2.3 不能被多次调用</p>
+<p>2.2.3 如果<code>onRejected</code>是一个函数</p>
+</li>
+<li><p>2.2.3.1 必须在 <code>promise</code> 被拒绝后执行,<code>promise</code>的 reason 作为第一个参数</p>
+</li>
+<li><p>2.2.3.2 在 <code>promise</code> 执行结束前不可被调用</p>
+</li>
+<li><p>2.2.3.3 不能被多次调用</p>
+<p>2.2.4 <code>onFulfilled</code>和<code>onRejected</code>只有在执行环境堆栈仅包含平台代码时才可被调用 <a href="####3.1">3.1</a></p>
+<p>2.2.5 <code>onFulfilled</code>和<code>onRejected</code>必须被作为函数调用（即没有 this 值） <a href="####3.2">3.2</a></p>
+<p>2.2.6 <code>then</code>方法可以被同一个 promise 调用多次</p>
+</li>
+<li><p>2.2.6.1 如果/当 <code>promise</code>是 fulfilled 状态，则所有相应的<code>onFulfilled</code>回调必须按注册顺序执行<code>then</code>方法</p>
+</li>
+<li><p>2.2.6.2 如果/当 <code>promise</code>是 rejected 状态，则所有相应的<code>onRejected</code>回调必须按注册顺序执行<code>then</code>方法</p>
+<p>2.2.7 <code>then</code>方法必须返回一个 promise 对象<a href="####3.3">3.3</a></p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">promise2 = promise1.then(onFulfilled, onRejected);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>2.2.7.1 如果<code>onFulfilled</code>或者<code>onRejected</code>返回一个值<code>x</code> ，则运行下面的 Promise 解决过程：<code>[[Resolve]](promise2, x)</code></li>
+<li>2.2.7.2 如果<code>onFulfilled</code>或者<code>onRejected</code>抛出一个异常<code>e</code> ，则<code>promise2</code>必须拒绝执行，并将<code>e</code>作为拒绝原因</li>
+<li>2.2.7.3 如果<code>onFulfilled</code>不是一个函数并且<code>promise1</code>已经完成，则<code>promise2</code>必须使用与<code>promise1</code>相同的 value 来 fulfilled</li>
+<li>2.2.7.4 如果<code>onRejected</code>不是一个函数并且<code>promise1</code>已经完成，则<code>promise2</code>必须使用与<code>promise1</code>相同的 reason 来 rejected</li>
+</ul>
+<h4 id="2-3-Promise-解决过程"><a href="#2-3-Promise-解决过程" class="headerlink" title="2.3 Promise 解决过程"></a>2.3 Promise 解决过程</h4><p>Promise 解决过程是一个抽象的操作,其需输入一个 promise 和一个值,我们表示为<code>[[Resolve]](promise, x)</code>,如果 x 是一个 thenable(promise),它会尝试采用 x 的状态,前提是<code>x</code>行为至少有点像 promise。否则，它作为<code>promise</code>的 fulfilled 的 value 返回。<br>对 thenables 的这种处理允许 promise 实现进行更具有通用性：只要其暴露出一个遵循 Promise/A+ 协议的 then 方法即可；这同时也使遵循 Promise/A+ 规范的实现可以与不冲突的实现能良好共存。</p>
+<p>要运行<code>[[Resolve]](promise, x)</code>, 需遵循以下步骤：</p>
+<ul>
+<li>2.3.1 如果<code>promise</code>和<code>x</code>指向同一对象，以<code>TypeError</code>为拒绝原因拒绝执行<code>promise</code></li>
+<li>2.3.2 如果<code>x</code>为 Promise,则使 promise 接受 x 的状态<a href="####3.4">3.4</a><ul>
+<li>2.3.2.1 如果<code>x</code>处于 pending,promise 需保持 pending,直至<code>x</code>被执行或拒绝</li>
+<li>2.3.2.2 如果<code>x</code>执行完毕,用相同的值执行<code>promise</code></li>
+<li>2.3.2.3 如果<code>x</code>被拒绝,用相同的原因拒绝<code>promise</code></li>
+</ul>
+</li>
+<li>2.3.3 如果<code>x</code>为对象或者函数<ul>
+<li>2.3.3.1 把<code>x.then</code>赋值给<code>then</code><a href="####3.5">3.5</a></li>
+<li>2.3.3.2 如果取<code>x.then</code>的值时抛出错误<code>e</code>,则用<code>e</code>作为 promise 的拒绝原因</li>
+<li>2.3.3.3 如果<code>then</code>是函数,将<code>x</code>作为函数的作用域<code>this</code>调用之。传递两个回调函数作为参数,第一个参数叫做<code>resolvePromise</code>,第二个参数叫做<code>rejectPromise</code>:<ul>
+<li>2.3.3.3.1 如果<code>resolvePromise</code>以值<code>y</code>为参数被调用，则运行 <code>[[Resolve]](promise, y)</code></li>
+<li>2.3.3.3.2 如果<code>rejectPromise</code>以拒绝原因<code>r</code>为参数被调用,则以<code>r</code>拒绝<code>promise</code></li>
+<li>2.3.3.3.3 如果<code>resolvePromise</code>和<code>rejectPromise</code>均被调用,或者被同一参数调用了多次,则优先采用首次调用并忽略其余调用</li>
+<li>2.3.3.3.4 如果调用<code>then</code>方法时抛出异常<code>e</code>,<ul>
+<li>2.3.3.3.4.1 如果<code>resolvePromise</code>或<code>rejectPromise</code>已经被调用,就忽略它</li>
+<li>2.3.3.3.4.2 否则以<code>e</code>为原因拒绝<code>promise</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>2.3.3.4 如果<code>then</code>不是函数,以<code>x</code>为参数执行<code>promise</code></li>
+</ul>
+</li>
+<li>2.3.4 如果<code>x</code>不为对象或者函数,以<code>x</code>为参数执行<code>promise</code></li>
+</ul>
+<p>如果一个 promise 被一个循环的 thenable 链中的对象解决，而<code>[[Resolve]](promise, thenable)</code>的递归性质导致其被再次调用,根据上述的算法将会陷入无限递归。规范鼓励施者检测这样的递归是否存在,但不强制,如果检测到存在则以一个可识别的<code>TypeError</code>为原因来拒绝 <code>promise</code>。<a href="####3.6">3.6</a></p>
+<h3 id="3-备注"><a href="#3-备注" class="headerlink" title="3. 备注"></a>3. 备注</h3><h4 id="3-1"><a href="#3-1" class="headerlink" title="3.1"></a>3.1</h4><p>这里的“平台代码”指的是引擎,环境和 promise 实现代码。实践中要确保<code>onFulfilled</code>和<code>onRejected</code>方法异步执行,且应该在<code>then</code>方法被调用的那一轮事件循环之后的新执行栈中执行。这可以用“宏任务”机制实现,例如<code>setTimeout</code>或者<code>setImmediate</code>,或者用“微任务”机制,例如<code>MutationObserver</code>或<code>process.nextTick</code>。由于 promise 实现被认为是平台代码,因此它本身可能包含一个任务调度队列或“trampoline”的处理程序。</p>
+<h4 id="3-2"><a href="#3-2" class="headerlink" title="3.2"></a>3.2</h4><p>也就是说在严格模式（strict）中，<code>this</code>的值为<code>undefined</code>;在非严格模式中其为全局对象。</p>
+<h4 id="3-3"><a href="#3-3" class="headerlink" title="3.3"></a>3.3</h4><p>代码实现在满足所有要求的情况下可以允许<code>promise2 === promise1</code>。每个实现都要文档说明其是否允许以及在何种条件下允许 p<code>romise2 === promise1</code>。</p>
+<h4 id="3-4"><a href="#3-4" class="headerlink" title="3.4"></a>3.4</h4><p>一般来说,<code>x</code>如果它来自当前的实现,那么它是一个真正的 promise。该子句允许使用特定于实现的方法来采用已知符合的 promise 的状态。</p>
+<h4 id="3-5"><a href="#3-5" class="headerlink" title="3.5"></a>3.5</h4><p>此过程首先存储引用<code>x.then</code>,然后测试,调用该引用,避免多次访问该<code>x.then</code>属性。这么做的原因是防止每次获取该值时,返回不同的情况（ES5 的 getter 特性可能会产生副作用）</p>
+<h4 id="3-6"><a href="#3-6" class="headerlink" title="3.6"></a>3.6</h4><p>实现不应该对 thenable 链的深度设限,并假定超出本限制的递归就是无限循环。只有真正的循环递归才应能导致<code>TypeError</code>异常；如果一条无限长的链上 thenable 均不相同,那么递归下去永远是正确的行为。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2020/11/09/PromisesA+%E8%A7%84%E8%8C%83%E7%BF%BB%E8%AF%91/" title="Promise规范翻译" target="_blank" rel="external">http://example.com/2020/11/09/PromisesA+规范翻译/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/HJY-xh" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/HJY-xh" target="_blank"><span class="text-dark">可乐加冰</span><small class="ml-1x">Web Developer</small></a></h3>
+        <div>跑起来会有风</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2020/10/26/margin%E5%90%88%E5%B9%B6/" title="margin 合并"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2021 HJY
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: true,
+    appId: 'TrQDRIWsj1IVoHW4a4fCkpgl-gzGzoHsz',
+    appKey: '1emq1qCoboyjpC5ysr8uuzjf',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

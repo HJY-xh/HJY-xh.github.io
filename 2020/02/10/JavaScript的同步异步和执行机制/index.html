@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>JavaScript的同步异步和执行机制 | 可乐加冰</title>
+  <meta name="description" content="本博客 hjy-xh，转载请申明出处  ##JavaScript中的单线程技术的出现总是和应用场景密切相关.JavaScript诞生于1995年,主要用于处理表单验证操作,也就是实现用户和浏览器的交互. 由此带来一个思考:这门语言为什么是单线程?作为浏览器脚本语言,JavaScript 的主要用途是与用户互动,以及操作 DOM.这决定了它只能是单线程,否则会带来很复杂的同步问题.比如,假定Jav">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript的同步异步和执行机制">
+<meta property="og:url" content="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="可乐加冰">
+<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  ##JavaScript中的单线程技术的出现总是和应用场景密切相关.JavaScript诞生于1995年,主要用于处理表单验证操作,也就是实现用户和浏览器的交互. 由此带来一个思考:这门语言为什么是单线程?作为浏览器脚本语言,JavaScript 的主要用途是与用户互动,以及操作 DOM.这决定了它只能是单线程,否则会带来很复杂的同步问题.比如,假定Jav">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/1.png">
+<meta property="og:image" content="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/2.png">
+<meta property="og:image" content="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/3.png">
+<meta property="og:image" content="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/4.png">
+<meta property="og:image" content="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/5.png">
+<meta property="og:image" content="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/6.png">
+<meta property="og:image" content="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/7.png">
+<meta property="og:image" content="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/8.png">
+<meta property="og:image" content="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/9.png">
+<meta property="og:image" content="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/10.png">
+<meta property="article:published_time" content="2020-02-10T07:23:13.000Z">
+<meta property="article:modified_time" content="2021-08-07T05:59:13.732Z">
+<meta property="article:author" content="HJY">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/1.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="可乐加冰" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/HJY-xh" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">可乐加冰</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanghai, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>跑起来会有风</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%8D%8F%E8%AE%AE/">协议</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">24</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">解决方案</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">16</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NoSQL/" rel="tag">NoSQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag">Web安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">关系型数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E8%AE%AE/" rel="tag">协议</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">服务器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" rel="tag">编程原理相关</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" rel="tag">网络攻击</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/ES6/" style="font-size: 13px;">ES6</a> <a href="/tags/Java/" style="font-size: 13px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/MongoDB/" style="font-size: 13px;">MongoDB</a> <a href="/tags/NoSQL/" style="font-size: 13px;">NoSQL</a> <a href="/tags/Web%E5%AE%89%E5%85%A8/" style="font-size: 13px;">Web安全</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13px;">关系型数据库</a> <a href="/tags/%E5%8D%8F%E8%AE%AE/" style="font-size: 13px;">协议</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 13.5px;">文学</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 13px;">服务器</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 13px;">浏览器</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" style="font-size: 13px;">编程原理相关</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" style="font-size: 13px;">网络攻击</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.5px;">读书笔记</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/11/09/PromisesA+%E8%A7%84%E8%8C%83%E7%BF%BB%E8%AF%91/" class="title">Promise规范翻译</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-11-09T13:30:40.000Z" itemprop="datePublished">2020-11-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/10/26/margin%E5%90%88%E5%B9%B6/" class="title">margin 合并</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-10-26T10:42:31.000Z" itemprop="datePublished">2020-10-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/08/16/Babel%E8%BD%AC%E8%AF%91%E4%B8%8B%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8/" class="title">Babel转译下的装饰器</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-08-16T11:40:50.000Z" itemprop="datePublished">2020-08-16</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/06/10/JavaScript%E4%B8%ADoffset%E3%80%81client%E3%80%81scroll/" class="title">JavaScript中offset、client、scroll</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-06-10T13:49:20.000Z" itemprop="datePublished">2020-06-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/05/03/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0--%E7%9B%B4%E5%87%BB%E6%9C%AC%E8%B4%A8/" class="title">直击本质——读书笔记</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-05-03T07:19:12.000Z" itemprop="datePublished">2020-05-03</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-JavaScript的同步异步和执行机制" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JavaScript的同步异步和执行机制
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/" class="article-date">
+	  <time datetime="2020-02-10T07:23:13.000Z" itemprop="datePublished">2020-02-10</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.6k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p>本博客 <a target="_blank" rel="noopener" href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p>
+</blockquote>
+<p>##JavaScript中的单线程<br>技术的出现总是和应用场景密切相关.<br>JavaScript诞生于1995年,主要用于处理表单验证操作,也就是实现用户和浏览器的交互.</p>
+<p>由此带来一个思考:这门语言为什么是单线程?<br>作为浏览器脚本语言,JavaScript 的主要用途是与用户互动,以及操作 DOM.这决定了它只能是单线程,否则会带来很复杂的同步问题.比如,假定JavaScript同时有两个线程,一个线程在某个 DOM 节点上添加内容，另一个线程删除了这个节点，这时浏览器应该以哪个线程为准？<br>所以,<strong>为了避免复杂性，从一诞生,JavaScript 就是单线程,这已经成了这门语言的核心特征,将来也不会改变.</strong></p>
+<p>为了利用多核 CPU 的计算能力,HTML5 提出 <strong>Web Worker 标准</strong>,允许 JavaScript 脚本创建多个线程,但是子线程完全受主线程控制,且不得操作 DOM.所以,<strong>这个新标准并没有改变 JavaScript 单线程的本质.</strong></p>
+<p>那么单线程的特点就很明显了:</p>
+<ul>
+<li>实现起来比较简单,执行环境相对单纯；</li>
+<li>只要有一个任务耗时很长,后面的任务都必须排队等着,会拖延整个程序的执行.<br>(常见的浏览器无响应(假死),往往就是因为某一段Javascript代码长时间运行(比如死循),导致整个页面卡在这个地方,其他任务无法执行.)</li>
+</ul>
+<h2 id="同步和异步"><a href="#同步和异步" class="headerlink" title="同步和异步"></a>同步和异步</h2><p>在JS中,同步意味着在很多情况下CPU在等待:后一个任务等待前一个任务结束,然后再执行,程序的执行顺序与任务的排列顺序是一致的、同步的;也就是说当一件事情没有处理完成,JS会一直处理它,直至完成,才会开始下一件事情,这样可能会堵塞代码执行;</p>
+<p>异步则是指每一个任务有一个或多个回调函数(callback),前一个任务结束后,不是执行后一个任务,而是执行回调函数,后一个任务则是不等前一个任务结束就执行,所以程序的执行顺序与任务的排列顺序是不一致的、异步的.</p>
+<p>一句话概括就是:<strong>同步等结果,异步不等结果.</strong></p>
+<h2 id="JavaScript的执行机制"><a href="#JavaScript的执行机制" class="headerlink" title="JavaScript的执行机制"></a>JavaScript的执行机制</h2><p>流程图如下:<br><img src="JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/1.png" alt="JavaScript的同步异步和执行机制.md"><br>注意点:</p>
+<ul>
+<li>JS代码分为同步任务和异步任务.</li>
+<li>同步任务进入主线程执行,异步任务进入<strong>Event Table(事件表)</strong>,当事件表中的异步任务完成后会在**Event Queue(事件队列)**中注册回调函数.</li>
+<li>主线程中的任务全部完成后,才会执行<strong>Event Queue中</strong>的任务.</li>
+<li>JS解析器会不断重复检查主线程执行栈是否为空,然后重复第3步,这称为<strong>Event Loop(事件循环)</strong>.</li>
+</ul>
+<h2 id="宏任务和微任务"><a href="#宏任务和微任务" class="headerlink" title="宏任务和微任务"></a>宏任务和微任务</h2><p>JS代码的类型如下图所示:<br><img src="JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/2.png" alt="JavaScript的同步异步和执行机制.md"></p>
+<p>宏任务主要有:</p>
+<ul>
+<li>script代码段</li>
+<li>setTimeout</li>
+<li>setInterval</li>
+<li>I/O</li>
+</ul>
+<p>微任务主要有:</p>
+<ul>
+<li>process.nextTick</li>
+<li>Promise</li>
+</ul>
+<p>注意点:</p>
+<ul>
+<li>任务有**宏任务(Macro Task)<strong>和</strong>微任务(Micro Task)**之分,这对JS代码的执行有更细致的影响.</li>
+<li>异步任务中的宏任务和微任务会进入不同的<strong>Event Queue(事件队列)</strong>,即<strong>Event Queue</strong>又可以分为宏任务队列和微任务队列.</li>
+<li><strong>setInterval</strong>会按照设定的时间间隔重复地在<strong>Event Queue</strong>中注册回调函数,如果某一段时间主线程代码执行太久,那么<strong>setInterval</strong>的回调函数可能阻塞到一起执行,无法保持设定的时间间隔,如果此时<strong>setInterval</strong>用于动画,则体现为卡顿.</li>
+</ul>
+<h2 id="详细过程"><a href="#详细过程" class="headerlink" title="详细过程"></a>详细过程</h2><p><img src="JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/3.png" alt="JavaScript的同步异步和执行机制.md"></p>
+<p>通常来说,页面中JS的执行顺序是这样的:</p>
+<ul>
+<li>第一轮事件循环:<br>  1.主线程执行JS整段(宏代码),将ajax、setTimeOut、promise等回调函数注册到<strong>Event Queue</strong>中,并区分宏任务和微任务.<br>  2.主线程提取并执行<strong>Evene Queue</strong>中的ajax、promise等所有微任务,并注册微任务中的异步任务到<strong>Event Queue</strong>(如果有).</li>
+<li>第二轮事件循环:<br>  1.主线程提取并执行<strong>Evene Queue</strong>中的第一个宏任务,注册该任务中的异步任务到<strong>Evene Queue</strong>(如果有).<br>  2.执行<strong>Evene Queue</strong>中所有的微任务,并注册微任务中的异步任务到<strong>Evene Queue</strong>(如果有).</li>
+<li>类似的循环:宏任务没执行完一个,就清空一次时间队列中的微任务.<br>注意点:<strong>事件队列中分”宏任务队列”和”微任务队列”，每执行一次任务都可能注册新的宏任务或微任务到相应的任务队列中.</strong></li>
+</ul>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;1&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 记作 set1</span></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;2&#x27;</span>);</span><br><span class="line">    <span class="comment">// set4</span></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;3&#x27;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">// pro2</span></span><br><span class="line">    <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;4&#x27;</span>);</span><br><span class="line">        resolve();</span><br><span class="line">    &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;5&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 记作 pro1</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;6&#x27;</span>);</span><br><span class="line">    resolve();</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;7&#x27;</span>);</span><br><span class="line">    <span class="comment">// set3</span></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;8&#x27;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 记作 set2</span></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;9&#x27;</span>);</span><br><span class="line">    <span class="comment">// 记作 pro3</span></span><br><span class="line">    <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;10&#x27;</span>);</span><br><span class="line">        resolve();</span><br><span class="line">    &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;11&#x27;</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 最终输出 : 1 6 7 2 4 5 9 10 11 8 3</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>第一轮事件循环:<br>  1.将整段script作为第一个宏任务进入主线程,遇到console.log,输出1.<br>  <img src="JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/4.png" alt="JavaScript的同步异步和执行机制.md"><br>  2.遇到set1,其回调函数被分发到宏任务<strong>Event Queue</strong>中.<br>  <img src="JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/5.png" alt="JavaScript的同步异步和执行机制.md"><br>  3.遇到pro1,new Promise直接执行,输出6.then被分发到微任务<strong>Event Queue</strong>中.<br>  <img src="JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/6.png" alt="JavaScript的同步异步和执行机制.md"><br>  4.遇到set2,其回调函数被分发到宏任务<strong>Event Queue</strong>中.<br>  <img src="JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/7.png" alt="JavaScript的同步异步和执行机制.md"><br>  5.主线程的整段JS代码(宏任务)执行完成,开始清空所有微任务;主线程执行微任务pro1,输出7;遇到set3，注册回调函数。<br>  <img src="JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/8.png" alt="JavaScript的同步异步和执行机制.md"></p>
+</li>
+<li><p>第二轮事件循环<br>  1.主线程执行队列中第一个宏任务set1,输出2;遇到set4,注册回调;再遇到pro2,new Promise直接执行,输出4,并注册回调.<br>  <img src="JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/9.png" alt="JavaScript的同步异步和执行机制.md"><br>  2.set1(宏任务)执行完,开始清空微任务,主线程执行微任务pro2,输出5;<br>  <img src="JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/10.png" alt="JavaScript的同步异步和执行机制.md"></p>
+</li>
+<li><p>第三轮事件循环<br>  1.主线程执行队列中第一个宏任务set2，输出9；代码中遇到了pro3，new promise()直接输出10，并注册回调；<br>  2.set2宏任务执行完毕，开始情况微任务，主线程执行微任务pro3，输出11。</p>
+</li>
+<li><p>类似循环…</p>
+</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/" title="JavaScript的同步异步和执行机制" target="_blank" rel="external">http://example.com/2020/02/10/JavaScript的同步异步和执行机制/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/HJY-xh" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/HJY-xh" target="_blank"><span class="text-dark">可乐加冰</span><small class="ml-1x">Web Developer</small></a></h3>
+        <div>跑起来会有风</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/02/11/JavaScript%E4%B8%ADPromise/" title="JavaScript中Promise"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/02/09/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0--%E5%9B%B4%E5%9F%8E/" title="围城——读书笔记"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2021 HJY
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: true,
+    appId: 'TrQDRIWsj1IVoHW4a4fCkpgl-gzGzoHsz',
+    appKey: '1emq1qCoboyjpC5ysr8uuzjf',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
