@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>读书笔记:Javascript函数式编程指南（三） | 可乐加冰</title>
+  <meta name="description" content="本博客 hjy-xh，转载请申明出处  四.函数式编程——针对复杂应用的设计模式（读书笔记：JavaScript函数式编程指南） 今日分享  命令式错误处理异常方式的问题 使用容器，以防访问无效数据 用 Functor 的实现来做数据转换   空引用是一个价值数十亿美元的错误。——Tony Hoare，InfoQ  命令式错误处理的不足在许多情况下都会发生 JavaScript 错误，特别是在与">
+<meta property="og:type" content="article">
+<meta property="og:title" content="读书笔记:Javascript函数式编程指南（三）">
+<meta property="og:url" content="http://example.com/2020/03/05/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E5%9B%9B%EF%BC%89/index.html">
+<meta property="og:site_name" content="可乐加冰">
+<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  四.函数式编程——针对复杂应用的设计模式（读书笔记：JavaScript函数式编程指南） 今日分享  命令式错误处理异常方式的问题 使用容器，以防访问无效数据 用 Functor 的实现来做数据转换   空引用是一个价值数十亿美元的错误。——Tony Hoare，InfoQ  命令式错误处理的不足在许多情况下都会发生 JavaScript 错误，特别是在与">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/08/08/1FiDH4MEVbfOJS9.png">
+<meta property="og:image" content="https://i.loli.net/2021/08/08/WLrdu1SBHiDy735.png">
+<meta property="og:image" content="https://i.loli.net/2021/08/08/XUa6k7sG4vZ81rS.png">
+<meta property="og:image" content="https://i.loli.net/2021/08/08/bPwu5ENr4mpAQoU.png">
+<meta property="og:image" content="https://i.loli.net/2021/08/08/YvoIHae8QUJfq6x.png">
+<meta property="og:image" content="https://i.loli.net/2021/08/08/dAocQ8O6PJMTUVk.png">
+<meta property="article:published_time" content="2020-03-05T06:33:22.000Z">
+<meta property="article:modified_time" content="2021-08-08T03:19:25.139Z">
+<meta property="article:author" content="HJY">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/08/08/1FiDH4MEVbfOJS9.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2020/03/05/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E5%9B%9B%EF%BC%89/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="可乐加冰" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/HJY-xh" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">可乐加冰</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanghai, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>跑起来会有风</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%8D%8F%E8%AE%AE/">协议</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">28</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">解决方案</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NoSQL/" rel="tag">NoSQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag">Web安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">关系型数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E8%AE%AE/" rel="tag">协议</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">服务器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" rel="tag">编程原理相关</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" rel="tag">网络攻击</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/ES6/" style="font-size: 13px;">ES6</a> <a href="/tags/Java/" style="font-size: 13px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/MongoDB/" style="font-size: 13px;">MongoDB</a> <a href="/tags/NoSQL/" style="font-size: 13px;">NoSQL</a> <a href="/tags/Web%E5%AE%89%E5%85%A8/" style="font-size: 13px;">Web安全</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13px;">关系型数据库</a> <a href="/tags/%E5%8D%8F%E8%AE%AE/" style="font-size: 13px;">协议</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 13.5px;">文学</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 13px;">服务器</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 13px;">浏览器</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" style="font-size: 13px;">编程原理相关</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" style="font-size: 13px;">网络攻击</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.5px;">读书笔记</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/01/15/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/" class="title">读书笔记:Javascript函数式编程指南（二）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-15T03:33:09.000Z" itemprop="datePublished">2021-01-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/11/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89/" class="title">读书笔记:Javascript函数式编程指南（一）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-11-20T09:49:02.000Z" itemprop="datePublished">2020-11-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/11/09/PromisesA+%E8%A7%84%E8%8C%83%E7%BF%BB%E8%AF%91/" class="title">Promise规范翻译</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-11-09T13:30:40.000Z" itemprop="datePublished">2020-11-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/10/26/margin%E5%90%88%E5%B9%B6/" class="title">margin 合并</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-10-26T10:42:31.000Z" itemprop="datePublished">2020-10-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/08/16/Babel%E8%BD%AC%E8%AF%91%E4%B8%8B%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8/" class="title">Babel转译下的装饰器</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-08-16T11:40:50.000Z" itemprop="datePublished">2020-08-16</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-读书笔记:Javascript函数式编程指南（四）" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      读书笔记:Javascript函数式编程指南（三）
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/03/05/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E5%9B%9B%EF%BC%89/" class="article-date">
+	  <time datetime="2020-03-05T06:33:22.000Z" itemprop="datePublished">2020-03-05</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/03/05/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E5%9B%9B%EF%BC%89/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 5k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 19(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p>本博客 <a target="_blank" rel="noopener" href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p>
+</blockquote>
+<h1 id="四-函数式编程——针对复杂应用的设计模式"><a href="#四-函数式编程——针对复杂应用的设计模式" class="headerlink" title="四.函数式编程——针对复杂应用的设计模式"></a>四.函数式编程——针对复杂应用的设计模式</h1><p>（读书笔记：JavaScript函数式编程指南）</p>
+<p>今日分享</p>
+<ul>
+<li>命令式错误处理异常方式的问题</li>
+<li>使用容器，以防访问无效数据</li>
+<li>用 Functor 的实现来做数据转换</li>
+</ul>
+<blockquote>
+<p>空引用是一个价值数十亿美元的错误。<br>——Tony Hoare，InfoQ</p>
+</blockquote>
+<h2 id="命令式错误处理的不足"><a href="#命令式错误处理的不足" class="headerlink" title="命令式错误处理的不足"></a>命令式错误处理的不足</h2><p>在许多情况下都会发生 JavaScript 错误，特别是在与服务器通信时，或是在试图访问一个为 null 对象的属性时。</p>
+<p>因此，开发者在编程时总是需要做好最坏的打算。在命令式编程世界中，异常是通过 try-catch 处理的。</p>
+<h3 id="用-try-catch-处理错误"><a href="#用-try-catch-处理错误" class="headerlink" title="用 try-catch 处理错误"></a>用 try-catch 处理错误</h3><p>JavaScript 的异常处理机制通常会以大多数现代语言都有的 try-catch 语句来完成：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="comment">// 可能会抛出异常的代码</span></span><br><span class="line">&#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;ERROR&quot;</span> + e.message);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以该语句包裹住你认为不太安全的代码，一旦有异常发生，JavaScript 会立即终止程序，并创建导致该问题的指令的函数调用堆栈跟踪。有关错误的具体细节，如消息、行号和文件名，被填充到 Error 类型的对象中，并传递到 catch 块中。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> student = findStudentById(<span class="string">&quot;666&quot;</span>);</span><br><span class="line">&#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&quot;ERROR&quot;</span> + e.message);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用 try-catch 后的代码将不能组合或连在一起，对于函数式编程来说，这将会严重影响代码设计。</p>
+<h3 id="函数式程序不应抛出异常"><a href="#函数式程序不应抛出异常" class="headerlink" title="函数式程序不应抛出异常"></a>函数式程序不应抛出异常</h3><p>命令式的 JavaScript 代码结构有很多缺陷，而且也会与函数式的设计有兼容性问题。会抛出异常的函数存在以下问题：</p>
+<ul>
+<li>难以与其他函数组合或链接</li>
+<li>违反了引用透明性，因为抛出异常会导致函数调用出现另一出口，所以不能确保单一的可预测的返回值</li>
+<li>会引起副作用，因为异常会在函数调用之外对堆栈引发不可预料的影响</li>
+<li>违反非局域性的原则，因为用于恢复异常的代码与原始的函数调用渐行渐远。当发生错误时，函数离开局部栈与环境</li>
+<li>不能只关注函数的返回值，调用者需要负责声明 catch 块中的异常匹配类型来管理特定的异常</li>
+<li>当有多个异常条件时会出现嵌套的异常处理块</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;oops&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">catch</span> (ex) &#123;</span><br><span class="line">    <span class="built_in">console</span>.error(<span class="string">&quot;inner&quot;</span>, ex.message);</span><br><span class="line">    <span class="keyword">throw</span> ex;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;finally&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> (ex) &#123;</span><br><span class="line">  <span class="built_in">console</span>.error(<span class="string">&quot;outer&quot;</span>, ex.message);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Output:</span></span><br><span class="line"><span class="comment">// &quot;inner&quot; &quot;oops&quot;</span></span><br><span class="line"><span class="comment">// &quot;finally&quot;</span></span><br><span class="line"><span class="comment">// &quot;outer&quot; &quot;oops&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>那函数式编程真的不需要抛出异常吗？</p>
+<p>该作者不这么认为。在实践中，很多因素是在控制范围之外的，而且依赖库也有抛出异常的可能。对于某些边缘情况，使用异常可能颇有效率。异常应该由一个地方抛出，而不应该随处可见。</p>
+<h3 id="空值（null）检查问题"><a href="#空值（null）检查问题" class="headerlink" title="空值（null）检查问题"></a>空值（null）检查问题</h3><p>另一种跟抛出异常一样烦人的错误是 null 返回值。虽然 null 返回值保证了函数的出口只有一个，但是也并没有好到哪去——给使用函数的用户带来需要 null 检查的负担。比如获取学生地址与国家的 getCountry 函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getUserCountry</span>(<span class="params">student</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> school = student.getSchool();</span><br><span class="line">  <span class="keyword">if</span> (school !== <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> addr = school.getAddress();</span><br><span class="line">    <span class="keyword">if</span> (addr !== <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="keyword">let</span> country = addr.getCountry();</span><br><span class="line">      <span class="keyword">return</span> country;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;Error extracting country info&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数很容易实现，但是需要大量的判空检查。不管是使用 try-catch 还是 null 检查，都是被动的解决方式。</p>
+<h2 id="一种更好的解决方案——Functor"><a href="#一种更好的解决方案——Functor" class="headerlink" title="一种更好的解决方案——Functor"></a>一种更好的解决方案——Functor</h2><p>函数式以一种完全不同的方法应对软件系统的错误处理。其思想说起来也非常简单，就是创建一个安全的容器，来存放危险代码,比方说 try-catch 就可以看作存放着会抛出异常的函数的保险箱。而保险箱可以看作一种容器。</p>
+<p>在函数式编程中，仍然会包裹这些危险代码，但可以不用 try-catch 块。使用函数式数据类型是解决不纯性的主要手段。不过，首先从最简单的类型开始。</p>
+<h3 id="包裹不安全的值"><a href="#包裹不安全的值" class="headerlink" title="包裹不安全的值"></a>包裹不安全的值</h3><p>将值包裹起来是函数式编程的一个基本设计模式，因为它直接地保证了值不会被任意篡改。这有点像把值保护起来，只能通过 map 操作来访问该容器中的值。实际上数组的 map，而数组也是值的容器。我们将继续扩展更广义的 map 的概念。</p>
+<p>其实，可以映射函数到更多类型，而不仅仅是数组。在函数式 JavaScript 中，map 只不过是一个函数，由于引用透明性，只要输入相同，map 永远会返回相同的结果。当然，还可以认为 map 是可以使用 lambda 表达式变换容器内的值的途径。比如，对于数组，就可以通过 map 转换值，返回包含新值的新数组。</p>
+<p>下面用 Wrapper 解释一下这个概念</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Wrapper</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">value</span>)</span> &#123; <span class="comment">// 存储任意类型值的简单类型</span></span><br><span class="line">    <span class="built_in">this</span>.value = value;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// map ::  A -&gt; B</span></span><br><span class="line">  <span class="function"><span class="title">map</span>(<span class="params">f</span>)</span> &#123; <span class="comment">// 用一个函数来 map 该类型（就像数组一样）</span></span><br><span class="line">    <span class="keyword">return</span> f(<span class="built_in">this</span>.value);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="function"><span class="title">toString</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Wrapper (&#x27;</span> + <span class="built_in">this</span>.value + <span class="string">&#x27;)&#x27;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// wrap :: A -&gt; Wrapper(A)</span></span><br><span class="line"><span class="keyword">const</span> wrap = <span class="function">(<span class="params">val</span>) =&gt;</span> <span class="keyword">new</span> Wrapper(val); <span class="comment">// 能够根据值快速创建 Wrapper 的帮助函数</span></span><br></pre></td></tr></table></figure>
+
+<p>要访问包裹内的对象，唯一办法是 map 一个 Ramda 的 identity 函数（注意，Wrapper 类型并没有 get 方法）。虽然 JavaScript 允许用户方便地访问这个值，但重要的是，一旦该值进入容器，就不应该能被直接获取或转化（就像一个虚拟的屏障），如图1 所示：</p>
+<p><img src="https://i.loli.net/2021/08/08/1FiDH4MEVbfOJS9.png"></p>
+<p>Wrapper 类型使用 map 安全地访问和操作值。在这种情况下，通过映射 identity 函数就能在容器中提取值。</p>
+<p>下面是获取值的例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> wrappedValue = wrap(<span class="string">&#x27;Get Functional&#x27;</span>);</span><br><span class="line">wrappedValue.map(R.identity); <span class="comment">// &#x27;Get Functional&#x27; &lt;--- 值的提取</span></span><br></pre></td></tr></table></figure>
+
+<p>其实还可以映射任何函数到该容器，比如变换该值：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wrappedValue.map(R.toUpper); <span class="comment">// &#x27;GET FUNCTIONAL&#x27; &lt;--- 对内部值应用函数</span></span><br></pre></td></tr></table></figure>
+
+<p>如此一来，所有对值的操作都必须借助 Wrapper.map “伸入”容器，从而使值得到一定的保护。但是 null 或者 undefined 的情况仍然存在，还是需要在映射的函数中去处理。接下来看看解决的方法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> wrappedNull = wrap(<span class="literal">null</span>);</span><br><span class="line">wrappedNull.map(doWork); <span class="comment">// doWork 被赋予了空值检查的责任</span></span><br></pre></td></tr></table></figure>
+
+<p>就像这个例子，由于直接调用函数，完全可以交给 Wrapper 类型来做错误处理。换句话说，可以在调用函数之前，检查 null、空字符串或者负数，等等。因此，Wrapper.map 的语义就由具体的 Wrapper 类型来确定。</p>
+<p>继续来看看 map 的变种——fmap：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// fmap :: (A -&gt; B) -&gt; Wrapper[A] -&gt; Wrapper[B]</span></span><br><span class="line">Wrapper.prototype.fmap = <span class="function"><span class="keyword">function</span> (<span class="params">f</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> wrap(f(<span class="built_in">this</span>.valve)); <span class="comment">// &lt;--- 先将返回值包裹到容器中，再返回给调用者</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>fmap 知道如何在上下文中应用函数值。它会先打开该容器，应用函数到值，最后把返回的值包裹到一个新的同类型容器中。拥有这种函数的类型称为 Functor。</strong></p>
+<h3 id="Functor-定义"><a href="#Functor-定义" class="headerlink" title="Functor 定义"></a>Functor 定义</h3><p>从本质上讲，Functor 只是一个可以将函数应用到它包裹的值上，并将结果再包裹起来的数据结构。<br>下面是 fmap 的一般定义：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fmap :: (A -&gt; B) -&gt; Wrapper(A) -&gt; Wrapper(B) <span class="comment">// &lt;--- Wrapper 可以是任何容器类型</span></span><br></pre></td></tr></table></figure>
+
+<p>fmap 函数接受一个从 A-&gt;B 的函数，以及一个 Wrapper(A) Functor，然后返回包裹着结果的新 Functor —— Wrapper(B)。图 2 显示了用 increment 函数作为 A-&gt;B 的映射函数，只是这里的 A 和 B 为同一类型。</p>
+<p><img src="https://i.loli.net/2021/08/08/WLrdu1SBHiDy735.png"></p>
+<p>图 2 Wrapper 内的值 1，在应用函数 increment 后再次包裹成新的容器。</p>
+<p>要注意的是，<strong>fmap 在每次调用都会返回一个新的副本，是不可变的。</strong></p>
+<p>在开始解决更实际的问题之前，再来看一个简单的例子。试用 Functor 来完成简单的 2 + 3 = 5。首先柯里化 add 函数，这样就得到了 plus3 的函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> plus = R.curry(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a + b);</span><br><span class="line"><span class="keyword">const</span> plus3 = plus(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<p>现在可以把数字 2 放到 Wrapper 中：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> two = wrap(<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+
+<p>再调用 fmap 把 plus3 映射到容器上：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> five = two.fmap(plus3); <span class="comment">//-&gt; Wrapper(5) &lt;--- 返回一个具有上下文包裹的值</span></span><br><span class="line">five.map(R.identity); <span class="comment">//-&gt; 5</span></span><br></pre></td></tr></table></figure>
+
+<p>fmap 返回同样类型的结果，可以通过映射 R.identity 来提取它的值。不过需要注意的是，值会一直在容器中，因此可以 fmap 任意次函数来转换值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">two.fmap(plus3).fmap(plus10); <span class="comment">//-&gt; Wrapper(15)</span></span><br></pre></td></tr></table></figure>
+
+<p>光看代码可能不够直观，图 3 更清楚地解释了如何 fmapplus3。</p>
+<p><img src="https://i.loli.net/2021/08/08/XUa6k7sG4vZ81rS.png"></p>
+<p>图 3 Wrapper 容器中的值是 2。Functor 会将其打开，应用 fmap 的函数，再包裹函数的返回值到新的容器中。<br>fmap 函数会返回同样的类型，这样就可以链式地继续使用 fmap。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> two = wrap(<span class="number">2</span>);</span><br><span class="line"><span class="keyword">const</span> isFive = two.fmap(plus3).fmap(R.equals(<span class="number">5</span>)); <span class="comment">//-&gt; Wrapper(true) &lt;--- 返回一个具有上下文包裹的值</span></span><br></pre></td></tr></table></figure>
+
+<p>这种链式的函数调用是不是非常眼熟？其实很多人一直在使用 Functor 却没有意识到而已。比如 Array的 map 和 filter 方法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">map :: (A -&gt; B) -&gt; <span class="built_in">Array</span>(A) -&gt; <span class="built_in">Array</span>(B)</span><br><span class="line"><span class="attr">filter</span> :: (A -&gt; <span class="built_in">Boolean</span>) -&gt; <span class="built_in">Array</span>(A) -&gt; <span class="built_in">Array</span>(A)</span><br></pre></td></tr></table></figure>
+
+<p>map 和 filter 都返回同样类型的 Functor，因此可以不断地链接。来看看另一个 Functor：compose。<br>正如之前分享提到的，这是从一个函数到另一个函数的映射（也保持类型不变）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">compose :: (B -&gt; C) -&gt; (A -&gt; B) -&gt; (A -&gt; C)</span><br></pre></td></tr></table></figure>
+
+<p>Functor 有如下一些重要的<strong>属性约束</strong>:</p>
+<ul>
+<li><strong>必须是无副作用的。</strong> 若映射 R.identity 函数可以获得上下文中相同的值，即可证明 Functor 是无副作用的：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wrap(<span class="string">&#x27;Get Functional&#x27;</span>).fmap(R.identity); <span class="comment">//-&gt; Wrapper(&#x27;Get Functional&#x27;)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>必须是可组合的。</strong> 这个属性的意思是 fmap 函数的组合，与分别 fmap 函数是一样的。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">two.fmap(R.compose(plus3, R.add(<span class="number">5</span>))).map(R.identity); <span class="comment">//-&gt; 10</span></span><br></pre></td></tr></table></figure>
+
+<p>Functor 的这些属性并不奇怪。遵守这些规则，可以免于抛出异常、篡改元素或者改变函数的行为。其实际目的只是创建一个上下文或一个抽象，以便可以安全地应用操作到值，而又不改变原始值。这也是 map 可以将一个数组转换到另一个数组，而不改变原数组的原因。而 Functor 就是这个概念的推广。</p>
+<p>Functor 本身并不需要知道如何处理 null。例如 Ramda 中的 R.compose，在收到为 null 的函数引用时就会抛出异常。这完全是预期的行为，并不是设计上的缺陷。因为 Functor 映射从一个类型到另一类型的函数。还有一个更为具体化的函数式数据类型——Monad。Monad 可以简化代码中的错误处理，进而更流畅地进行函数组合。但是它跟 Functor 有什么关系呢？其实，Monad 就是 Functor“伸入”的容器。</p>
+<p>如果写过 jQuery 代码，那么应该觉得 Monad 很面熟。</p>
+<p>Monad 只是给一些资源提供了抽象，例如一个简单的价值，一个 DOM 元素、事件或 AJAX 调用，这样就可以安全地处理其中包含的数据。比如，jQuery 就可以看作 DOM 的 Monad：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">&#x27;#student-info&#x27;</span>).fadeIn(<span class="number">3000</span>).text(student.fullname());</span><br></pre></td></tr></table></figure>
+
+<p>这段代码的行为之所以像 Monad，是因为 jQuery 可以将 fadeIn 和 text 行为安全地应用到 DOM 上。如果 student-info 面板不存在，将方法应用到空的 jQuery 对象上只会什么也不发生，而不会抛出任何异常。Monad 旨在安全地传送错误，这样应用才具有较好的容错性。</p>
+<h2 id="使用-Monad-函数式地处理错误"><a href="#使用-Monad-函数式地处理错误" class="headerlink" title="使用 Monad 函数式地处理错误"></a>使用 Monad 函数式地处理错误</h2><p>Monad 用于函数式地解决传统错误处理的问题。但在深入这个话题之前，先来了解使用 Functor 的局限性。使用 Functor 可以安全地应用函数到其内部的值，并且返回一个不可变的新 Functor。但如果它遍布在代码中，就会有一些让人不那么顺心的地方。下面来看一个通过 id 获取学生地址的例子。对于这个例子，大概需要两个函数——findStudent 和 getAddress，这两个函数都给值包裹上一个安全的上下文：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> findStudent = R.curry(<span class="function"><span class="keyword">function</span>(<span class="params">db, id</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> wrap(find(db, id)); <span class="comment">// &lt;--- 包裹对象获取逻辑，以避免找不到对象所造成的问题</span></span><br><span class="line">  &#125;);</span><br><span class="line"><span class="keyword">const</span> getAddress = <span class="function"><span class="keyword">function</span>(<span class="params">student</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> wrap(student.fmap(R.prop(<span class="string">&quot;address&quot;</span>))); <span class="comment">// 用 Ramda 的 R.prop()函数来 map 对象以获取其地址， 再将结果包裹起来</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后把这两个函数组合在一起：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> studentAddress = R.compose(</span><br><span class="line">  getAddress,</span><br><span class="line">  findStudent(DB(<span class="string">&#x27;student&#x27;</span>))</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>虽然成功地避免了所有的错误处理代码，但是结果却出乎意料。返回的值是被包裹了两层的 address对象：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">studentAddress(<span class="string">&#x27;666&#x27;</span>); <span class="comment">//-&gt; Wrapper(Wrapper(address))</span></span><br></pre></td></tr></table></figure>
+
+<p>为了提取这个值，需要两次应用 R.identity 函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">studentAddress(<span class="string">&#x27;666&#x27;</span>).map(R.identity).map(R.identity);</span><br></pre></td></tr></table></figure>
+
+<p>在自己的代码中见到两层这样的代码还可以勉强接受，如果出现三四层呢？这个时候，Monad 可以成为更好的解决方案。</p>
+<h3 id="Monad：从控制流到数据流"><a href="#Monad：从控制流到数据流" class="headerlink" title="Monad：从控制流到数据流"></a>Monad：从控制流到数据流</h3><p>Monad 和 Functor 类似，但在处理某些情况时可以带来一些特殊的逻辑。下面就用简单的例子来看看Monad 到底有什么特殊的功能。假如有一个函数 half::Number -&gt;Number（见图 4）：</p>
+<p><img src="https://i.loli.net/2021/08/08/bPwu5ENr4mpAQoU.png"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Wrapper(<span class="number">2</span>).fmap(half); <span class="comment">//-&gt; Wrapper(1)</span></span><br><span class="line">Wrapper(<span class="number">3</span>).fmap(half); <span class="comment">//-&gt; Wrapper(1.5)</span></span><br></pre></td></tr></table></figure>
+
+<p>图 4 Functor 可以将函数应用到包裹的值上。例子中包裹的值会被 2 除。<br>不过，Functor 只管应用函数到值并将结果包裹起来，并不能加额外的逻辑。如果想要限制 half 只应用到偶数，而输入是一个奇数，该怎么办？或许可以返回 null 或抛出异常，但更好的策略是让该函数能给合法的数字返回正确的结果，并忽略不合法的数字。<br>现在假设有一个名为 Empty 的类似 Wrapper 的容器：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Empty = <span class="function"><span class="keyword">function</span> (<span class="params">_</span>) </span>&#123;</span><br><span class="line">  ; <span class="comment">// 无操作。 Empty 不会存储任何值，其代表着“空”或“无”的概念</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// map :: (A -&gt; B) -&gt; A -&gt; B</span></span><br><span class="line">Empty.prototype.map = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="built_in">this</span>; &#125;; <span class="comment">// &lt;--- 类似，将函数 map 到 Empty 上会跳过该操作</span></span><br><span class="line"><span class="comment">// empty :: _ -&gt; Empty</span></span><br><span class="line"><span class="keyword">const</span> empty = <span class="function">() =&gt;</span> <span class="keyword">new</span> Empty();</span><br></pre></td></tr></table></figure>
+
+<p>为了实现 half 以满足新的需求，可以通过以下方式完成（见图 5）：</p>
+<p><img src="https://i.loli.net/2021/08/08/YvoIHae8QUJfq6x.png"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isEven = <span class="function">(<span class="params">n</span>) =&gt;</span> <span class="built_in">Number</span>.isFinite(n) &amp;amp;&amp;amp; (n % <span class="number">2</span> == <span class="number">0</span>); <span class="comment">// &lt;--- 区分奇偶数的工具函数</span></span><br><span class="line"><span class="keyword">const</span> half = <span class="function">(<span class="params">val</span>) =&gt;</span> isEven(val) ? wrap(val / <span class="number">2</span>) : empty(); <span class="comment">// &lt;--- half 函数只会操作偶数，否则会返回一个空的容器</span></span><br><span class="line">half(<span class="number">4</span>); <span class="comment">//-&gt; Wrapper(2)</span></span><br><span class="line">half(<span class="number">3</span>); <span class="comment">//-&gt; Empty</span></span><br></pre></td></tr></table></figure>
+
+<p>图 5 函数 half 可以根据输入返回一个包裹好的值或空容器。<br>Monad 用于创建一个带有一定规则的容器，而 Functor 并不需要了解其容器内的值。Functor 可以有效地保护数据，然而当需要组合函数时，即可以用Monad 来安全并且无副作用地管理数据流。在前面的例子中，对于奇数会返回 Empty 而不是 null。所以此后如果想应用函数，就不必在意可能会出现的异常：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">half(<span class="number">4</span>).fmap(plus3); <span class="comment">//-&gt; Wrapper(5)</span></span><br><span class="line">half(<span class="number">3</span>).fmap(plus3); <span class="comment">//-&gt; Empty &lt;--- 容器知道该如何应用函数，即便其值是非法的</span></span><br></pre></td></tr></table></figure>
+
+<p>除此之外，Monad 还适用于解决其他问题。这里只讨论如何使用 Monad 来解决命令式错误处理的问题，从而使代码更可读、更易于推理。</p>
+<p>以下两个概念非常重要。</p>
+<ul>
+<li>Monad:为 Monadic 操作提供抽象接口。</li>
+<li>Monadic 类型: 该接口的具体实现。</li>
+</ul>
+<p>Monadic 类型类似于上面提到的的 Wrapper 对象。不过每个 Monad 都有不同的用途，可以定义不同的语义便于确定其行为（例如 map 或 fmap）。使用这些类型可以进行链式或嵌套操作，但都应遵循下列接口定义。</p>
+<ul>
+<li>类型构造函数: 创建 Monadic 类型（类似于 Wrapper 的构造函数）。</li>
+<li>unit 函数: 可将特定类型的值放入 Monadic 结构中（类似于 wrap 和前面看到的 empty 函数）。对于 Monad 的实现来说，该函数也被称为 of 函数。</li>
+<li>bind 函数: 可以链式操作，后文将使用更简短的 map。</li>
+<li>join 函数: 将两层 Monadic 结构合并成一层。这会对嵌套返回 Monad 的函数特别有用。<br>将这一个接口应用到 Wrapper 类型，就可以重构成以下这种形式。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Wrapper</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="title">constructor</span>(<span class="params">value</span>)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.value = value;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// unit 函数</span></span><br><span class="line">  <span class="keyword">static</span> <span class="function"><span class="title">of</span>(<span class="params">a</span>)</span> &#123; </span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Wrapper(a);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// bind 函数（ Functor）</span></span><br><span class="line">  <span class="function"><span class="title">map</span>(<span class="params">f</span>)</span> &#123; </span><br><span class="line">    <span class="keyword">return</span> Wrapper.of(f(<span class="built_in">this</span>.value));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 压平嵌套的 Wrapper</span></span><br><span class="line">  <span class="function"><span class="title">join</span>(<span class="params"></span>)</span> &#123; </span><br><span class="line">    <span class="keyword">if</span>(!(<span class="built_in">this</span>.value <span class="keyword">instanceof</span> Wrapper)) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">this</span>.value.join();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 返回一个当前结构的文本描述</span></span><br><span class="line">  <span class="function"><span class="title">toString</span>(<span class="params"></span>)</span> &#123; </span><br><span class="line">    <span class="keyword">return</span> <span class="string">`Wrapper (<span class="subst">$&#123;<span class="built_in">this</span>.value&#125;</span>)`</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Wrapper 使用 Functor 的 map 将数据提升到容器中，这样就可以无任何副作用。通常还可以用_.identity 函数来检查其内容：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Wrapper.of(<span class="string">&#x27;Hello Monads!&#x27;</span>)</span><br><span class="line">.map(R.toUpper)</span><br><span class="line">.map(R.identity); <span class="comment">//-&gt; Wrapper(&#x27;HELLO MONADS!&#x27;)</span></span><br></pre></td></tr></table></figure>
+
+<p>map 操作被视为一种中立的 functor，因为它无非只是映射函数到对象，然后关闭它。之后，Monad 给map 加入特殊的功能。join 函数用于逐层扁平化嵌套结构，就像剥洋葱一样。这可以用来消除之前用functor 时发现的问题，如下 所示。<br>扁平化 Monadic 结构</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// findObject :: DB -&gt; String -&gt; Wrapper</span></span><br><span class="line"><span class="keyword">const</span> findObject = R.curry(<span class="function"><span class="keyword">function</span>(<span class="params">db, id</span>) </span>&#123;</span><br><span class="line"><span class="keyword">return</span> Wrapper.of(find(db, id));</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// getAddress :: Student -&gt; Wrapper</span></span><br><span class="line"><span class="keyword">const</span> getAddress = <span class="function"><span class="keyword">function</span>(<span class="params">student</span>) </span>&#123;</span><br><span class="line"><span class="keyword">return</span> Wrapper.of(student.map(R.prop(<span class="string">&#x27;address&#x27;</span>)));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> studentAddress = R.compose(getAddress, findObject(DB(<span class="string">&#x27;student&#x27;</span>)));</span><br><span class="line">studentAddress(<span class="string">&#x27;444-44-4444&#x27;</span>).join().get(); <span class="comment">// Address</span></span><br></pre></td></tr></table></figure>
+
+<p>该代码返回一组嵌套的 wrapper，其中 join 操作用于将这种嵌套结构压平成单一的层：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Wrapper.of(Wrapper.of(Wrapper.of(<span class="string">&#x27;Get Functional&#x27;</span>))).join();</span><br><span class="line"><span class="comment">//-&gt; Wrapper(&#x27;Get Functional&#x27;)</span></span><br></pre></td></tr></table></figure>
+
+<p>图 6 为 join 操作的示意图，递归扁平化嵌套结构的 Monad，像剥洋葱一样：</p>
+<p><img src="https://i.loli.net/2021/08/08/dAocQ8O6PJMTUVk.png"></p>
+<p>Monad 通常有更多的操作，这里提及的最小接口只是其整个 API 的子集。一个 Monad 本身只是抽象，没有任何实际意义。只有实际的实现类型才有丰富的功能。大多数函数式编程的代码只用一些常用的类型就可以消除大量的样板代码，同时还能完成同样的工作。</p>
+<p>Monad 实例丰富，例如：Maybe、Either 和 IO，大家有兴趣可以自行查看。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>面向对象抛异常的机制让函数变得不纯，把大部分的责任都推到了调用者的尝试——try-catch逻辑上</li>
+<li>把值包裹到容器中的模式是为了构建无副作用的代码，把可能不纯的变化包裹成引用透明的过程</li>
+<li>使用Functor将函数应用到容器中的值，这是无副作用地、不可变地访问和修改操作</li>
+<li>Monad是函数式中用来降低应用复杂度的设计模式，通过这种模式可以将函数编排成安全的数据流程</li>
+<li>交错的组合函数和Monadic类型是非常有弹性而且强大的，如Maybe、Either和IO</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2015/07/monad.html">阮一峰：图解 Monad</a><br><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2017/02/fp-tutorial.html">阮一峰：函数式编程入门教程</a></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2020/03/05/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E5%9B%9B%EF%BC%89/" title="读书笔记:Javascript函数式编程指南（三）" target="_blank" rel="external">http://example.com/2020/03/05/读书笔记:Javascript函数式编程指南（四）/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/HJY-xh" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/HJY-xh" target="_blank"><span class="text-dark">可乐加冰</span><small class="ml-1x">Web Developer</small></a></h3>
+        <div>跑起来会有风</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/03/05/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%89%EF%BC%89/" title="读书笔记:Javascript函数式编程指南（三）"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/03/02/JavaScript%E4%B8%AD%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%8B%93%E5%B1%95%E3%80%81%E5%AF%86%E5%B0%81%E5%8F%8A%E5%86%BB%E7%BB%93%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7/" title="JavaScript中对象的拓展、密封及冻结三大特性"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2021 HJY
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: true,
+    appId: 'TrQDRIWsj1IVoHW4a4fCkpgl-gzGzoHsz',
+    appKey: '1emq1qCoboyjpC5ysr8uuzjf',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

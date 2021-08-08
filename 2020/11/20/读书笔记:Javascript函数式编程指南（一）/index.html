@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>读书笔记:Javascript函数式编程指南（一） | 可乐加冰</title>
+  <meta name="description" content="本博客 hjy-xh，转载请申明出处  &gt; 面向对象编程（OO）通过封装变化是的代码更易理解。&gt; 函数式编程（FP）通过最小化变化使得代码更易理解。 Michael Feathers 是世界级面向对象技术专家，以丰富的软件项目开发经验著称。 简明扼要，可见函数式编程的优点。 什么是函数式编程？简单来说：函数式是一种强调以函数使用为主的软件开发风格。 这听起来很平常，好像我们平常也都是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="读书笔记:Javascript函数式编程指南（一）">
+<meta property="og:url" content="http://example.com/2020/11/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+<meta property="og:site_name" content="可乐加冰">
+<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  &gt; 面向对象编程（OO）通过封装变化是的代码更易理解。&gt; 函数式编程（FP）通过最小化变化使得代码更易理解。 Michael Feathers 是世界级面向对象技术专家，以丰富的软件项目开发经验著称。 简明扼要，可见函数式编程的优点。 什么是函数式编程？简单来说：函数式是一种强调以函数使用为主的软件开发风格。 这听起来很平常，好像我们平常也都是">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-11-20T09:49:02.000Z">
+<meta property="article:modified_time" content="2021-08-08T03:12:08.293Z">
+<meta property="article:author" content="HJY">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2020/11/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="可乐加冰" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/HJY-xh" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">可乐加冰</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanghai, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>跑起来会有风</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%8D%8F%E8%AE%AE/">协议</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">28</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">解决方案</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NoSQL/" rel="tag">NoSQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag">Web安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">关系型数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E8%AE%AE/" rel="tag">协议</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">服务器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" rel="tag">编程原理相关</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" rel="tag">网络攻击</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/ES6/" style="font-size: 13px;">ES6</a> <a href="/tags/Java/" style="font-size: 13px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/MongoDB/" style="font-size: 13px;">MongoDB</a> <a href="/tags/NoSQL/" style="font-size: 13px;">NoSQL</a> <a href="/tags/Web%E5%AE%89%E5%85%A8/" style="font-size: 13px;">Web安全</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13px;">关系型数据库</a> <a href="/tags/%E5%8D%8F%E8%AE%AE/" style="font-size: 13px;">协议</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 13.5px;">文学</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 13px;">服务器</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 13px;">浏览器</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" style="font-size: 13px;">编程原理相关</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" style="font-size: 13px;">网络攻击</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.5px;">读书笔记</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/01/15/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/" class="title">读书笔记:Javascript函数式编程指南（二）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-01-15T03:33:09.000Z" itemprop="datePublished">2021-01-15</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/11/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89/" class="title">读书笔记:Javascript函数式编程指南（一）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-11-20T09:49:02.000Z" itemprop="datePublished">2020-11-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/11/09/PromisesA+%E8%A7%84%E8%8C%83%E7%BF%BB%E8%AF%91/" class="title">Promise规范翻译</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-11-09T13:30:40.000Z" itemprop="datePublished">2020-11-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/10/26/margin%E5%90%88%E5%B9%B6/" class="title">margin 合并</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-10-26T10:42:31.000Z" itemprop="datePublished">2020-10-26</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/08/16/Babel%E8%BD%AC%E8%AF%91%E4%B8%8B%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8/" class="title">Babel转译下的装饰器</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-08-16T11:40:50.000Z" itemprop="datePublished">2020-08-16</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-读书笔记:Javascript函数式编程指南（一）" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      读书笔记:Javascript函数式编程指南（一）
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/11/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89/" class="article-date">
+	  <time datetime="2020-11-20T09:49:02.000Z" itemprop="datePublished">2020-11-20</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/11/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 4.6k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 17(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p>本博客 <a target="_blank" rel="noopener" href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p>
+</blockquote>
+<p>&gt; 面向对象编程（OO）通过封装变化是的代码更易理解。<br>&gt; 函数式编程（FP）通过最小化变化使得代码更易理解。</p>
+<p>Michael Feathers 是世界级面向对象技术专家，以丰富的软件项目开发经验著称。</p>
+<p>简明扼要，可见函数式编程的优点。</p>
+<h2 id="什么是函数式编程？"><a href="#什么是函数式编程？" class="headerlink" title="什么是函数式编程？"></a>什么是函数式编程？</h2><p>简单来说：函数式是一种强调以函数使用为主的软件开发风格。</p>
+<p>这听起来很平常，好像我们平常也都是这么做的。</p>
+<p>先讲概念：函数式编程的目标是使用函数来<strong>抽象作用在数据之上的控制流与操作</strong>，从而在系统中<strong>消除副作用</strong>并<strong>减少对状态的改变</strong>。</p>
+<p>没有栗子就是在耍流氓:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.getElementById(<span class="string">&quot;#msg&quot;</span>).innerHTML = <span class="string">&quot;&amp;lt;h1&amp;gt;Hello world&amp;lt;/h1&amp;gt;&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>代码很简单，但是写死了，也就不能动态显示消息。</p>
+<p>如果想改变消息的格式，内容或者目标 DOM 元素，需要重写整个表达式。</p>
+<p>我们给它改进一下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> printMessage = (elementId, NodeType, message) &#123;</span><br><span class="line">    <span class="built_in">document</span>.getElementById(elementId).innerHTML = <span class="string">`&amp;lt;<span class="subst">$&#123;NodeType&#125;</span>&amp;gt;<span class="subst">$&#123;message&#125;</span>&amp;lt;/<span class="subst">$&#123;NodeType&#125;</span>&amp;gt;`</span>;</span><br><span class="line">&#125;</span><br><span class="line">printMessage(<span class="string">&quot;msg&quot;</span>, <span class="string">&quot;h1&quot;</span>, <span class="string">&quot;Hello world&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这样好一点，但是重用性仍然不高，接下来改成函数式:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 函数定义</span></span><br><span class="line"><span class="keyword">const</span> printMessage = run(addToDOM(<span class="string">&quot;msg&quot;</span>), h1, echo);</span><br><span class="line"></span><br><span class="line">printMessage(<span class="string">&quot;Hello world&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这段代码与之前的完全不同: <code>h1</code>不再是一个量值，它与<code>addToDOM</code>,<code>echo</code>都是函数，这样看上去像是用一些较小的函数构建成一个新的函数。</p>
+<p>代码写成这样的原因是什么？</p>
+<p>将代码分解成一些更可重用，更可靠且易于理解的部分，再将其组合起来，形成一个更易推理的程序整体。</p>
+<p>上面的代码有一个神奇的函数<code>run</code>，它序列地调用一系列函数。</p>
+<p>在后台，<code>run</code>函数基本上是通过将一个函数的返回值作为下一个函数的输入，以这张方式将各个函数连接起来。这样，由<code>echo</code>返回字符串，被传递到<code>h1</code>中，其结果最终又被传递到<code>addToDOM</code>。<code>run</code>函数的细节之后会解释。</p>
+<p>上面比较了函数式和非函数式的编程方案，尽管他们结果相同，但是实现过程截然不同。这是源于函数式编程开发中固有的声明模式，为了充分理解函数式编程，我们先来了解一些基本概念:</p>
+<ul>
+<li>声明式编程</li>
+<li>纯函数</li>
+<li>引用透明</li>
+<li>不可变性</li>
+</ul>
+<h3 id="声明式编程"><a href="#声明式编程" class="headerlink" title="声明式编程"></a>声明式编程</h3><p>函数式编程属于<strong>声明式</strong>编程范式:这种范式会描述一系列的操作，但并不会暴露它们是如何实现的或是数据流如何穿过它们。</p>
+<p>目前更加主流的是<strong>命令式</strong>或者<strong>过程式</strong>的编程范式，如 Java、C#、C++和其他大多数结构化语言和面向对象语言都对其提供支持。</p>
+<p>命令式编程将计算机视为一系列自上而下的断言，通过修改系统的的各个状态来计算最终的结果。</p>
+<p>看个栗子:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> array = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &amp;lt; array.length; i++) &#123;</span><br><span class="line">  array[i] = <span class="built_in">Math</span>.pow(array[i], <span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// [ 0,  1,  4, 9, 16, 25, 36]</span></span><br></pre></td></tr></table></figure>
+
+<p>命令式编程很具体地告诉计算机如何执行某个任务。</p>
+<p>而声明式编程将程序的描述与求值分离开来。它关注于如何用各种表达式来描述程序逻辑，而不一定要指明其控制流或者状态的变化。</p>
+<p>函数式:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> array = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];</span><br><span class="line">array.map((num) =&amp;gt; <span class="built_in">Math</span>.pow(num, <span class="number">2</span>));</span><br></pre></td></tr></table></figure>
+
+<p>函数式编程只需要对应用在每个数组元素上的行为予以关注，将循环交给系统的其他其他部分去控制。</p>
+<h3 id="副作用带来问题和纯函数"><a href="#副作用带来问题和纯函数" class="headerlink" title="副作用带来问题和纯函数"></a>副作用带来问题和纯函数</h3><p>函数式编程基于一个前提:即使用纯函数构建具有不变性的程序。</p>
+<p>它具有以下性质:</p>
+<ul>
+<li>仅取决于提供的输入，而不依赖于任何在函数求值期间或调用间隔时可能变化的隐藏状态或外部状态</li>
+<li>不会造成超出其作用域的变化，例如修改全局对象或引用传递的参数</li>
+</ul>
+<p>栗子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> counter = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> add = () =&amp;gt; ++counter;</span><br><span class="line"></span><br><span class="line">add(); <span class="comment">// 1</span></span><br><span class="line">counter++; <span class="comment">// 2</span></span><br><span class="line">add(); <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+
+<p>这个函数是不纯的，因为它读取并修改了一个外部变量，即函数作用域外的 counter。</p>
+<p>一般来说，函数在读取或写入外部资源时都会产生副作用，例如上面的代码中，<code>counter</code>可以在调用间隔的任何时间发生改变。</p>
+<p>另一个常见的函数是<code>Date.now()</code>,它的输出是不可预见的，并且不一致，因为它依赖于一个不断变化的因素–时间。</p>
+<p>常见的副作用:</p>
+<ul>
+<li>改变一个全局的变量、属性或数据结构</li>
+<li>改变一个参数的原始值</li>
+<li>处理用户输入</li>
+<li>屏幕打印</li>
+<li>查询 cookie</li>
+</ul>
+<p>如果没有这些操作，那程序会有什么实用价值？</p>
+<p>事实上，在一个充满了动态行为与变化的世界里，纯函数确实很难使用。</p>
+<p>但是，函数式编程在实践上并不限制一切状态的改变，它只是提供了一个框架来帮助管理和减少可变状态，同时让你能够将纯函数从不纯的部分中分离出来。</p>
+<p>栗子:<br>假设有一段程序，它能够通过身份证(ID)来找到一个人的记录并渲染在浏览器中</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> showPerson = (ID) =&amp;gt; &#123;</span><br><span class="line">  <span class="comment">// 查询数据库</span></span><br><span class="line">  <span class="keyword">const</span> person = db.get(ID);</span><br><span class="line">  <span class="comment">// 判断是否有这个人</span></span><br><span class="line">  <span class="keyword">if</span> (person !== <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 渲染操作</span></span><br><span class="line">    <span class="built_in">document</span>.getElementById(</span><br><span class="line">      <span class="string">`<span class="subst">$&#123;elementId&#125;</span>`</span></span><br><span class="line">    ).innerHTML = <span class="string">`<span class="subst">$&#123;person.ID&#125;</span>:<span class="subst">$&#123;person.name&#125;</span>`</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;404&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">showPerson(<span class="number">123</span>);</span><br></pre></td></tr></table></figure>
+
+<p>分析代码:</p>
+<ul>
+<li>该函数访问数据，与外部变量<code>db</code>进行了交互，因为该函数签名中并没有声明该参数，在任意时间，这个引用可能为<code>null</code>,或在调用间隔内改变，从而导致完全不同的结果并破坏了程序的完整性</li>
+<li>全局变量<code>elementId</code>可能随时改变，难以控制</li>
+<li>HTML 元素被直接修改了，HTML 文档（DOM）本身是一个可变的、共享的全局资源</li>
+<li>如果没有找到记录，该函数可能为抛出异常，导致整个程序的栈回退并突然结束</li>
+</ul>
+<p>用函数式思想改进:</p>
+<ul>
+<li>将这个长函数分离成多个具有单一职责的短函数</li>
+<li>通过显示地将完成功能所需的依赖都定义为函数参数来减少副作用的数量</li>
+</ul>
+<p>首先通过分离显示与获取数据的行为。</p>
+<p>当然，与外部存储系统和 DOM 交互所产生的副作用是不可避免的，但至少可以通过将其从主逻辑中分离出来的方式使它们更易于管理。</p>
+<p>这里需要引入一种常见的函数式编程技巧–<strong>柯里化</strong>，使用它，可以允许部分地传递函数参数，以便将函数的参数减少为一个，之后会再介绍。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 分离函数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> find = () =&amp;gt; &#123;</span><br><span class="line">  curry((db, id) =&amp;gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> obj = db.get(id);</span><br><span class="line">    <span class="keyword">if</span> (obj === <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;404&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> message = (person) =&amp;gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;person.ID&#125;</span>:<span class="subst">$&#123;person.name&#125;</span>`</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> append = () =&amp;gt; &#123;</span><br><span class="line">  curry((elementId, info) =&amp;gt; &#123;</span><br><span class="line">    <span class="built_in">document</span>.getElementById(elementId).innerHTML = info;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> showPerson = run(append(<span class="string">&quot;msg&quot;</span>), message, find(db));</span><br><span class="line"></span><br><span class="line">showPerson(<span class="number">123</span>);</span><br></pre></td></tr></table></figure>
+
+<p>尽管这个程序只有些许改进，但是它开始展现出许多优势:</p>
+<ul>
+<li>灵活很多，因为有了三个可以被复用的组件</li>
+<li>这种细粒度函数的重用是提高工作效率的一种手段，因为可以大大减少需要主动维护的代码量</li>
+<li>声明式代码风格提供了程序需要执行的那些高阶步骤的一个清晰试图，增强了代码的可读性</li>
+<li>将纯函数从不纯的行为中分离出来</li>
+</ul>
+<p>由于一些我们会在后续了解到的原因，能够确保一个函数有相同的返回值是一个优点，它使得函数的结果是一致的和可预测的。这是纯函数的一个特质，称为引用透明</p>
+<h3 id="引用透明和可置换性"><a href="#引用透明和可置换性" class="headerlink" title="引用透明和可置换性"></a>引用透明和可置换性</h3><p>引用透明是定义一个纯函数正确的方式。纯度在这个意义上表明了一个函数的参数和返回值之前映射的纯的关系。</p>
+<p>因此，如果一个函数对于相同输入始终产生相同的结果，那么就说它是<strong>引用透明</strong>的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> counter = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> add = () =&amp;gt; ++counter;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数不是引用透明的，因为其返回值严重依赖外部变量 counter。改造:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> add = (counter) =&amp;gt; ++counter;</span><br></pre></td></tr></table></figure>
+
+<p>为了引用透明，需要删除其依赖的外部变量这一状态，使其成为函数签名中显示定义的参数。</p>
+<p>现在这个函数是稳定的，对于相同输入每次都返回相同的输出结果。</p>
+<p>之所以追求这种函数的特质，是因为它不仅能让代码更易于测试，还可以让开发人员更容易<strong>推理整个程序</strong>。</p>
+<p>假设现在要求一个数组中的平均值:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> input = [<span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> sum = (total, current) =&amp;gt; total + current;</span><br><span class="line"><span class="keyword">const</span> total = (arr) =&amp;gt; arr.reduce(sum);</span><br><span class="line"><span class="keyword">const</span> size = (arr) =&amp;gt; arr.length;</span><br><span class="line"><span class="keyword">const</span> divide = (a, b) =&amp;gt; a / b;</span><br><span class="line"><span class="keyword">const</span> average = (arr) =&amp;gt; divide(sum(arr), size(arr));</span><br><span class="line"></span><br><span class="line">average(input);</span><br></pre></td></tr></table></figure>
+
+<p>由于函数<code>sum</code>和<code>size</code>都是引用透明的，对于如下给定输入，可以很容易重写这个表达式。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">divide(<span class="number">90</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line"><span class="number">90</span> / <span class="number">3</span> = <span class="number">30</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="存储不可变数据"><a href="#存储不可变数据" class="headerlink" title="存储不可变数据"></a>存储不可变数据</h3><p><strong>不可变数据</strong>是指那些被创建后不能更改的数据。</p>
+<p>与许多其他语言一样，JavaScript 中的所有基本类型（String、Number 等）从本质上是不可变的。但是其他对象，例如数组，都是可变的——即使他们作为输入传递给另一个函数，仍然可以通过改变原有内容的方式产生副作用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sortDesc = (arr) =&amp;gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> arr.sort((a, b) =&amp;gt; b - a);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> input = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>];</span><br><span class="line"><span class="keyword">let</span> output = sortDesc(input);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(input); <span class="comment">// [7, 6, 5, 4, 3, 2, 1]</span></span><br><span class="line"><span class="built_in">console</span>.log(output); <span class="comment">// [7, 6, 5, 4, 3, 2, 1]</span></span><br></pre></td></tr></table></figure>
+
+<p>排序的目的达到了，但是产生了副作用，即改变了输入。</p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>现在我们已经了解了函数式编程的一些基本原则（如声明式的、纯的和不可变的），那可以这么描述它:</p>
+<p>函数式编程是指为创建不可变的程序，通过消除外部可见的副作用，来对纯函数的声明式的求值过程。</p>
+<h2 id="函数式编程的优点"><a href="#函数式编程的优点" class="headerlink" title="函数式编程的优点"></a>函数式编程的优点</h2><ul>
+<li>促使开发人员将任务分解成更小的任务(函数)</li>
+<li>使用流式的调用链来处理数据</li>
+<li>通过响应式范式降低是将驱动代码的复杂性</li>
+</ul>
+<h3 id="复杂任务的分解"><a href="#复杂任务的分解" class="headerlink" title="复杂任务的分解"></a>复杂任务的分解</h3><p>从宏观上讲，函数式编程实际上是分解（将程序拆分成小片段）和组合（将小片段连接到一起）之间的相互作用。正是这种二元性，使得函数式如此模块化和高效。</p>
+<p>这里的模块化就是函数本身，函数式思维的学习通常始于将特定任务分解为逻辑子任务（函数）的过程。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> find = () =&amp;gt; &#123;</span><br><span class="line">  curry((db, id) =&amp;gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> obj = db.get(id);</span><br><span class="line">    <span class="keyword">if</span> (obj === <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;404&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> message = (person) =&amp;gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;person.ID&#125;</span>:<span class="subst">$&#123;person.name&#125;</span>`</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> append = () =&amp;gt; &#123;</span><br><span class="line">  curry((elementId, info) =&amp;gt; &#123;</span><br><span class="line">    <span class="built_in">document</span>.getElementById(elementId).innerHTML = info;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> showPerson = run(append(<span class="string">&quot;msg&quot;</span>), message, find(db));</span><br><span class="line"></span><br><span class="line">showPerson(<span class="number">123</span>);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">                find</span><br><span class="line">showPerson  →   message</span><br><span class="line">                append</span><br></pre></td></tr></table></figure>
+
+<p>如果需要，这些子任务可以进一步分解，直到成为一个个简单的，相互独立的纯函数功能单元。</p>
+<p>可以看出，函数式编程的模块化概念与<strong>单一职责</strong>原则息息相关，也就是说，函数都应该拥有单一的目的。纯度和引用透明会促使我们这样思考问题。</p>
+<p>还记得上面说的那个<code>run</code>函数吗？</p>
+<p>现在揭秘这个黑魔法:实际上<code>run</code>函数是一个极为重要的技术的别名 —— <strong>组合</strong> 。</p>
+<p>两个函数的组合是一个新的函数，它拿到一个函数的输出，并传递到另一个函数中。讲述有两个函数<code>f</code>和<code>g</code>，形式上，组合可以如下描述:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f · g = f(g(x))</span><br></pre></td></tr></table></figure>
+
+<p>这个公式读作“f 组合上 g”,它在 g 的返回值与 f 的参数之间构建了一个松耦合的且类型安全的联系。</p>
+<p>两个函数能够组合的条件是，它们必须在参数数目及参数类型上形成一致。</p>
+<p>现在用<code>compose</code>构建组合函数<code>showPerson</code>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> showPerson = compose(append(<span class="string">&quot;#msg&quot;</span>), message, find(db));</span><br><span class="line">showPerson(<span class="number">123</span>);</span><br></pre></td></tr></table></figure>
+
+<p>关于组合，先了解这么多。</p>
+<p>到此为此，我们可以看到:函数式的组合提高了抽象的层次，可以清晰地够勾勒代码的所有步骤，但又不暴露任何底层细节在此代码执行的所有步骤。</p>
+<p>由于<code>compose</code>接受其他函数为参数，这被称为<code>高阶函数</code>，但组合并不是构建流式的、模块化的代码的唯一方式。</p>
+<h3 id="使用流式链来处理函数"><a href="#使用流式链来处理函数" class="headerlink" title="使用流式链来处理函数"></a>使用流式链来处理函数</h3><p>除了<code>map</code>，我们还可以通过导入一些函数式类库来获得更多高阶函数，比方说<code>lodash</code>。</p>
+<p>假设一个场景:需要计算那些选择多门课程的学生的平均分</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> data = [</span><br><span class="line">  &#123; <span class="attr">number</span>: <span class="number">2</span>, <span class="attr">grade</span>: <span class="number">100</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">number</span>: <span class="number">3</span>, <span class="attr">grade</span>: <span class="number">80</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">number</span>: <span class="number">1</span>, <span class="attr">grade</span>: <span class="number">89</span> &#125;,</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>命令式代码可能是这样的:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> totalGrade = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">let</span> totalStudentsFound = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &amp;lt; data.length; i++) &#123;</span><br><span class="line">  <span class="keyword">let</span> student = data[i];</span><br><span class="line">  <span class="keyword">if</span> (student !== <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (student.number &amp;gt; <span class="number">1</span>) &#123;</span><br><span class="line">      totalGrade += student.grade;</span><br><span class="line">      totalStudentsFound++;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> average = totalGrade / totalStudentsFound;</span><br></pre></td></tr></table></figure>
+
+<p>用函数式思维来分解这个问题:</p>
+<ul>
+<li>选择合适的学生（选课数量大于 1 的）</li>
+<li>获取他们的成绩</li>
+<li>计算平均值</li>
+</ul>
+<p>通过<code>lodash</code>把这些操作连接起来:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">_.chain(data)</span><br><span class="line">  .filter((student) =&amp;gt; student.number &amp;gt; <span class="number">1</span>)</span><br><span class="line">  .pluck(<span class="string">&quot;grade&quot;</span>)</span><br><span class="line">  .average()</span><br><span class="line">  .value(); <span class="comment">// 执行链式队列并提取解链后的值。</span></span><br></pre></td></tr></table></figure>
+
+<p>我们先不用太在意发生了什么，与命令式版本比较，并注意如何消除变量的声明和变化，以及循环和判断语句。</p>
+<p>诸如循环和逻辑分支这样的很多命令式控制流机制，会提高函数的复杂程度，因为它们会根据某些条件不同而执行不同的行为，难以测试。</p>
+<p>上面代码略过了一些错误处理代码，我们可以利用一些纯函数式的设计模式来处理它，这个以后再说。</p>
+<h3 id="复杂异步应用中的响应"><a href="#复杂异步应用中的响应" class="headerlink" title="复杂异步应用中的响应"></a>复杂异步应用中的响应</h3><p>大家经历过回调地狱吗？</p>
+<p>它打破了线性的代码结构，使代码变得难以阅读，因为它的成功处理和失败处理的逻辑混杂在一起。</p>
+<p>我们经常要处理在服务端或者客户端的异步和事件驱动代码，可以用响应式编程来大幅降低这些代码的复杂性</p>
+<p>响应式是一种范式，是函数式编程应用之一，采用它的好处在于能够提高代码的抽象级别，从而更专注业务逻辑。这种范式能够充分利用函数式编程中函数链和组合的样式。</p>
+<p>事件有很多种:鼠标点击、文本变化、焦点变化、HTTP 请求处理或者文件写入等等。假设现在根据输入的 ID 号码查询用户是否存在，命令式代码可能是这样的:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> valid = <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">const</span> element = <span class="built_in">document</span>.getElementById(<span class="string">&quot;#input&quot;</span>);</span><br><span class="line">element.onkeyup = (event) =&amp;gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> val = element.value;</span><br><span class="line">  <span class="keyword">if</span> (val !== <span class="literal">null</span> &amp;amp;&amp;amp; val.length !== <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// 可能进行的裁剪或者清理输入，直接改变数据</span></span><br><span class="line">    val = val.replace(<span class="regexp">/^[a-zA-Z0-9_-]&#123;4,16&#125;$/</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">    <span class="comment">// 可能存在的嵌套逻辑分支</span></span><br><span class="line">    <span class="keyword">if</span> (val.length === <span class="number">9</span>) &#123;</span><br><span class="line">      valid = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;404&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>我刚学编程那会写过类似结构的代码，一大段逻辑塞在一起。但是对于这样一个简单的任务，编码从一开始就变得复杂，这样除了增加心智负担，代码也无法重用。</p>
+<p>来康康响应式，这种白痴南横范式使用了一个叫做<code>observable</code>的概念，它能够订阅一个数据流，让开发者通过使用组合和链式操作来优雅地处理数据。</p>
+<p>代码:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Rx.Observable.fromEvent(<span class="built_in">document</span>.getElementById(<span class="string">&quot;#input&quot;</span>), <span class="string">&quot;keyup&quot;</span>)</span><br><span class="line">  .map((input) =&amp;gt; input.srcElement.value)</span><br><span class="line">  .filter((val) =&amp;gt; val !== <span class="literal">null</span> &amp;amp;&amp;amp; val.length !== <span class="number">0</span>)</span><br><span class="line">  .skipWhile((val) =&amp;gt; length === <span class="number">9</span>)</span><br><span class="line">  .subscribe(() =&amp;gt; <span class="built_in">console</span>.log(<span class="string">&quot;404&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>它和前面的例子相像，这说明，无论是处理集合元素序列或者用户输入序列，一切都被抽象出来，这使得可以用相同的方式去处理数据。</p>
+<p>上面的代码的操作是不可变的，并且所有业务逻辑被分割成单独的函数。并不是必须要响应式地使用函数，但函数式的思维会迫使开发者这么做。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>使用纯函数的代码绝不会更改或破坏全局状态，有助于提高代码的可测试性和可维护性</li>
+<li>函数式编程采用声明式的风格，易于推理。这提高了应用程序的整体可读性，通过使用组合和 lambda 表达式使函数更加精简</li>
+<li>集合中数据元素可以通过链接如 map 和 reduce 这样的函数来实现</li>
+<li>函数式编程将函数视为积木，通过一等高阶函数来提高代码的模块化和可重用性</li>
+<li>可以利用响应式编程组合各个函数来降低驱动程序的复杂性</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2020/11/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89/" title="读书笔记:Javascript函数式编程指南（一）" target="_blank" rel="external">http://example.com/2020/11/20/读书笔记:Javascript函数式编程指南（一）/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/HJY-xh" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/HJY-xh" target="_blank"><span class="text-dark">可乐加冰</span><small class="ml-1x">Web Developer</small></a></h3>
+        <div>跑起来会有风</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2021/01/15/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/" title="读书笔记:Javascript函数式编程指南（二）"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/11/09/PromisesA+%E8%A7%84%E8%8C%83%E7%BF%BB%E8%AF%91/" title="Promise规范翻译"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2021 HJY
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: true,
+    appId: 'TrQDRIWsj1IVoHW4a4fCkpgl-gzGzoHsz',
+    appKey: '1emq1qCoboyjpC5ysr8uuzjf',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
