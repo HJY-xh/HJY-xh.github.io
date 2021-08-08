@@ -2,14 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://example.com/2021/04/16/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E5%9B%9B%EF%BC%89/</loc>
+    <loc>http://example.com/2021/03/05/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%89%EF%BC%89/</loc>
     
     <lastmod>2021-08-08</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/2021/03/05/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%89%EF%BC%89/</loc>
+    <loc>http://example.com/2021/04/16/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E5%9B%9B%EF%BC%89/</loc>
     
     <lastmod>2021-08-08</lastmod>
     
@@ -347,6 +347,13 @@
   </url>
   
   <url>
+    <loc>http://example.com/tags/%E5%8D%8F%E8%AE%AE/</loc>
+    <lastmod>2021-08-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/tags/NoSQL/</loc>
     <lastmod>2021-08-08</lastmod>
     <changefreq>daily</changefreq>
@@ -361,13 +368,6 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/%E5%8D%8F%E8%AE%AE/</loc>
-    <lastmod>2021-08-08</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/tags/Java/</loc>
     <lastmod>2021-08-08</lastmod>
     <changefreq>daily</changefreq>
@@ -375,14 +375,14 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/git/</loc>
+    <loc>http://example.com/tags/CSS/</loc>
     <lastmod>2021-08-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/tags/CSS/</loc>
+    <loc>http://example.com/tags/git/</loc>
     <lastmod>2021-08-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
