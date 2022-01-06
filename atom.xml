@@ -215,6 +215,30 @@
   </entry>
   
   <entry>
+    <title>React中render的实现</title>
+    <link href="http://example.com/2021/07/19/React%E4%B8%ADrender%E7%9A%84%E5%AE%9E%E7%8E%B0/"/>
+    <id>http://example.com/2021/07/19/React%E4%B8%ADrender%E7%9A%84%E5%AE%9E%E7%8E%B0/</id>
+    <published>2021-07-19T14:03:04.000Z</published>
+    <updated>2022-01-06T08:13:59.959Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://github.com/HJY-xh/frame-course/blob/master/React/render%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/render%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0.md">传送门 </a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;&lt;a href=&quot;https://github.com/HJY-xh/frame-course/blob/master/React/render%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/render%E7%9A%84%E7%</summary>
+      
+    
+    
+    
+    <category term="技术" scheme="http://example.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+    <category term="React" scheme="http://example.com/tags/React/"/>
+    
+  </entry>
+  
+  <entry>
     <title>JavaScript 中的作用域</title>
     <link href="http://example.com/2021/06/11/JavaScript%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/"/>
     <id>http://example.com/2021/06/11/JavaScript%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F/</id>
@@ -530,33 +554,6 @@
 &lt;p&gt;本博客 &lt;a href=&quot;https://hjy-xh.github.io/&quot;&gt;hjy-xh&lt;/a&gt;，转载请申明出处&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink</summary>
-      
-    
-    
-    
-    <category term="技术" scheme="http://example.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-    <category term="JavaScript" scheme="http://example.com/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JavaScript中的防抖和节流</title>
-    <link href="http://example.com/2020/04/28/JavaScript%E4%B8%AD%E7%9A%84%E9%98%B2%E6%8A%96%E5%92%8C%E8%8A%82%E6%B5%81/"/>
-    <id>http://example.com/2020/04/28/JavaScript%E4%B8%AD%E7%9A%84%E9%98%B2%E6%8A%96%E5%92%8C%E8%8A%82%E6%B5%81/</id>
-    <published>2020-04-28T14:18:41.000Z</published>
-    <updated>2021-08-07T05:59:13.785Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>本博客 <a href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p></blockquote><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>防抖和节流是优化前端性能的一种手段。<br>以下情况可以考虑使用防抖和节流：</p><ul><li>DOM 频繁重绘</li><li>频繁请求后端接口</li><li>浏览器的 resize、scroll（适合用节流）</li><li>鼠标的 mounsemove、mouseover（适合用节流）</li><li>input 输入框的 keypress（适合用防抖）</li></ul><h2 id="防抖-debounce"><a href="#防抖-debounce" class="headerlink" title="防抖(debounce)"></a>防抖(debounce)</h2><p>核心思想：当事件被触发，延迟 n 秒后执行回调函数，如果在 n 秒内再次被触发，则重新计时延迟时间。</p><p>代码实现：</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">debounce</span>(<span class="params">fn, delay</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> timer;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> that = <span class="built_in">this</span>;</span><br><span class="line">    <span class="keyword">var</span> args = <span class="built_in">arguments</span>;</span><br><span class="line">    timer &amp;&amp; <span class="built_in">clearTimeout</span>(timer);</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      fn.apply(that, args);</span><br><span class="line">    &#125;, delay);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="节流"><a href="#节流" class="headerlink" title="节流"></a>节流</h2><p>核心思想：在规定的一个单位时间内只能触发一次函数，如果在这个单位时间内出发多次函数，只有一次生效。</p><p>代码实现:</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">fn, delay</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> timer;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> that = <span class="built_in">this</span>;</span><br><span class="line">    <span class="keyword">var</span> args = <span class="built_in">arguments</span>;</span><br><span class="line">    <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      fn.apply(that, args);</span><br><span class="line">      <span class="comment">// 在执行完fn后清空timer,throttle触发可以进入计时器</span></span><br><span class="line">      timer = <span class="literal">null</span>;</span><br><span class="line">    &#125;, delay);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="节流与防抖的异同"><a href="#节流与防抖的异同" class="headerlink" title="节流与防抖的异同"></a>节流与防抖的异同</h2><p>相同：在一段时间内防止函数被频繁调用，减少资源浪费，提升性能。<br>不同：防抖是固定时间内只执行一次，节流是间隔固定时间后执行。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;本博客 &lt;a href=&quot;https://hjy-xh.github.io/&quot;&gt;hjy-xh&lt;/a&gt;，转载请申明出处&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; ti</summary>
       
     
     

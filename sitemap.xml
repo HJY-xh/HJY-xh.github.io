@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://example.com/2021/07/19/React%E4%B8%ADrender%E7%9A%84%E5%AE%9E%E7%8E%B0/</loc>
+    
+    <lastmod>2022-01-06</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://example.com/2021/12/28/React%20Hook%E8%A7%A3%E6%9E%90/</loc>
     
     <lastmod>2022-01-06</lastmod>
@@ -417,13 +424,6 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/%E5%8D%8F%E8%AE%AE/</loc>
-    <lastmod>2022-01-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/tags/NoSQL/</loc>
     <lastmod>2022-01-06</lastmod>
     <changefreq>daily</changefreq>
@@ -439,6 +439,13 @@
   
   <url>
     <loc>http://example.com/tags/React/</loc>
+    <lastmod>2022-01-06</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/%E5%8D%8F%E8%AE%AE/</loc>
     <lastmod>2022-01-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
