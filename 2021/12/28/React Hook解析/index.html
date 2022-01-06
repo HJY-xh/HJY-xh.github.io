@@ -17,18 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>书单 | 可乐加冰</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="书单">
-<meta property="og:url" content="http://example.com/books/index.html">
+  <title>React Hook解析 | 可乐加冰</title>
+  <meta name="description" content="问题列表带着以下问题学习：  Hook解决了什么问题？ Hook有哪些优势？ 为什么有Hook？ useState方括号有什么用？ 为什么每次更新的时候都要运行 Effect? useMemo 和 shouldComponentUpdate 有什么区别？  Hook概述 React 16.8的新增特性  它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性（是一些">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React Hook解析">
+<meta property="og:url" content="http://example.com/2021/12/28/React%20Hook%E8%A7%A3%E6%9E%90/index.html">
 <meta property="og:site_name" content="可乐加冰">
+<meta property="og:description" content="问题列表带着以下问题学习：  Hook解决了什么问题？ Hook有哪些优势？ 为什么有Hook？ useState方括号有什么用？ 为什么每次更新的时候都要运行 Effect? useMemo 和 shouldComponentUpdate 有什么区别？  Hook概述 React 16.8的新增特性  它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性（是一些">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-08-07T06:13:07.340Z">
-<meta property="article:modified_time" content="2021-08-07T06:13:07.340Z">
+<meta property="article:published_time" content="2021-12-28T12:23:54.000Z">
+<meta property="article:modified_time" content="2022-01-06T03:29:01.059Z">
 <meta property="article:author" content="HJY">
+<meta property="article:tag" content="React">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/books/index.html">
+  <link rel="canonical" href="http://example.com/2021/12/28/React%20Hook%E8%A7%A3%E6%9E%90/index.html">
   
     <link rel="alternate" href="/atom.xml" title="可乐加冰" type="application/atom+xml">
   
@@ -45,7 +48,7 @@
 <meta name="generator" content="Hexo 5.4.0"></head>
 
 
-<body class="main-center no-sidebar" itemscope itemtype="http://schema.org/WebPage">
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
   <header class="header" itemscope itemtype="http://schema.org/WPHeader">
   <div class="slimContent">
     <div class="navbar-header">
@@ -324,40 +327,297 @@
 </aside>
 
   
-  <main class="main" role="main">
-  <article class="article article-links article-type-list" itemscope="">
-  <header class="article-header">
-    <h1 itemprop="title">书单</h1>
-    <p class="text-muted">个人收藏的书单推荐给大家 <a href="https://www.douban.com/people//" target="_blank">[我的豆瓣]</a></p>
-    <nav role="navigation" id="nav-main" class="okayNav">
-      <ul id="tabs">
-        <li><a id="reading-tab" href="javascript:show('reading')" rel="external">在读<span id="reading-total"></span></a></li>
-        <li><a id="wish-tab" href="javascript:show('wish')" rel="external">想读<span id="wish-total"></span></a></li>
-        <li><a id="read-tab" href="javascript:show('read')" rel="external">已读<span id="read-total"></span></a></li>
-      </ul>
-    </nav>
-  </header>
-  <div class="article-body">
-    <div id="loading">
-      <p>正在加载...</p>
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-React Hook解析" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React Hook解析
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2021/12/28/React%20Hook%E8%A7%A3%E6%9E%90/" class="article-date">
+	  <time datetime="2021-12-28T12:23:54.000Z" itemprop="datePublished">2021-12-28</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/React/" rel="tag">React</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/12/28/React%20Hook%E8%A7%A3%E6%9E%90/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.4k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
+	
+
+      </div>
     </div>
-    <div id="douban">
-      <div id="collections">
-        <div id="reading" class="row hide">
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="问题列表"><a href="#问题列表" class="headerlink" title="问题列表"></a>问题列表</h2><p>带着以下问题学习：</p>
+<ul>
+<li>Hook解决了什么问题？</li>
+<li>Hook有哪些优势？</li>
+<li>为什么有Hook？</li>
+<li>useState方括号有什么用？</li>
+<li>为什么每次更新的时候都要运行 Effect?</li>
+<li>useMemo 和 shouldComponentUpdate 有什么区别？</li>
+</ul>
+<h2 id="Hook概述"><a href="#Hook概述" class="headerlink" title="Hook概述"></a>Hook概述</h2><ul>
+<li><p>React 16.8的新增特性</p>
+</li>
+<li><p>它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性（是一些可以让你在函数组件里“钩入” React state 及生命周期等特性的函数）</p>
+</li>
+</ul>
+<h2 id="Hook的动机"><a href="#Hook的动机" class="headerlink" title="Hook的动机"></a>Hook的动机</h2><ul>
+<li>在无需修改组件结构的情况下复用状态逻辑</li>
+</ul>
+<p>在组件之间复用状态逻辑很难</p>
+<p>Hook出现之前，将可复用性行为”附加“到组件的解决方案有<code>render props</code>和<code>高阶组件</code>，但是这类方案需要重新组织组件结构，可能会很麻烦，进而让代码难以理解。</p>
+<ul>
+<li>Hook将组件中相互关联的部分拆分成更小的函数（比如监听事件、请求数据），而并非强制按照生命周期划分</li>
+</ul>
+<p>组件期初很简单，但是逐渐会被状态逻辑和副作用充斥，相关关联且需要对照修改的代码被拆分（监听事件），不相关的代码在同一个方法中（<code>componentDidMount</code>、<code>componentWillUnmount</code>)组合在一起，容易产生bug。</p>
+<ul>
+<li>降低学习门槛</li>
+</ul>
+<p>对class的学习（需要理解JS中的this工作方式）</p>
+<h2 id="Hook使用规则"><a href="#Hook使用规则" class="headerlink" title="Hook使用规则"></a>Hook使用规则</h2><ul>
+<li><p>只能在函数最外层调用Hook。不要在循环、条件判断或者子函数中调用</p>
+<p>  这样能够确保Hook在每一次渲染中都按照同样的顺序被调用</p>
+</li>
+<li><p>只能在React的函数组件中调用Hook（包括自定义的Hook）</p>
+</li>
+</ul>
+<h2 id="常见的Hook"><a href="#常见的Hook" class="headerlink" title="常见的Hook"></a>常见的Hook</h2><ul>
+<li><p>基础 Hook</p>
+<ul>
+<li>useState</li>
+<li>useEffect<ul>
+<li>说明<pre><code>  - 可以把该Hook看做是`componentDidMount`、`componentDidUpdate`、`componentWillUnmout`三个函数的组合
+  - React保证了每次运行effect的同时，DOM都已经更新完毕
+  - 与`componentDidMount`或`componentDidUpdate`不同，使用useEffect调度的effect不会阻塞浏览器更新屏幕，这让应用看起来响应更快
+  - effect中可选的清除机制在组件卸载的时候触发
+</code></pre>
+</li>
+<li>使用技巧<pre><code>  - 使用多个 Effect 实现关注点分离（按照代码的用途分离它们），React将按照effect声明的顺序一次调用组建的每一个effect
+  - 跳过 Effect 进行性能优化（第二个参数）
+</code></pre>
+</li>
+</ul>
+</li>
+<li>useContext<pre><code>接收一个 context 对象（`React.createContext` 的返回值）并返回该 context 的当前值
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>额外的 Hook</p>
+<ul>
+<li>useReducer<br>useState 的替代方案。它接收一个形如 <code>(state, action) =&gt; newState</code> 的 reducer，并返回当前的 state 以及与其配套的 dispatch 方法</li>
+<li>useCallback<br>useCallback(fn, deps) 相当于 useMemo(() =&gt; fn, deps)</li>
+<li>useMemo<br>可以把 useMemo 作为性能优化的手段，但不要把它当成语义上的保证<br>可以使用它缓存一些相对耗时的计算，也非常适合用于存储引用类型的数据，可以传入对象字面量，匿名函数等，甚至是 React Element</li>
+<li>useRef<br>useRef 返回一个可变的 ref 对象，其 <code>.current</code> 属性被初始化为传入的参数（initialValue）</li>
+<li>useImperativeHandle<ul>
+<li>useImperativeHandle 可以在使用 ref 时自定义暴露给父组件的实例值</li>
+<li>在大多数情况下，应当避免使用 ref 这样的命令式代码</li>
+<li>useImperativeHandle 应当与 <code>forwardRef</code> 一起使用</li>
+</ul>
+</li>
+<li>useLayoutEffect<br>其函数签名与 useEffect 相同，但它会在所有的 DOM 变更之后同步调用 effect。可以使用它来读取 DOM 布局并同步触发重渲染</li>
+<li>useDebugValue<br>useDebugValue 可用于在 React 开发者工具中显示自定义 hook 的标签,它接受一个格式化函数作为可选的第二个参数。该函数只有在 Hook 被检查时才会被调用。它接受 debug 值作为参数，并且会返回一个格式化的显示值</li>
+</ul>
+</li>
+</ul>
+<h2 id="自定义Hook"><a href="#自定义Hook" class="headerlink" title="自定义Hook"></a>自定义Hook</h2><p>通过自定义 Hook，可以将组件逻辑提取到可重用的函数中</p>
+<p>字应该始终以 use 开头，这样可以一眼看出其符合 Hook 的规则</p>
+<p>自定义 Hook 是一种自然遵循 Hook 设计的约定，而并不是 React 的特性</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul>
+<li><p>函数组件执行函数<code>renderWithHooks</code></p>
+<ul>
+<li>作用<br>它是调用<code>function组件</code>函数的主要函数，从源码中看，它首先会置空即将调和渲染的<code>workInProgress树</code>的<code>memoizedState</code>和<code>updateQueue</code>，把新的hooks信息挂载到这两个属性上，然后在组件<code>commit阶段</code>，将<code>workInProgress树</code>替换成<code>current树</code>，替换真实的DOM元素节点。并在current树保存hooks信息。</li>
+<li>步骤<ul>
+<li>执行函数组件</li>
+<li>改变<code>ReactCurrentDispatcher</code>对象</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>初始化hooks</p>
+<p>  相关hook实际执行的函数:</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">useState: mountState, <span class="comment">// 初始化useState</span></span><br><span class="line"><span class="attr">useEffect</span>: mountEffect, <span class="comment">// 初始化useEffect</span></span><br><span class="line"><span class="attr">useLayoutEffect</span>: mountLayoutEffect, <span class="comment">// 初始化useLayoutEffect</span></span><br><span class="line"><span class="attr">useMemo</span>: mountMemo, <span class="comment">// 初始化useMemo</span></span><br><span class="line"><span class="attr">useReducer</span>: mountReducer, <span class="comment">// 初始化useReducer</span></span><br><span class="line"><span class="attr">useRef</span>: mountRef, <span class="comment">// 初始化useRef</span></span><br><span class="line"><span class="attr">useCallback</span>: mountCallback, <span class="comment">// 初始化useCallback</span></span><br></pre></td></tr></table></figure>
+
+<p>  <code>mountWorkInProgressHook</code>生成hook链表</p>
+<ul>
+<li>在一个函数组件第一次渲染时，每个hook执行，都会产生一个hook对象，并形成链表结构，绑定在<code>workInProgress</code>的<code>memoizedState</code>属性上</li>
+<li>hook上的状态，绑定在当前hook对象的<code>memoizedState</code>属性上</li>
+<li>对于effect副作用钩子，会绑定在<code>workInProgress.updateQueue</code>上，等到<code>commit阶段</code>，dom树构建完成，再执行每个 effect 副作用钩子。</li>
+</ul>
+</li>
+<li><p>更新hooks</p>
+<p>  相关hook实际执行的函数:</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">useState: updateState, <span class="comment">// 得到最新的state</span></span><br><span class="line"><span class="attr">useEffect</span>: updateEffect, <span class="comment">// 更新updateQueue</span></span><br><span class="line"><span class="attr">useLayoutEffect</span>: updateLayoutEffect,</span><br><span class="line"><span class="attr">useMemo</span>: updateMemo,</span><br><span class="line"><span class="attr">useReducer</span>: updateReducer,</span><br><span class="line"><span class="attr">useRef</span>: updateRef, <span class="comment">// 获取ref对象</span></span><br><span class="line"><span class="attr">useCallback</span>: updateCallback</span><br></pre></td></tr></table></figure>
+
+<p>  <code>updateWorkInProgressHook</code>更新hook链表，找到对应的hooks</p>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://zh-hans.reactjs.org/docs/hooks-intro.html">官方文档</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904165500518414">React Hooks 最佳实践</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6864438643727433741">react-hooks如何使用？</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6944863057000529933#heading-0">一文吃透react-hooks原理</a></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2021/12/28/React%20Hook%E8%A7%A3%E6%9E%90/" title="React Hook解析" target="_blank" rel="external">http://example.com/2021/12/28/React Hook解析/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/HJY-xh" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/HJY-xh" target="_blank"><span class="text-dark">可乐加冰</span><small class="ml-1x">Web Developer</small></a></h3>
+        <div>跑起来会有风</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/01/05/JavaScript%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" title="JavaScript 如何实现单例模式"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2021/12/19/%E5%B8%B8%E8%A7%81%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" title="常见的排序算法"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="clearfix"></div>
-        <div id="wish" class="row hide">
-        </div>
-        <div class="clearfix"></div>
-        <div id="read" class="row hide">
-        </div>
-        <div class="clearfix"></div>
       </div>
     </div>
   </div>
-</article>
-
-  
+</div>
 
 
 
@@ -415,156 +675,39 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
-   <script>
-function show(id) {
-  document.getElementById('reading').classList.remove('active');
-  document.getElementById('read').classList.remove('active');
-  document.getElementById('wish').classList.remove('active');
-  document.getElementById('reading').classList.add('hide');
-  document.getElementById('read').classList.add('hide');
-  document.getElementById('wish').classList.add('hide');
 
-  var ele = document.getElementById(id);
-  ele.classList.remove('hide');
-  ele.classList.add('active');
-
-  document.getElementById('reading-tab').classList.remove('active');
-  document.getElementById('read-tab').classList.remove('active');
-  document.getElementById('wish-tab').classList.remove('active');
-  document.getElementById(id + '-tab').classList.add('active');
-};
-
-(function() {
-  var read = [];
-  var wish = [];
-  var reading = [];
-
-  // XHR 获取豆瓣书单数据，数据格式json
-  // function loadDoubanCollections() {
-  //   var xhr = new XMLHttpRequest();
-  //   // https://api.douban.com/v2/book/user/:name/collections
-  //   xhr.open('GET', 'http://7b1fa0.com1.z0.glb.clouddn.com/douban-20170429-1.json', true);
-
-  //   xhr.onload = function() {
-  //     // console.log(this);
-  //     if (this.status >= 200 && this.status < 300) {
-  //       var res = JSON.parse(this.response);
-  //       searchData = res;
-  //       onLoadDouban(searchData);
-  //     } else {
-  //       console.error(this.statusText);
-  //     }
-  //   };
-
-  //   xhr.onerror = function() {
-  //     console.error(this.statusText);
-  //   };
-
-  //   xhr.send();
-  // }
-  
-  // Ajax 获取豆瓣书单数据，数据格式json
-  function loadDoubanCollections() {
-    var _this = this;
-    // https://api.douban.com/v2/book/user/:name/collections?start=0&count=100
-    var url = "https://api.douban.com/v2/book/user//collections"
-    $.ajax({
-      url: url,
-      type: 'GET',
-      data: {
-        start:0, // 从哪一条记录开始
-        count:100, // 获取豆瓣书单数据条数
-        apikey:'' // 豆瓣apikey
-      },
-      dataType: 'JSONP', //here
-      success: function(data) {
-        // console.log(data);
-        onLoadDouban(data);
-      }
-    });
-  }
-
-  function onLoadDouban(data) {
-    if (data['count'] > 0) {
-      for (var i = 0; i < data['collections'].length; ++i) {
-        resolveBook(data['collections'][i]);
-      }
-    }
-    render();
-  }
-
-  function resolveBook(book) {
-    if (book['status'] == 'read') {
-      read.push(book);
-    }
-    if (book['status'] == 'wish') {
-      wish.push(book);
-    }
-    if (book['status'] == 'reading') {
-      reading.push(book);
-    }
-  }
-
-  function render() {
-    renderList(read, 'read');
-    renderList(wish, 'wish');
-    renderList(reading, 'reading');
-
-    document.getElementById('reading-total').innerHTML = '(' + reading.length + ')';
-    document.getElementById('read-total').innerHTML = '(' + read.length + ')';
-    document.getElementById('wish-total').innerHTML = '(' + wish.length + ')';
-
-    show('reading');
-    document.getElementById('loading').classList.add('hide');
-  }
-
-  function renderList(list, id) {
-    for (var i = 0; i < list.length; ++i) {
-      var h = renderBook(list[i]);
-      if (i > 0 && i % 4 == 3) {
-        h += '<div class="clearfix"></div>';
-      }
-      document.getElementById(id).innerHTML = document.getElementById(id).innerHTML + h;
-    }
-  }
-
-  function renderBook(book) {
-    var html = '<div class="col-sm-6 col-md-6"><div class="panel panel-default hover-grow"><div class="panel-body">'
-      + '<div class="media media-middle book book-' + book['status'] + '" itemscope itemtype="http://schema.org/Book">' 
-      + '<div class="media-left"><a class="media-middle" target="_blank" href="' + book.book.alt + '" rel="external nofollow noopener noreferrer"><img class="media-object" src="' + book.book.image + '" itemprop="image"/></a></div><div class="media-body">' 
-      + '<h3 class="media-heading" itemprop="name"><a target="_blank" href="' + book.book.alt + '" rel="external nofollow noopener noreferrer">' + book.book.title + '</a></h3>' 
-      + '<p class="meta text-nowrap-1x"><small itemprop="author">' + book.book.author[0] + '</small> / <small itemprop="datePublished">' + book.book.pubdate + '</small> / <small itemprop="ratingValue">' + book.book.rating.average + '分</small></p>' 
-      + '<p class="meta text-nowrap-1x">' + book.updated.substring(0, 10) + resolveRating(book.rating) + resolveTags(book.tags) + '</p>' 
-      + '<div class="comments text-muted text-nowrap-3x" itemprop="comment">' + (book.comment ? book.comment : '') + '</div>' 
-      + '</div>' + '</div>' + '</div>' + '</div>' + '</div>';
-    return html;
-  }
-
-  function resolveRating(rating) {
-    if (rating && rating.value) {
-      return ' / ' + rating.value + '星';
-    }
-    return '';
-  }
-
-  function resolveTags(tags) {
-    if (tags && tags.length > 0) {
-      var html = ' / ';
-      for (var i = 0; i < tags.length; ++i) {
-        html += tags[i] + ' ';
-      }
-      return html;
-    }
-    return '';
-  }
-
-  setTimeout(function() {
-    loadDoubanCollections();
-  }, 0)
-})()
-</script>
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: true,
+    appId: 'TrQDRIWsj1IVoHW4a4fCkpgl-gzGzoHsz',
+    appKey: '1emq1qCoboyjpC5ysr8uuzjf',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
 
 
 

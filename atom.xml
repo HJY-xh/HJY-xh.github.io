@@ -44,6 +44,34 @@
   </entry>
   
   <entry>
+    <title>React Hook解析</title>
+    <link href="http://example.com/2021/12/28/React%20Hook%E8%A7%A3%E6%9E%90/"/>
+    <id>http://example.com/2021/12/28/React%20Hook%E8%A7%A3%E6%9E%90/</id>
+    <published>2021-12-28T12:23:54.000Z</published>
+    <updated>2022-01-06T03:29:01.059Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="问题列表"><a href="#问题列表" class="headerlink" title="问题列表"></a>问题列表</h2><p>带着以下问题学习：</p><ul><li>Hook解决了什么问题？</li><li>Hook有哪些优势？</li><li>为什么有Hook？</li><li>useState方括号有什么用？</li><li>为什么每次更新的时候都要运行 Effect?</li><li>useMemo 和 shouldComponentUpdate 有什么区别？</li></ul><h2 id="Hook概述"><a href="#Hook概述" class="headerlink" title="Hook概述"></a>Hook概述</h2><ul><li><p>React 16.8的新增特性</p></li><li><p>它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性（是一些可以让你在函数组件里“钩入” React state 及生命周期等特性的函数）</p></li></ul><h2 id="Hook的动机"><a href="#Hook的动机" class="headerlink" title="Hook的动机"></a>Hook的动机</h2><ul><li>在无需修改组件结构的情况下复用状态逻辑</li></ul><p>在组件之间复用状态逻辑很难</p><p>Hook出现之前，将可复用性行为”附加“到组件的解决方案有<code>render props</code>和<code>高阶组件</code>，但是这类方案需要重新组织组件结构，可能会很麻烦，进而让代码难以理解。</p><ul><li>Hook将组件中相互关联的部分拆分成更小的函数（比如监听事件、请求数据），而并非强制按照生命周期划分</li></ul><p>组件期初很简单，但是逐渐会被状态逻辑和副作用充斥，相关关联且需要对照修改的代码被拆分（监听事件），不相关的代码在同一个方法中（<code>componentDidMount</code>、<code>componentWillUnmount</code>)组合在一起，容易产生bug。</p><ul><li>降低学习门槛</li></ul><p>对class的学习（需要理解JS中的this工作方式）</p><h2 id="Hook使用规则"><a href="#Hook使用规则" class="headerlink" title="Hook使用规则"></a>Hook使用规则</h2><ul><li><p>只能在函数最外层调用Hook。不要在循环、条件判断或者子函数中调用</p><p>  这样能够确保Hook在每一次渲染中都按照同样的顺序被调用</p></li><li><p>只能在React的函数组件中调用Hook（包括自定义的Hook）</p></li></ul><h2 id="常见的Hook"><a href="#常见的Hook" class="headerlink" title="常见的Hook"></a>常见的Hook</h2><ul><li><p>基础 Hook</p><ul><li>useState</li><li>useEffect<ul><li>说明<pre><code>  - 可以把该Hook看做是`componentDidMount`、`componentDidUpdate`、`componentWillUnmout`三个函数的组合  - React保证了每次运行effect的同时，DOM都已经更新完毕  - 与`componentDidMount`或`componentDidUpdate`不同，使用useEffect调度的effect不会阻塞浏览器更新屏幕，这让应用看起来响应更快  - effect中可选的清除机制在组件卸载的时候触发</code></pre></li><li>使用技巧<pre><code>  - 使用多个 Effect 实现关注点分离（按照代码的用途分离它们），React将按照effect声明的顺序一次调用组建的每一个effect  - 跳过 Effect 进行性能优化（第二个参数）</code></pre></li></ul></li><li>useContext<pre><code>接收一个 context 对象（`React.createContext` 的返回值）并返回该 context 的当前值</code></pre></li></ul></li><li><p>额外的 Hook</p><ul><li>useReducer<br>useState 的替代方案。它接收一个形如 <code>(state, action) =&gt; newState</code> 的 reducer，并返回当前的 state 以及与其配套的 dispatch 方法</li><li>useCallback<br>useCallback(fn, deps) 相当于 useMemo(() =&gt; fn, deps)</li><li>useMemo<br>可以把 useMemo 作为性能优化的手段，但不要把它当成语义上的保证<br>可以使用它缓存一些相对耗时的计算，也非常适合用于存储引用类型的数据，可以传入对象字面量，匿名函数等，甚至是 React Element</li><li>useRef<br>useRef 返回一个可变的 ref 对象，其 <code>.current</code> 属性被初始化为传入的参数（initialValue）</li><li>useImperativeHandle<ul><li>useImperativeHandle 可以在使用 ref 时自定义暴露给父组件的实例值</li><li>在大多数情况下，应当避免使用 ref 这样的命令式代码</li><li>useImperativeHandle 应当与 <code>forwardRef</code> 一起使用</li></ul></li><li>useLayoutEffect<br>其函数签名与 useEffect 相同，但它会在所有的 DOM 变更之后同步调用 effect。可以使用它来读取 DOM 布局并同步触发重渲染</li><li>useDebugValue<br>useDebugValue 可用于在 React 开发者工具中显示自定义 hook 的标签,它接受一个格式化函数作为可选的第二个参数。该函数只有在 Hook 被检查时才会被调用。它接受 debug 值作为参数，并且会返回一个格式化的显示值</li></ul></li></ul><h2 id="自定义Hook"><a href="#自定义Hook" class="headerlink" title="自定义Hook"></a>自定义Hook</h2><p>通过自定义 Hook，可以将组件逻辑提取到可重用的函数中</p><p>字应该始终以 use 开头，这样可以一眼看出其符合 Hook 的规则</p><p>自定义 Hook 是一种自然遵循 Hook 设计的约定，而并不是 React 的特性</p><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><ul><li><p>函数组件执行函数<code>renderWithHooks</code></p><ul><li>作用<br>它是调用<code>function组件</code>函数的主要函数，从源码中看，它首先会置空即将调和渲染的<code>workInProgress树</code>的<code>memoizedState</code>和<code>updateQueue</code>，把新的hooks信息挂载到这两个属性上，然后在组件<code>commit阶段</code>，将<code>workInProgress树</code>替换成<code>current树</code>，替换真实的DOM元素节点。并在current树保存hooks信息。</li><li>步骤<ul><li>执行函数组件</li><li>改变<code>ReactCurrentDispatcher</code>对象</li></ul></li></ul></li><li><p>初始化hooks</p><p>  相关hook实际执行的函数:</p>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">useState: mountState, <span class="comment">// 初始化useState</span></span><br><span class="line"><span class="attr">useEffect</span>: mountEffect, <span class="comment">// 初始化useEffect</span></span><br><span class="line"><span class="attr">useLayoutEffect</span>: mountLayoutEffect, <span class="comment">// 初始化useLayoutEffect</span></span><br><span class="line"><span class="attr">useMemo</span>: mountMemo, <span class="comment">// 初始化useMemo</span></span><br><span class="line"><span class="attr">useReducer</span>: mountReducer, <span class="comment">// 初始化useReducer</span></span><br><span class="line"><span class="attr">useRef</span>: mountRef, <span class="comment">// 初始化useRef</span></span><br><span class="line"><span class="attr">useCallback</span>: mountCallback, <span class="comment">// 初始化useCallback</span></span><br></pre></td></tr></table></figure><p>  <code>mountWorkInProgressHook</code>生成hook链表</p><ul><li>在一个函数组件第一次渲染时，每个hook执行，都会产生一个hook对象，并形成链表结构，绑定在<code>workInProgress</code>的<code>memoizedState</code>属性上</li><li>hook上的状态，绑定在当前hook对象的<code>memoizedState</code>属性上</li><li>对于effect副作用钩子，会绑定在<code>workInProgress.updateQueue</code>上，等到<code>commit阶段</code>，dom树构建完成，再执行每个 effect 副作用钩子。</li></ul></li><li><p>更新hooks</p><p>  相关hook实际执行的函数:</p>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">useState: updateState, <span class="comment">// 得到最新的state</span></span><br><span class="line"><span class="attr">useEffect</span>: updateEffect, <span class="comment">// 更新updateQueue</span></span><br><span class="line"><span class="attr">useLayoutEffect</span>: updateLayoutEffect,</span><br><span class="line"><span class="attr">useMemo</span>: updateMemo,</span><br><span class="line"><span class="attr">useReducer</span>: updateReducer,</span><br><span class="line"><span class="attr">useRef</span>: updateRef, <span class="comment">// 获取ref对象</span></span><br><span class="line"><span class="attr">useCallback</span>: updateCallback</span><br></pre></td></tr></table></figure><p>  <code>updateWorkInProgressHook</code>更新hook链表，找到对应的hooks</p></li></ul><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://zh-hans.reactjs.org/docs/hooks-intro.html">官方文档</a></p><p><a href="https://juejin.cn/post/6844904165500518414">React Hooks 最佳实践</a></p><p><a href="https://juejin.cn/post/6864438643727433741">react-hooks如何使用？</a></p><p><a href="https://juejin.cn/post/6944863057000529933#heading-0">一文吃透react-hooks原理</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;问题列表&quot;&gt;&lt;a href=&quot;#问题列表&quot; class=&quot;headerlink&quot; title=&quot;问题列表&quot;&gt;&lt;/a&gt;问题列表&lt;/h2&gt;&lt;p&gt;带着以下问题学习：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Hook解决了什么问题？&lt;/li&gt;
+&lt;li&gt;Hook有哪些优势？&lt;/li&gt;
+&lt;</summary>
+      
+    
+    
+    
+    <category term="技术" scheme="http://example.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+    <category term="React" scheme="http://example.com/tags/React/"/>
+    
+  </entry>
+  
+  <entry>
     <title>常见的排序算法</title>
     <link href="http://example.com/2021/12/19/%E5%B8%B8%E8%A7%81%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/"/>
     <id>http://example.com/2021/12/19/%E5%B8%B8%E8%A7%81%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</id>
@@ -537,33 +565,6 @@
     
     
     <category term="JavaScript" scheme="http://example.com/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MQTT协议详解</title>
-    <link href="http://example.com/2020/04/26/MQTT%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/"/>
-    <id>http://example.com/2020/04/26/MQTT%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/</id>
-    <published>2020-04-26T05:18:56.000Z</published>
-    <updated>2021-08-07T05:59:13.905Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>本博客 <a href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p></blockquote><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>MQTT(Message Queuing Telemetry Transport,消息队列遥测传输协议)，是一种基于发布/订阅(public/subscribe)模式的轻量级物联网消息推送协议。<br>该协议构建于TCP/IP协议上，是为硬件性能低下的远程设备以及网络状况糟糕的情况下而设计的协议。这让它成为新兴的”机器到机器（M2M)”，”物联网(IoT)”场景下的理想选择。</p><h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ul><li>MQTT协议是轻量、简单、开放和易于实现的</li><li>提供服务质量管理</li><li>采用发布/订阅模式，方便消息传递</li><li>基于TCP/IP网络连接，提供有序，无损的双向连接</li><li>假如数据不可知，不强求传输数据的类型与格式，保持灵活性</li><li>1字节固定报头，2字节心跳报文，最小化传输开销和协议交换，有效减少网络流量</li></ul><h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>MQTT协议广泛应用于物联网、移动互联网、智能硬件、车联网、电力能源等领域</p><ul><li>物联网M2M通信，物联网大数据采集</li><li>Android消息推送，Web消息推送</li><li>移动即时消息，例如Facebook Messenger</li><li>智能硬件、智能家居</li><li>车联网通信、电动车站桩采集</li><li>电力、石油与能源等行业市场</li></ul><h2 id="主题和负载"><a href="#主题和负载" class="headerlink" title="主题和负载"></a>主题和负载</h2><p>MQTT传输的消息分为：主题（Topic）和负载（payload）</p><ul><li>Topic：可以理解为消息的类型，订阅者订阅（Subscribe)后，就会收到该主题的消息内容（payload）</li><li>payload：可以理解为消息的内容，失致订阅者具体要使用的内容</li></ul><h2 id="三种消息发布服务质量："><a href="#三种消息发布服务质量：" class="headerlink" title="三种消息发布服务质量："></a>三种消息发布服务质量：</h2><ul><li>至多一次：消息发布完全依赖底层TCP/IP网络，qos=0。会发生消息丢失或重复的情况，这一级别可用于如下情况，环境传感器数据，丢失一次读记录影响不大</li><li>至少一次：确保消息到达，qos=1。但消息重复可能会发生</li><li>只有一次：确保消息到底一次，qos=2。</li></ul><h2 id="协议原理"><a href="#协议原理" class="headerlink" title="协议原理"></a>协议原理</h2><ul><li><p>实现方式<br><img src="./MQTT%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/1.jpg" alt="MQTT协议详解.md"><br>MQTT协议具有三种身份：发布者（Publish)、代理（Broker)（服务器）、订阅者（Subscribe）<br>其中，消息的发布者和订阅者都是客户端，消息代理是服务器。消息的发布者可以同时是订阅者</p></li><li><p>网络传输与应用消息<br>MQTT会构建底层网络传输：它将简历客户端到服务器的连接，提供两者之间的一个有序的、无损的、基于字节流的双向传输。<br>当应用数据通过MQTT网络发送时，MQTT会把与之相关的服务质量（QoS）和主题名（Topic）相关联。</p></li><li><p>MQTT客户端<br>一个使用MQTT协议的应用程序或者设备，它总是建立到服务器的网络连接。客户端可以：</p><ul><li>发布其他客户端可能会订阅的消息</li><li>订阅其他客户端发布的消息</li><li>退订或删除应用程序的消息</li><li>断开与服务器连接</li></ul></li><li><p>MQTT服务端<br>MQTT服务器已称为”消息代理”(Broker)，可以是一个应用程序或一台设备。它位于消息发布者和订阅者中间，它可以：</p><ul><li>接受来自客户的网络连接</li><li>接受客户发布的应用消息</li><li>处理来自客户端的订阅和退订请求</li><li>向订阅的客户转发应用程序消息</li></ul></li><li><p>MQTT协议中的订阅、主题、会话</p><ul><li>订阅（Subscription）<br>订阅包含主题筛选器（Topic Filter）和最大服务质量（QoS）。订阅会与一个会话（Session）关联。一个会话可以包含多个订阅。每个会话中的每个订阅都有一个不同的主题筛选器。</li><li>会话（Session）<br>每个客户端与服务器建立连接后就是一个会话，客户端和服务器之间有状态交互。绘画存在于一个网络之间，也可能在客户端和服务器之间跨越多个连续的网络连接。</li><li>主题名（Topic Name）<br>连接到一个应用程序消息的标签，如果该标签与服务器的订阅相匹配，服务器就会将消息发送给订阅所匹配标签的客户端。</li><li>主题筛选器（Topic Filter）<br>一个对主题名通配符筛选器，在订阅表达式中使用，表示订阅所匹配到的多个主题。</li></ul></li><li><p>MQTT协议中的方法<br>MQTT协议中定义了一些方法，也被称之为动作，来表示对于确定资源进行的操作。资源可以是预先存在的数据或者动态生成的数据，这取决于服务器的实现，通常来说，资源指服务器上的文件或输出。主要方法有：</p><ul><li>Connect：等待与服务器建立连接</li><li>Disconnect：等待MQTT客户端完成所作的工作，并与服务器断开TCP/IP会话</li><li>Subscribe:等待完成订阅</li><li>UnSubscribe:等待服务器取消客户端的一个或多个topics订阅</li><li>Publish：MQTT客户端发送消息请求，发送完成后返回应用程序线程</li></ul></li></ul><h2 id="MQTT协议数据包结构"><a href="#MQTT协议数据包结构" class="headerlink" title="MQTT协议数据包结构"></a>MQTT协议数据包结构</h2><p>在MQTT协议中，一个MQTT数据包由：固定头（Fixed header）、可变头（Varibale header）、消息体（payload）三部分构成。</p><ul><li><p>固定头（Fixed header）：存在于所有MQTT数据包中，表示数据包类型及数据包的分组类标识<br><img src="MQTT%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/2.jpg" alt="MQTT协议详解.md"><br>数据包类型为byte 1中bits7-4,相当于一个4位的无符号值，类型如下：<br><img src="MQTT%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/3.jpg" alt="MQTT协议详解.md"><br>标识位为byte 1中bits3-0,在不使用标识位的消息类型中，标识位被做为保留位。如果收到无效的标志时，接收端必须关闭网络连接：<br><img src="MQTT%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/4.jpg" alt="MQTT协议详解.md"></p><ul><li>DUP：发布消息的副本，用来保证消息的可靠传输。如果设置为 1，则在下面的变长中增加MessageId，并且需要回复确认，以保证消息传输完成，但不能用于检测消息重复发送</li><li>QoS：发布消息的服务质量，即：保证消息传递的次数<ul><li>00：最多一次，即：&lt;=1</li><li>01：至少一次，即：&gt;=1</li><li>10：一次，即：=1</li><li>11：预留</li></ul></li><li>RETAIN： 发布保留标识，表示服务器要保留这次推送的信息，如果有新的订阅者出现，就把这消息推送给它，如果设有那么推送至当前订阅者后释放<br>剩余长度（Remaining Length）<br>固定头的第二字节用来保存变长头部和消息体的总大小的，但不是直接保存的。这一字节是可以扩展，其保存机制，前7位用于保存长度，后一部用做标识。当最后一位为 1时，表示长度不足，需要使用二个字节继续保存。</li></ul></li><li><p>可变头（Varibale header）：存在于部分MQTT数据包中，数据包类型决定了可变头是否存在及其具体内容<br>MQTT数据包中包含一个可变头，它驻位于固定的头和负载之间。可变头的内容因数据包类型而不同，较常的应用是作为包的标识：</p></li></ul><p>很多类型数据包中都包括一个2字节的数据包标识字段，这些类型的包有：PUBLISH (QoS &gt; 0)、PUBACK、PUBREC、PUBREL、PUBCOMP、SUBSCRIBE、SUBACK、UNSUBSCRIBE、UNSUBACK<br><img src="MQTT%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/5.jpg" alt="MQTT协议详解.md"></p><ul><li>消息体（payload））：存在于部分MQTT数据包中，表示客户端收到的具体内容<br>Payload消息体位MQTT数据包的第三部分，包含CONNECT、SUBSCRIBE、SUBACK、UNSUBSCRIBE四种类型的消息：<ul><li>CONNECT:消息体内容主要是客户端的ClientID、订阅的Topic、Message以及用户名和密码</li><li>SUBSCRIBE:消息内内容是一系列要订阅的主题以及QoS</li><li>SUBACK：消息体内容是服务器对于SUBSCRIBE所申请的主题及QoS进行确认和回复</li><li>UNSUBSCRIBE:消息体内容是要订阅的主题</li></ul></li></ul>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;本博客 &lt;a href=&quot;https://hjy-xh.github.io/&quot;&gt;hjy-xh&lt;/a&gt;，转载请申明出处&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; ti</summary>
-      
-    
-    
-    
-    <category term="协议" scheme="http://example.com/categories/%E5%8D%8F%E8%AE%AE/"/>
-    
-    
-    <category term="协议" scheme="http://example.com/tags/%E5%8D%8F%E8%AE%AE/"/>
     
   </entry>
   
