@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>webpack笔记 | 可乐加冰</title>
+  <meta name="description" content="问题列表 webpack是用来解决什么问题的 ？ 它有什么亮点 ？ loader 和 plugin 有什么区别 ？ 运行原理 ？ 如何编写 Loader? Webpack 和 Rollup 有什么相同点与不同点？  webpack 作用 本质上，webpack 是一个现代 JavaScript 应用程序的静态模块打包器(module bundler)。当 webpack 处理应用程序时，它会递归地">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack笔记">
+<meta property="og:url" content="http://example.com/2021/08/05/webpack%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="可乐加冰">
+<meta property="og:description" content="问题列表 webpack是用来解决什么问题的 ？ 它有什么亮点 ？ loader 和 plugin 有什么区别 ？ 运行原理 ？ 如何编写 Loader? Webpack 和 Rollup 有什么相同点与不同点？  webpack 作用 本质上，webpack 是一个现代 JavaScript 应用程序的静态模块打包器(module bundler)。当 webpack 处理应用程序时，它会递归地">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/01/06/M17foghaR2QwBbv.png">
+<meta property="article:published_time" content="2021-08-05T13:09:33.000Z">
+<meta property="article:modified_time" content="2022-01-10T07:59:19.154Z">
+<meta property="article:author" content="HJY">
+<meta property="article:tag" content="webpack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/01/06/M17foghaR2QwBbv.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2021/08/05/webpack%E7%AC%94%E8%AE%B0/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="可乐加冰" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/HJY-xh" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">可乐加冰</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanghai, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>跑起来会有风</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%8D%8F%E8%AE%AE/">协议</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">40</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">解决方案</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">28</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NoSQL/" rel="tag">NoSQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag">Web安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">关系型数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E8%AE%AE/" rel="tag">协议</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/" rel="tag">思维导图</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">服务器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" rel="tag">编程原理相关</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" rel="tag">网络攻击</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/ES6/" style="font-size: 13px;">ES6</a> <a href="/tags/Java/" style="font-size: 13px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/MongoDB/" style="font-size: 13px;">MongoDB</a> <a href="/tags/NoSQL/" style="font-size: 13px;">NoSQL</a> <a href="/tags/React/" style="font-size: 13.33px;">React</a> <a href="/tags/Web%E5%AE%89%E5%85%A8/" style="font-size: 13px;">Web安全</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/webpack/" style="font-size: 13px;">webpack</a> <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13px;">关系型数据库</a> <a href="/tags/%E5%8D%8F%E8%AE%AE/" style="font-size: 13px;">协议</a> <a href="/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/" style="font-size: 13.33px;">思维导图</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 13.67px;">文学</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 13px;">服务器</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 13.33px;">浏览器</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13px;">算法</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" style="font-size: 13px;">编程原理相关</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" style="font-size: 13.33px;">网络攻击</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.67px;">读书笔记</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">一月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">十一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">二月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/01/05/JavaScript%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="title">JavaScript 如何实现单例模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-01-05T14:56:59.000Z" itemprop="datePublished">2022-01-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/12/28/React%20Hook%E8%A7%A3%E6%9E%90/" class="title">React Hook解析</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-12-28T12:23:54.000Z" itemprop="datePublished">2021-12-28</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/12/19/%E5%B8%B8%E8%A7%81%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="title">常见的排序算法</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-12-19T02:41:09.000Z" itemprop="datePublished">2021-12-19</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/12/09/TypeScript%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/" class="title">TypeScript思维导图</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-12-09T13:34:11.000Z" itemprop="datePublished">2021-12-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/11/16/DOM%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" class="title">DOM基本操作思维导图</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-11-16T13:01:11.000Z" itemprop="datePublished">2021-11-16</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-webpack笔记" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      webpack笔记
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2021/08/05/webpack%E7%AC%94%E8%AE%B0/" class="article-date">
+	  <time datetime="2021-08-05T13:09:33.000Z" itemprop="datePublished">2021-08-05</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/webpack/" rel="tag">webpack</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/08/05/webpack%E7%AC%94%E8%AE%B0/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.6k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 9(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="问题列表"><a href="#问题列表" class="headerlink" title="问题列表"></a>问题列表</h2><ul>
+<li>webpack是用来解决什么问题的 ？</li>
+<li>它有什么亮点 ？</li>
+<li>loader 和 plugin 有什么区别 ？</li>
+<li>运行原理 ？</li>
+<li>如何编写 Loader?</li>
+<li>Webpack 和 Rollup 有什么相同点与不同点？</li>
+</ul>
+<h2 id="webpack-作用"><a href="#webpack-作用" class="headerlink" title="webpack 作用"></a>webpack 作用</h2><blockquote>
+<p>本质上，webpack 是一个现代 JavaScript 应用程序的静态模块打包器(module bundler)。当 webpack 处理应用程序时，它会递归地构建一个依赖关系图(dependency graph)，其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个 bundle。</p>
+</blockquote>
+<p>根据官网的高度概述，我们可以简单理解<code>webpack</code>是一个针对<code>JavaScript</code>项目的打包工具。</p>
+<p><img src="https://s2.loli.net/2022/01/06/M17foghaR2QwBbv.png"></p>
+<p>简单浏览一遍官方文档，再看看上面这张图，就会发现<code>webpack</code>的关键点在于<code>模块处理</code>和<code>打包</code>,在webpack构建的流程中，通过<code>loader</code>处理非 JS 文件，将其转换为 webpack 能够处理的有效模块，使用各式各样的<code>plugin</code>在构建时的关键步骤进行一些操作（比如按需加载，代码压缩等），最终输出浏览器能使用的静态资源。</p>
+<h3 id="这里思考一下为什么需要模块化呢？"><a href="#这里思考一下为什么需要模块化呢？" class="headerlink" title="这里思考一下为什么需要模块化呢？"></a>这里思考一下为什么需要模块化呢？</h3><p><a target="_blank" rel="noopener" href="https://hjy-xh.github.io/2021/08/19/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F/">答案</a></p>
+<h3 id="那怎么理解模块化呢？"><a href="#那怎么理解模块化呢？" class="headerlink" title="那怎么理解模块化呢？"></a>那怎么理解模块化呢？</h3><p>在<code>webpack</code>中，核心思想就是一切皆模块，比如说一张图片，一个SCSS文件。</p>
+<p>这样做的好处就是能够清晰地描述出各个模块之间依赖关系，便于<code>webpack</code>对模块进行组合、打包。</p>
+<h2 id="为什么是-webpack"><a href="#为什么是-webpack" class="headerlink" title="为什么是 webpack"></a>为什么是 webpack</h2><p>这些年前框框架、工具非常多，那为什么<code>webpack</code>更受青睐呢？</p>
+<h3 id="这里来分析一下其它的工具"><a href="#这里来分析一下其它的工具" class="headerlink" title="这里来分析一下其它的工具"></a>这里来分析一下其它的工具</h3><ul>
+<li><p>基于任务执行的工具</p>
+<p>  比如说：<a target="_blank" rel="noopener" href="https://www.gulpjs.com.cn/">gulp</a>、<a target="_blank" rel="noopener" href="https://www.gruntjs.net/">grunt</a></p>
+<p>  <strong>这些工具能够自动执行指定的任务。</strong>它们简单高效，社区活跃，有着丰富的插件，可以方便打造各种工作流。</p>
+</li>
+<li><p>基于模块化打包的工具</p>
+<p>  比如说：<a target="_blank" rel="noopener" href="https://browserify.org/">browserify</a>、<a target="_blank" rel="noopener" href="https://www.webpackjs.com/">webpack</a>、<a target="_blank" rel="noopener" href="https://www.rollupjs.com/">rollup</a></p>
+<p>  在 Node 环境下，如果需要引用组件，使用<code>require</code>关键字即可，这类工具就是这个模式，还可以实现按需加载、异步加载模块</p>
+</li>
+<li><p>整合型工具</p>
+<p>  比如说：<a target="_blank" rel="noopener" href="https://fis.baidu.com/">FIS3</a>、<a target="_blank" rel="noopener" href="https://elemefe.github.io/cooking/">cooking</a></p>
+<p>  这类工具使用了多种技术栈实现的脚手架工具，好处是即开即用，缺点就是它们约束了技术选型，并且学习成本相对较高。</p>
+</li>
+</ul>
+<h3 id="为什么选用-webpack"><a href="#为什么选用-webpack" class="headerlink" title="为什么选用 webpack"></a>为什么选用 webpack</h3><ul>
+<li>大多数团队在开发新项目时会采用紧跟时代的技术，这些技术几乎都会采用“模块化+新语言+新框架”，<code>webpack</code>可以为这些新项目提供一站式的解决方案</li>
+<li><code>webpack</code> 有良好的生态链和维护团队，能提供良好的开发体验和保证质量</li>
+<li><code>webpack</code> 被全世界的大量 Web 开发者使用和验证，能找到各个层面所需的教程和经验分享</li>
+</ul>
+<h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h2><ul>
+<li>entry: 入口<br>  <code>webpack</code>执行构建的第一步就从入口开始，可以抽象理解为输入</li>
+<li>module: 模块<br>  在<code>webpack</code>中一切皆模块，一个文件就是一个模块，<code>webpack</code>会从入口开始递归遍历找出所有依赖的模块</li>
+<li>chunk: 代码块<br>  一个<code>Chunk</code>由多个模块组合而成，它是代码合并、分割的产物</li>
+<li>loader: 模块转换器<br>  <code>webpack</code>使用它把原内容转换成浏览器能够使用的文件</li>
+<li>plugin: 插件拓展<br>  <code>webpack</code>在构建流程中的特定时机注入扩展逻辑来改变构建结果</li>
+<li>output: 输出结果<br>  <code>webpack</code>经过一系列处理后，输出的最终结果</li>
+</ul>
+<h2 id="loader"><a href="#loader" class="headerlink" title="loader"></a>loader</h2><p><code>webpack</code> 只能理解<code>JavaScript</code>和<code>JSON</code>文件，这是<code>webpack</code>开箱可用的自带能力。</p>
+<p><code>loader</code>让<code>webpack</code>能够去处理其他类型的文件，并将它们转换为有效模块，以供应用程序使用，以及被添加到依赖图中。</p>
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>处理文件时可以使用多个<code>loader</code>,<code>loader</code>的执行顺序和配置中的顺序是相反的。也就是说最后一个<code>loader</code>先执行，它接收源文件作为参数，处理之后把处理结果传给下一个<code>loader</code></p>
+<h3 id="常用的-loader"><a href="#常用的-loader" class="headerlink" title="常用的 loader"></a>常用的 loader</h3><ul>
+<li>css-loader<br>  加载<code>CSS</code>、支持模块化、压缩、文件导入等特性</li>
+<li>style-loader<br>  把<code>CSS</code>代码注入到<code>JavaScript</code>中，通过<code>DOM</code>操作去加载<code>CSS</code></li>
+<li>file-loader<br>  把文件输出到一个文件夹中，在代码中通过相对URL去引用输出的文件</li>
+<li>url-loader<br>  它和 filr-loader 类似，但是能在文件很小的情况下以<code>base64</code>的方式把文件内容注入到代码中</li>
+<li>babel-loader<br>  让开发者能够在项目中使用新的<code>JavaScript</code>特性</li>
+</ul>
+<h2 id="plugin"><a href="#plugin" class="headerlink" title="plugin"></a>plugin</h2><p>插件是<code>webpack</code>的<strong>支柱</strong>功能。</p>
+<p>插件目的在于解决<code>loader</code>无法实现的其他事。</p>
+<p><code>webpack</code>自身也是构建于插件系统之上。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>在<code>webpack</code>运行的生命周期中会广播出许多事件，插件可以监听这些事件，在合适的时机通过<code>webpack</code>提供的API改变输出结果，在这个过程中插件可以访问到<code>compile</code>和<code>compilation</code>，通过钩子拦截<code>webpack</code>的执行。</p>
+<h3 id="常用的-plugin"><a href="#常用的-plugin" class="headerlink" title="常用的 plugin"></a>常用的 plugin</h3><ul>
+<li>clean-webpack-plugin<br>  每次打包后自动清理<code>output.path</code>内的文件，只保留本次构建的结果</li>
+<li>html-webpack-plugin<br>  创建一个<code>html</code>文件，并把<code>webpack</code>打包后的静态文件自动插入到这个<code>html</code>文件当中</li>
+<li>DefinePlugin<br>  这是一个定义全局变量的插件,定义的变量可以在<code>webpack</code>打包范围内任意<code>JavaScript</code>环境内访问</li>
+<li>MiniCssExtractPlugin<br>  将<code>CSS</code>单独打包成一个文件，它为每个包含<code>CSS</code>和<code>JavaScript</code>文件都创建一个<code>CSS</code>文件，结合<code>html-webpack-plugin</code>插件，以<code>link</code>的形式插入到<code>html</code>文档中</li>
+<li>babel-loader<br>  让开发者能够在项目中使用新的<code>JavaScript</code>特性</li>
+<li>webpack-merge<br>  该插件用于合并配置</li>
+<li>webpack-bundle-analyzer<br>  项目打包后进行性能分析</li>
+</ul>
+<h2 id="构建流程和原理"><a href="#构建流程和原理" class="headerlink" title="构建流程和原理"></a>构建流程和原理</h2><p>构建之前先了解几个名词：</p>
+<ul>
+<li>Compiler：编译管理器，<code>webpack</code>启动后会创建<code>compiler</code>对象，该对象一直存活直到结束退出</li>
+<li>Complilation：单次编译过程的管理器，比如<code>watch=true</code>时，运行过程中只有一个<code>compiler</code>，但每次文件变更触发重新编译时，都会创建一个新的<code>compilation</code>对象</li>
+<li>Dependence：依赖对象，<code>webpack</code>基于该类型记录模块间依赖关系</li>
+<li>Module：<code>webpack</code>内部所有资源都会以<code>module</code>对象形式存在，所有关于资源的操作、转译、合并都是以<code>module</code>为基本单位进行的</li>
+<li>Chunk：编译完成准备输出时，<code>webpack</code>会将<code>module</code>按特定的规则组织成一个一个的<code>chunk</code>，这些<code>chunk</code>某种程度上跟最终输出一一对应</li>
+</ul>
+<p>构建流程：</p>
+<ul>
+<li><p>初始化阶段</p>
+<ul>
+<li>初始化参数：从配置文件、配置对象、Shell参数中读取，进行错误检查，与默认配置结合得出最终的参数</li>
+<li>创建编译器对象：用上一步得到的参数创建<code>Compiler</code>对象</li>
+<li>初始化编译环境：包括注入内置插件、注册各种模块工厂、初始化RuleSet集合、加载配置的插件等</li>
+<li>开始编译：执行<code>compiler</code>对象的<code>run</code>方法</li>
+<li>确定入口：根据配置中的<code>entry</code>找出所有的入口文件，调用<code>compilition.addEntry</code>将入口文件转换为<code>dependence</code>对象</li>
+</ul>
+</li>
+<li><p>构建阶段</p>
+<ul>
+<li>编译模块：根据<code>entry</code>对应的<code>dependence</code>创建<code>module</code>对象，调用<code>loader</code>将模块转移为标准JS内容，调用JS解释器将内容转换为AST对象，从中找出该模块依赖的模块，再递归这个步骤直到所有入口依赖的文件都经过了本步骤的处理</li>
+<li>完成模块编译：上一步递归处理所有能触达到的模块后，得到了每个模块被翻译后的内容以及它们之间的<code>依赖关系图</code></li>
+</ul>
+</li>
+<li><p>生成阶段</p>
+<ul>
+<li>输出资源：根据入口和模块之间的依赖关系，组装成一个个包含多个模块的<code>Chunk</code>，再把每个<code>Chunk</code>转换成一个单独的文件加入到输出列表。这个步骤是可以修改输出内容的最后机会</li>
+<li>写入文件系统：在确定好输出内容后，根据配置确定输出的路径和文件名，把文件内容写入到文件系统</li>
+</ul>
+</li>
+</ul>
+<p>源码中的一些重要方法：</p>
+<ul>
+<li><strong>webpack_require</strong>: 我们在模块化开发的时候，通常会使用ES Module或者CommonJS规范导入导出以来的模块，webpack在打包的时候，会统一替换成自己的__webpack_require__来实现模块的引入和导出，从而实现模块缓存机制，以及抹平不同模块规范之间的一些差异性</li>
+<li>__webpack_modules__：存放了编译后的各个文件模块的JS内容</li>
+<li>__webpack_module_cache__：用来做模块缓存</li>
+</ul>
+<h2 id="配置优化"><a href="#配置优化" class="headerlink" title="配置优化"></a>配置优化</h2><p><code>webpack</code>配置虽然简单，但是配置项非常多，每个配置项的取值可能也有很多的选择，故而优化的空间很大。</p>
+<p>讲一些平常用的多的配置优化：</p>
+<ul>
+<li><p>使用<code>webpack-bundle-analyzer</code>插件</p>
+<p>  可以看到项目各模块大小，进行按需优化</p>
+<p>  stat表示文件的输入大小，parsed表示文件的输出大小，gzip表示通过gzip压缩运行解析的包/模块大小</p>
+</li>
+<li><p>使用<code>tree shaking</code>擦除无用代码</p>
+<p>  移除<code>JavaScript</code>上下文中的未引用代码</p>
+</li>
+<li><p>开启<code>scope hosting</code>减少函数申明和内存开销</p>
+<p>  这个名词直译过来就是作用域提升，它把所有的代码按照引用顺序放在一个函数作用域里面，适当的重命名变量防止冲突</p>
+</li>
+<li><p>使用<code>splitChunksPlugin</code>分离页面公共文件，抽取公共代码</p>
+</li>
+<li><p>使用多进程多实例解析资源</p>
+</li>
+<li><p>使用<code>DLLPlugin</code>对基础依赖库进行分包，减少编译次数</p>
+<p>  DllPlugin动态链接库插件，其原理是把网页依赖的基础模块抽离出来打包到dll文件中，当需要导入的模块存在于某个dll中时，这个模块不再被打包，而是去dll中获取。dll中大多包含的是常用的第三方模块，如react、react-dom，所以只要这些模块版本不升级，就只需被编译一次。</p>
+</li>
+</ul>
+<p>总结来看，可以使用大量插件对编译过程进行优化。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.webpackjs.com/concepts/">官网</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6943468761575849992">当面试官问Webpack的时候他想知道什么</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6949040393165996040">一文吃透 Webpack 核心原理</a></p>
+<p><a target="_blank" rel="noopener" href="https://tsejx.github.io/webpack-guidebook/basic/build-tool/">构建工具</a></p>
+<p>书目：</p>
+<ul>
+<li>深入浅出 Webpack</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2021/08/05/webpack%E7%AC%94%E8%AE%B0/" title="webpack笔记" target="_blank" rel="external">http://example.com/2021/08/05/webpack笔记/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/HJY-xh" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/HJY-xh" target="_blank"><span class="text-dark">可乐加冰</span><small class="ml-1x">Web Developer</small></a></h3>
+        <div>跑起来会有风</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2021/08/19/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F/" title="前端模块化的前世今生"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2021/07/19/React%E4%B8%ADrender%E7%9A%84%E5%AE%9E%E7%8E%B0/" title="React中render的实现"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2022 HJY
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: true,
+    appId: 'TrQDRIWsj1IVoHW4a4fCkpgl-gzGzoHsz',
+    appKey: '1emq1qCoboyjpC5ysr8uuzjf',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
