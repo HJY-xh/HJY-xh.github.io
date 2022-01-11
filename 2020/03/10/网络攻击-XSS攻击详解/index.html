@@ -26,7 +26,7 @@
 <meta property="og:description" content="本博客 hjy-xh，转载请申明出处  XSS 概念跨站脚本攻击(XSS),是最普遍的Web应用安全漏洞. 这类漏洞能够使得攻击者嵌入恶意脚本代码到正常用户会访问到的页面中,当正常用户访问该页面时,则可导致嵌入的恶意脚本代码的执行,从而达到恶意攻击用户的目的. 人们经常将跨站脚本攻击(Cross Site Scripting)缩写为 CSS ,但这会与层叠样式表(Cascading Style">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-10T05:39:41.000Z">
-<meta property="article:modified_time" content="2021-08-07T05:59:13.652Z">
+<meta property="article:modified_time" content="2022-01-11T07:50:17.048Z">
 <meta property="article:author" content="HJY">
 <meta property="article:tag" content="网络攻击">
 <meta property="article:tag" content="Web安全">
@@ -401,10 +401,12 @@
 <li>DOM跨站:指受害者端的网页脚本在修改本地页面DOM环境时未进行合理的处置,而使得攻击脚本被执行.在整个攻击过程中,服务器响应的页面并没有发生变化,引起客户端脚本执行结果差异的原因是对本地DOM的恶意篡改利用</li>
 </ul>
 <h2 id="具体示例"><a href="#具体示例" class="headerlink" title="具体示例"></a>具体示例</h2><ul>
-<li><p>反射型XSS<br>假如一个接口<code>http://www.test.com/xss/reflect.php</code>的代码如下:</p>
+<li>反射型XSS<br>假如一个接口<code>http://www.test.com/xss/reflect.php</code>的代码如下:</li>
+</ul>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;x&#x27;</span></span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+
 <p>这里的x值没有经过处理直接输出,当客户端提交请求<code>http://www.test.com/xss/reflect.php?x=&lt;script&gt;alert(1)&lt;/script&gt;</code>,此时浏览器会触发alert()函数.</p>
-</li>
+<ul>
 <li><p>存储型XSS<br>最典型的例子就是留言板XSS,当用户提交了一条包含XSS代码的留言存储到数据库,目标用户查看留言板时,留言内容会从数据库提取并展示在页面上,浏览器发现有XSS代码,就当成HTML和JavaScript解析执行,从而触发XSS攻击.简单的可以是一个alert()弹窗,复杂一些的可以是盗用用户cookie等操作.</p>
 </li>
 <li><p>DOM XSS<br>DOM XSS攻击并不需要服务器参与,触发攻击靠浏览器的DOM解析,核心是运用DOM函数.<br>我们知道<code>eval()</code>函数有一个作用是将一段字符串转换成<code>JavaScript</code>语句,因此在<code>JavaScript</code>中使用<code>eval()</code>是一件有风险的事情,容易造成XSS攻击.</p>

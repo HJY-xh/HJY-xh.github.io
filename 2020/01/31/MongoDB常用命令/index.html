@@ -18,15 +18,15 @@
   
   
   <title>MongoDB常用命令 | 可乐加冰</title>
-  <meta name="description" content="本博客 hjy-xh，转载请申明出处  为了从命令提示符下运行 MongoDB 服务器，必须从 MongoDB 目录的 bin 目录中执行 mongod.exe 文件。 1E:\MongoDB\bin&gt;mongod --dbpath E:\MongoDB\data\db  数据库:查看当前版本1db.version() 数据库:查看所有数据库1show dbs  查看当前数据库1db  创">
+  <meta name="description" content="本博客 hjy-xh，转载请申明出处  为了从命令提示符下运行 MongoDB 服务器，必须从 MongoDB 目录的 bin 目录中执行 mongod.exe 文件。 1E:\MongoDB\bin&gt;mongod --dbpath E:\MongoDB\data\db  数据库查看当前版本1db.version()  数据库查看所有数据库1show dbs  查看当前数据库1db  创建">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MongoDB常用命令">
 <meta property="og:url" content="http://example.com/2020/01/31/MongoDB%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html">
 <meta property="og:site_name" content="可乐加冰">
-<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  为了从命令提示符下运行 MongoDB 服务器，必须从 MongoDB 目录的 bin 目录中执行 mongod.exe 文件。 1E:\MongoDB\bin&gt;mongod --dbpath E:\MongoDB\data\db  数据库:查看当前版本1db.version() 数据库:查看所有数据库1show dbs  查看当前数据库1db  创">
+<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  为了从命令提示符下运行 MongoDB 服务器，必须从 MongoDB 目录的 bin 目录中执行 mongod.exe 文件。 1E:\MongoDB\bin&gt;mongod --dbpath E:\MongoDB\data\db  数据库查看当前版本1db.version()  数据库查看所有数据库1show dbs  查看当前数据库1db  创建">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-01-31T09:22:58.000Z">
-<meta property="article:modified_time" content="2021-08-07T05:59:13.898Z">
+<meta property="article:modified_time" content="2022-01-11T07:43:25.245Z">
 <meta property="article:author" content="HJY">
 <meta property="article:tag" content="NoSQL">
 <meta property="article:tag" content="MongoDB">
@@ -391,8 +391,9 @@
 <p>为了从命令提示符下运行 MongoDB 服务器，必须从 MongoDB 目录的 bin 目录中执行 mongod.exe 文件。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">E:\MongoDB\bin&gt;mongod --dbpath E:\MongoDB\data\db</span><br></pre></td></tr></table></figure>
 
-<h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库:"></a>数据库:</h3><h5 id="查看当前版本"><a href="#查看当前版本" class="headerlink" title="查看当前版本"></a>查看当前版本</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.version()</span><br></pre></td></tr></table></figure>
-<h3 id="数据库-1"><a href="#数据库-1" class="headerlink" title="数据库:"></a>数据库:</h3><h5 id="查看所有数据库"><a href="#查看所有数据库" class="headerlink" title="查看所有数据库"></a>查看所有数据库</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show dbs</span><br></pre></td></tr></table></figure>
+<h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><h5 id="查看当前版本"><a href="#查看当前版本" class="headerlink" title="查看当前版本"></a>查看当前版本</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.version()</span><br></pre></td></tr></table></figure>
+
+<h3 id="数据库-1"><a href="#数据库-1" class="headerlink" title="数据库"></a>数据库</h3><h5 id="查看所有数据库"><a href="#查看所有数据库" class="headerlink" title="查看所有数据库"></a>查看所有数据库</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show dbs</span><br></pre></td></tr></table></figure>
 
 <h5 id="查看当前数据库"><a href="#查看当前数据库" class="headerlink" title="查看当前数据库"></a>查看当前数据库</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db</span><br></pre></td></tr></table></figure>
 
@@ -400,7 +401,8 @@
 
 <h5 id="删除当前数据库"><a href="#删除当前数据库" class="headerlink" title="删除当前数据库"></a>删除当前数据库</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.dropDatabase()</span><br></pre></td></tr></table></figure>
 
-<h3 id="集合"><a href="#集合" class="headerlink" title="集合:"></a>集合:</h3><h5 id="在当前数据库创建集合"><a href="#在当前数据库创建集合" class="headerlink" title="在当前数据库创建集合"></a>在当前数据库创建集合</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createCollection(name, options)</span><br></pre></td></tr></table></figure>
+<h3 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h3><h5 id="在当前数据库创建集合"><a href="#在当前数据库创建集合" class="headerlink" title="在当前数据库创建集合"></a>在当前数据库创建集合</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.createCollection(name, options)</span><br></pre></td></tr></table></figure>
+
 <p>参数说明：</p>
 <ul>
 <li>name: 要创建的集合名称</li>
@@ -416,22 +418,22 @@
 </thead>
 <tbody><tr>
 <td>capped</td>
-<td>布尔    （可选）</td>
+<td>布尔 （可选）</td>
 <td>如果为 true，则创建固定集合。固定集合是指有着固定大小的集合，当达到最大值时，它会自动覆盖最早的文档。当该值为 true 时，必须指定 size 参数。</td>
 </tr>
 <tr>
 <td>autoIndexId</td>
-<td>布尔    （可选）</td>
+<td>布尔 （可选）</td>
 <td>如为 true，自动在 _id 字段创建索引。默认为 false。</td>
 </tr>
 <tr>
 <td>size</td>
-<td>数值    （可选）</td>
+<td>数值 （可选）</td>
 <td>为固定集合指定一个最大值，以千字节计（KB）。如果 capped 为 true，也需要指定该字段。</td>
 </tr>
 <tr>
 <td>max</td>
-<td>数值    （可选）</td>
+<td>数值 （可选）</td>
 <td>指定固定集合中包含文档的最大数量。</td>
 </tr>
 </tbody></table>
@@ -446,21 +448,26 @@
 
 <h5 id="删除集合"><a href="#删除集合" class="headerlink" title="删除集合"></a>删除集合</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.drop()</span><br></pre></td></tr></table></figure>
 
-<h3 id="文档"><a href="#文档" class="headerlink" title="文档:"></a>文档:</h3><h5 id="向集合中插入文档"><a href="#向集合中插入文档" class="headerlink" title="向集合中插入文档"></a>向集合中插入文档</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.insert(document)</span><br></pre></td></tr></table></figure>
+<h3 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h3><h5 id="向集合中插入文档"><a href="#向集合中插入文档" class="headerlink" title="向集合中插入文档"></a>向集合中插入文档</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.insert(document)</span><br></pre></td></tr></table></figure>
+
 <p>例子:在hjy_friends集合中创建一条文档:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.hjy_friends.insert(&#123;name:&quot;小黄朋友&quot;,age:22&#125;)</span><br></pre></td></tr></table></figure>
 
 <h5 id="更新文档"><a href="#更新文档" class="headerlink" title="更新文档"></a>更新文档</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.update()</span><br></pre></td></tr></table></figure>
+
 <p>例子:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.hjy_friends.update(&#123;age:22&#125;,&#123;$set:&#123;name:&quot;小黄的朋友&quot;&#125;&#125;)</span><br></pre></td></tr></table></figure>
 
 <h5 id="删除文档-2-6版本后"><a href="#删除文档-2-6版本后" class="headerlink" title="删除文档(2.6版本后)"></a>删除文档(2.6版本后)</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">db.collection.remove(</span><br><span class="line">   &lt;query&gt;,</span><br><span class="line">   &#123;</span><br><span class="line">     justOne: &lt;boolean&gt;,</span><br><span class="line">     writeConcern: &lt;document&gt;</span><br><span class="line">   &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
 <p>例子:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.hjy_friends.update(&#123;age:22&#125;,&#123;$set:&#123;name:&quot;小黄的朋友&quot;&#125;&#125;)</span><br></pre></td></tr></table></figure>
 
 <h5 id="查询的文档"><a href="#查询的文档" class="headerlink" title="查询的文档"></a>查询的文档</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.find()</span><br></pre></td></tr></table></figure>
+
 <p>pretty()方法以格式化的方式来显示所有文档</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.COLLECTION_NAME.find().pretty()</span><br></pre></td></tr></table></figure>
+
       
     </div>
     <div class="article-footer">
