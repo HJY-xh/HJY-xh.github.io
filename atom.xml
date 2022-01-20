@@ -123,9 +123,9 @@
     <category term="技术" scheme="http://example.com/categories/%E6%8A%80%E6%9C%AF/"/>
     
     
-    <category term="思维导图" scheme="http://example.com/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/"/>
-    
     <category term="JavaScript" scheme="http://example.com/tags/JavaScript/"/>
+    
+    <category term="思维导图" scheme="http://example.com/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/"/>
     
   </entry>
   
@@ -152,9 +152,9 @@
     <category term="技术" scheme="http://example.com/categories/%E6%8A%80%E6%9C%AF/"/>
     
     
-    <category term="思维导图" scheme="http://example.com/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/"/>
-    
     <category term="JavaScript" scheme="http://example.com/tags/JavaScript/"/>
+    
+    <category term="思维导图" scheme="http://example.com/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/"/>
     
   </entry>
   
@@ -324,9 +324,9 @@
     <link href="http://example.com/2021/03/22/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%89%93%E5%BC%80%E4%B8%80%E4%B8%AA%E9%A1%B5%E9%9D%A2%EF%BC%8C%E4%BC%9A%E6%9C%894%E4%B8%AA%E8%BF%9B%E7%A8%8B%EF%BC%9F/"/>
     <id>http://example.com/2021/03/22/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%89%93%E5%BC%80%E4%B8%80%E4%B8%AA%E9%A1%B5%E9%9D%A2%EF%BC%8C%E4%BC%9A%E6%9C%894%E4%B8%AA%E8%BF%9B%E7%A8%8B%EF%BC%9F/</id>
     <published>2021-03-22T05:07:12.000Z</published>
-    <updated>2022-01-10T06:01:56.393Z</updated>
+    <updated>2022-01-20T03:06:49.445Z</updated>
     
-    <content type="html"><![CDATA[<blockquote><p>本博客 <a href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p></blockquote><h2 id="简单回答"><a href="#简单回答" class="headerlink" title="简单回答"></a>简单回答</h2><p>因为打开1个页面，至少需要1个浏览器进程、1个网络进程、1个GPU进程以及1个渲染进程</p><h2 id="相关思维导图"><a href="#相关思维导图" class="headerlink" title="相关思维导图"></a>相关思维导图</h2><p><img src="https://s2.loli.net/2022/01/09/P5xs9HKBg1WpLiD.png"></p><h2 id="前置知识：线程和进程"><a href="#前置知识：线程和进程" class="headerlink" title="前置知识：线程和进程"></a>前置知识：线程和进程</h2><p>进程资源分配的最小单元，线程是CPU调度的最小单元。</p><p>二者都是一个时间段的描述，是CPU工作时间段的描述，是运行中的程序指令的一种描述，这需要与程序中的代码区别开来。</p><h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>这个问题与浏览器的发展相关，浏览器是从单进程时代发展到多进程时代。</p><h3 id="单进程时代"><a href="#单进程时代" class="headerlink" title="单进程时代"></a>单进程时代</h3><p>顾名思义，单进程浏览器是指浏览器的所有功能模块都是运行在同一个进程里，其中包含JS引擎、渲染引擎、网络进程、插件进程、GPU进程等等。</p><p>如此之多的功能模块在一个进程中，使得浏览器面临以下的窘境：</p><ul><li>不稳定<br>  插件容易崩溃</li><li>不流畅<br>  所有功能模块都在一个进程中，从线程和进程的关系得知，这意味着同一时刻只有一个模块可以运行，效率不高</li><li>不安全<br>  恶意插件、恶意脚本</li></ul><h3 id="多进程时代"><a href="#多进程时代" class="headerlink" title="多进程时代"></a>多进程时代</h3><p>这里以Chrome浏览器为例，它也是第一个采用多进程架构的浏览器，这个架构<strong>能容许许多个程序同事运行而互不影响</strong></p><p><img src="https://s2.loli.net/2022/01/09/Vmk68QIpOBgZGoU.png"></p><p>虽然多进程模型提升了浏览器的稳定性、流畅性和安全性，但同样不可避免地带来了一些问题：</p><ul><li>更高的资源占用</li><li>更复杂的体系结构</li></ul><h3 id="关于安全沙箱"><a href="#关于安全沙箱" class="headerlink" title="关于安全沙箱"></a>关于安全沙箱</h3><p>采用多进程架构的好处之一是可以使用安全沙箱，沙箱设计的目的是为了让不可信的代码运行在一定的环境中，从而限制这些代码访问隔离区之外的资源，</p><h3 id="各个进程的作用"><a href="#各个进程的作用" class="headerlink" title="各个进程的作用"></a>各个进程的作用</h3><p>这里仍以Chrome浏览器为例</p><ul><li>网络进程：主要负责界面显示、用户交互、子进程管理，同时提供存储功能</li><li>渲染进程：核心任务就是将HTML、CSS和JavaScript转换为用户可以与之交互的网页(排版引擎Blink、JavaScript引擎V8都是运行在该进程中，默认情况下，Chrome会为每个Tab标签创建一个渲染进程，出于安全考虑，渲染进程都是运行在沙箱模式下)</li><li>GPU进程：该进程的使用初衷是为了实现3D CSS的效果，只是随后网页、Chrome的UI界面都选择采用GPU来绘制，这使得GPU成为浏览器的普遍需求。最后，Chrome在其多进程架构上也引入了GPU进程。</li><li>网络进程：主要负责页面的网络资源加载</li><li>插件进程：主要负责插件的运行，因为插件易崩溃，所以需要通过插件进程来隔离，以保证插件进程不会对浏览器和页面造成影响</li></ul><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://cloud.tencent.com/developer/article/1688297">进程和线程的概念、区别及进程线程间通信</a></p><p><a href="https://codeantenna.com/a/Xr9k4lpBJn">Chrome为什么打开一个页面，会有4个进程?</a></p><p><a href="https://cloud.tencent.com/developer/news/414508">Chrome架构：仅仅打开了1个页面，为什么有4个进程？</a></p>]]></content>
+    <content type="html"><![CDATA[<blockquote><p>本博客 <a href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p></blockquote><h2 id="简单回答"><a href="#简单回答" class="headerlink" title="简单回答"></a>简单回答</h2><p>因为打开1个页面，至少需要1个浏览器进程、1个网络进程、1个GPU进程以及1个渲染进程</p><h2 id="相关思维导图"><a href="#相关思维导图" class="headerlink" title="相关思维导图"></a>相关思维导图</h2><p><img src="https://s2.loli.net/2022/01/09/P5xs9HKBg1WpLiD.png"></p><h2 id="前置知识：线程和进程"><a href="#前置知识：线程和进程" class="headerlink" title="前置知识：线程和进程"></a>前置知识：线程和进程</h2><p>进程资源分配的最小单元，线程是CPU调度的最小单元。</p><p>二者都是一个时间段的描述，是CPU工作时间段的描述，是运行中的程序指令的一种描述，这需要与程序中的代码区别开来。</p><h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>这个问题与浏览器的发展相关，浏览器是从单进程时代发展到多进程时代。</p><h3 id="单进程时代"><a href="#单进程时代" class="headerlink" title="单进程时代"></a>单进程时代</h3><p>顾名思义，单进程浏览器是指浏览器的所有功能模块都是运行在同一个进程里，其中包含JS引擎、渲染引擎、网络进程、插件进程、GPU进程等等。</p><p>如此之多的功能模块在一个进程中，使得浏览器面临以下的窘境：</p><ul><li>不稳定<br>  插件容易崩溃</li><li>不流畅<br>  所有功能模块都在一个进程中，从线程和进程的关系得知，这意味着同一时刻只有一个模块可以运行，效率不高</li><li>不安全<br>  恶意插件、恶意脚本</li></ul><h3 id="多进程时代"><a href="#多进程时代" class="headerlink" title="多进程时代"></a>多进程时代</h3><p>这里以Chrome浏览器为例，它也是第一个采用多进程架构的浏览器，这个架构<strong>能容许许多个程序同事运行而互不影响</strong></p><p><img src="https://s2.loli.net/2022/01/09/Vmk68QIpOBgZGoU.png"></p><p>虽然多进程模型提升了浏览器的稳定性、流畅性和安全性，但同样不可避免地带来了一些问题：</p><ul><li>更高的资源占用</li><li>更复杂的体系结构</li></ul><h3 id="关于安全沙箱"><a href="#关于安全沙箱" class="headerlink" title="关于安全沙箱"></a>关于安全沙箱</h3><p>采用多进程架构的好处之一是可以使用安全沙箱，沙箱设计的目的是为了让不可信的代码运行在一定的环境中，从而限制这些代码访问隔离区之外的资源，</p><h2 id="各个进程的作用"><a href="#各个进程的作用" class="headerlink" title="各个进程的作用"></a>各个进程的作用</h2><p>这里仍以Chrome浏览器为例</p><ul><li>浏览器进程：主要负责界面显示、用户交互、子进程管理，同时提供存储功能</li><li>渲染进程：核心任务就是将HTML、CSS和JavaScript转换为用户可以与之交互的网页(排版引擎Blink、JavaScript引擎V8都是运行在该进程中，默认情况下，Chrome会为每个Tab标签创建一个渲染进程，出于安全考虑，渲染进程都是运行在沙箱模式下)</li><li>GPU进程：该进程的使用初衷是为了实现3D CSS的效果，只是随后网页、Chrome的UI界面都选择采用GPU来绘制，这使得GPU成为浏览器的普遍需求。最后，Chrome在其多进程架构上也引入了GPU进程。</li><li>网络进程：主要负责页面的网络资源加载</li><li>插件进程：主要负责插件的运行，因为插件易崩溃，所以需要通过插件进程来隔离，以保证插件进程不会对浏览器和页面造成影响</li></ul><h2 id="标题的答案"><a href="#标题的答案" class="headerlink" title="标题的答案"></a>标题的答案</h2><p>打开 1 个页面至少需要 1 个网络进程、1 个浏览器进程、1 个 GPU 进程以及 1 个渲染进程，共 4 个；如果打开的页面有运行插件的话，还需要再加上 1 个插件进程。</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://cloud.tencent.com/developer/article/1688297">进程和线程的概念、区别及进程线程间通信</a></p><p><a href="https://codeantenna.com/a/Xr9k4lpBJn">Chrome为什么打开一个页面，会有4个进程?</a></p><p><a href="https://cloud.tencent.com/developer/news/414508">Chrome架构：仅仅打开了1个页面，为什么有4个进程？</a></p>]]></content>
     
     
       
@@ -510,6 +510,33 @@
   </entry>
   
   <entry>
+    <title>JavaScript 中的 instanceof 和 typeof</title>
+    <link href="http://example.com/2020/09/25/JavaScript%20%E4%B8%AD%E7%9A%84%20instanceof%20%E5%92%8C%20typeof/"/>
+    <id>http://example.com/2020/09/25/JavaScript%20%E4%B8%AD%E7%9A%84%20instanceof%20%E5%92%8C%20typeof/</id>
+    <published>2020-09-25T12:44:01.000Z</published>
+    <updated>2022-01-20T07:32:30.442Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>本博客 <a href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p></blockquote><h2 id="instanceof"><a href="#instanceof" class="headerlink" title="instanceof"></a>instanceof</h2><blockquote><p><code>instanceof</code>运算符用于检测构造函数的<code>prototype</code>属性是否出现在某个实例对象的原型链上</p></blockquote><p>当然，<code>instanceof</code>也可以判断一个实例是否是其祖先类型的实例。</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Car</span>(<span class="params">make, model, year</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.make = make;</span><br><span class="line">  <span class="built_in">this</span>.model = model;</span><br><span class="line">  <span class="built_in">this</span>.year = year;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> auto = <span class="keyword">new</span> Car(<span class="string">&#x27;Honda&#x27;</span>, <span class="string">&#x27;Accord&#x27;</span>, <span class="number">1998</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(auto <span class="keyword">instanceof</span> Car); <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(auto <span class="keyword">instanceof</span> <span class="built_in">Object</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure><p>根据<a href="https://hjy-xh.github.io/2020/02/03/JavaScript%E5%8E%9F%E5%9E%8B%E5%92%8C%E5%8E%9F%E5%9E%8B%E9%93%BE/">原型和原型链</a>的相关知识，这里进行一个实现：</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myInstanceof</span>(<span class="params">obj, target</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> targetPrototype = target.prototype;</span><br><span class="line">    <span class="keyword">let</span> objPrototype = obj.__proto__;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(objPrototype === <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(objPrototype === targetPrototype) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        objPrototype = objPrototype.__proto__;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="typeof"><a href="#typeof" class="headerlink" title="typeof"></a>typeof</h2><blockquote><p><code>typeof</code>操作符返回一个字符串，表示未经计算的操作数的类型</p></blockquote><p>这里用一张表来总结<code>typeof</code>的使用情况：</p><table><thead><tr><th>类型</th><th>结果</th></tr></thead><tbody><tr><td>Undefined</td><td>‘undefined’</td></tr><tr><td>Null</td><td>‘object’</td></tr><tr><td>Boolean</td><td>‘boolean’</td></tr><tr><td>Number</td><td>‘number’</td></tr><tr><td>BigInt</td><td>‘bigint’</td></tr><tr><td>String</td><td>‘string’</td></tr><tr><td>Symbol</td><td>‘symbol’</td></tr><tr><td>Function</td><td>‘function’</td></tr><tr><td>其它任何对象</td><td>‘object’</td></tr></tbody></table><p>眼尖的小伙伴肯定发现了该操作符对于<code>null</code>的执行结果有些奇怪，</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// JavaScript 诞生以来便如此</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="literal">null</span> === <span class="string">&#x27;object&#x27;</span>; <span class="comment">// true</span></span><br></pre></td></tr></table></figure><p>在JavaScript最初的实现中，底层存储变量的时候，会在变量的机器码的低位1-3位存储其类型信息：</p><ul><li>000：对象</li><li>010：浮点数</li><li>100：字符串</li><li>110：布尔</li><li>1：整数</li></ul><p>由于<code>null</code>代表的空指针（大多数平台下值为0X00, 所有机器码均为0），因此<code>typeof null</code> 也因此返回 <code>&#39;object&#39;</code>。</p><p>这也是 JavaScript 的历史遗留bug。</p><p>从上面的分析看出，在使用<code>typeof</code>来判断变量类型时，需要避免对<code>null</code>的判断。还有一个不错的判断类型的方法，就是<code>Object.prototype.toString</code>:</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.prototype.toString.call(<span class="number">0</span>) <span class="comment">// &quot;[object Number]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(<span class="string">&#x27;hi&#x27;</span>) <span class="comment">// &quot;[object String]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(&#123;<span class="attr">food</span>:<span class="string">&#x27;cola&#x27;</span>&#125;) <span class="comment">// &quot;[object Object]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call([<span class="number">1</span>,<span class="string">&#x27;a&#x27;</span>]) <span class="comment">// &quot;[object Array]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(<span class="literal">true</span>) <span class="comment">// &quot;[object Boolean]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(<span class="function">() =&gt;</span> &#123;&#125;) <span class="comment">// &quot;[object Function]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(<span class="literal">null</span>) <span class="comment">// &quot;[object Null]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(<span class="literal">undefined</span>) <span class="comment">// &quot;[object Undefined]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(<span class="built_in">Symbol</span>(<span class="number">1</span>)) <span class="comment">// &quot;[object Symbol]&quot;</span></span><br></pre></td></tr></table></figure><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://juejin.cn/post/6844903613584654344">浅谈 instanceof 和 typeof 的实现原理</a></p><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/typeof#null">typeof mdn</a></p><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/instanceof">instanceof mdn</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;本博客 &lt;a href=&quot;https://hjy-xh.github.io/&quot;&gt;hjy-xh&lt;/a&gt;，转载请申明出处&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;instanceof&quot;&gt;&lt;a href=&quot;#instanceof&quot; class</summary>
+      
+    
+    
+    
+    <category term="技术" scheme="http://example.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+    <category term="JavaScript" scheme="http://example.com/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Babel转译下的装饰器</title>
     <link href="http://example.com/2020/08/16/Babel%E8%BD%AC%E8%AF%91%E4%B8%8B%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8/"/>
     <id>http://example.com/2020/08/16/Babel%E8%BD%AC%E8%AF%91%E4%B8%8B%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8/</id>
@@ -525,33 +552,6 @@
 &lt;p&gt;本博客 &lt;a href=&quot;https://hjy-xh.github.io/&quot;&gt;hjy-xh&lt;/a&gt;，转载请申明出处&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h4 id=&quot;装饰器概念&quot;&gt;&lt;a href=&quot;#装饰器概念&quot; class=&quot;headerli</summary>
-      
-    
-    
-    
-    <category term="技术" scheme="http://example.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-    <category term="JavaScript" scheme="http://example.com/tags/JavaScript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>JavaScript中offset、client、scroll</title>
-    <link href="http://example.com/2020/06/10/JavaScript%E4%B8%ADoffset%E3%80%81client%E3%80%81scroll/"/>
-    <id>http://example.com/2020/06/10/JavaScript%E4%B8%ADoffset%E3%80%81client%E3%80%81scroll/</id>
-    <published>2020-06-10T13:49:20.000Z</published>
-    <updated>2022-01-11T07:44:17.740Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>本博客 <a href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p></blockquote><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>在web前端开发中经常会碰到offset、client、scroll,容易混乱,这里记录一番.<br>先放两张图,未来好查阅 :smile:<br><img src="JavaScript%E4%B8%ADoffset%E3%80%81client%E3%80%81scroll/1.png" alt="JavaScript中offset、client、scroll.md"><br><img src="JavaScript%E4%B8%ADoffset%E3%80%81client%E3%80%81scroll/2.png" alt="JavaScript中offset、client、scroll.md"></p><h2 id="offset"><a href="#offset" class="headerlink" title="offset"></a>offset</h2><p>offset: 偏移量<br>它包括元素在屏幕上占用的所有可见的空间.元素的可见大小由其高度、宽度决定,包括所有的内边距<code>padding</code>,滚动条和边框<code>border</code>大小(注意:不包括外边距).</p><p>通过以下4个属性可以取得元素的偏移量:</p><ul><li>offsetHeight: offsetHeight = border-width * 2 + padding-top + padding-bottom + height</li><li>offsetWidth: offsetWidth = border-width * 2 + padding-left + padding-right + width</li><li>offsetLeft: offsetLeft = offsetParent 的padding-left + 中间元素的offsetWidth + 当前元素的margin-left</li><li>offsetTop: offsetParent 的padding-top + 中间元素的offsetHeight + 当前元素的margin-top</li></ul><p><strong>它们都是只读属性,每次访问都要重新计算,如果经常访问,可以用变量存起来,以提高性能</strong></p><p><img src="JavaScript%E4%B8%ADoffset%E3%80%81client%E3%80%81scroll/3.png" alt="JavaScript中offset、client、scroll.md"></p><h2 id="client"><a href="#client" class="headerlink" title="client"></a>client</h2><p>client: 客户区大小<br>它包括元素内容及其内边距所占据的空间大小.</p><p>通过以下2个属性可以取得元素的客户区:</p><ul><li>clientHeight: padding-top + padding-bottom + height</li><li>clientWidth: padding-left + padding-right + width</li></ul><p><strong>它们也是只读属性,每次访问都要重新计算</strong></p><p><img src="JavaScript%E4%B8%ADoffset%E3%80%81client%E3%80%81scroll/4.png" alt="JavaScript中offset、client、scroll.md"></p><h2 id="scroll"><a href="#scroll" class="headerlink" title="scroll"></a>scroll</h2><p>scroll: 滚动大小<br>它指的是滚动内容的元素的大小.<br>有些元素(比如<code>&lt;html&gt;</code>),即使没有执行任何代码也能自动地添加滚动条;有些元素需要通过设置CSS的<code>overflow</code>属性才能滚动.</p><p>通过以下4个属性可以取得滚动的相关属性:</p><ul><li>scrollHeight: 在没有滚动条的情况下,元素实际内容的总高度</li><li>scrollWidth: 在没有滚动条的情况下,元素实际内容的总宽度</li><li>scrollLeft: 被隐藏在内容区域左侧的像素数,设置该属性可以改变元素的滚动位置</li><li>scrollTop: 被隐藏在内容区域上方的像素数,设置该属性可以改变元素的滚动位置</li></ul><p><strong>通常认为<code>&lt;html&gt;</code>元素是在web浏览器的视口中滚动的元素,所以带有垂直滚动条的页面总高度就是<code>document.documentElement.scrollHeight</code>.</strong></p><p><img src="JavaScript%E4%B8%ADoffset%E3%80%81client%E3%80%81scroll/5.png" alt="JavaScript中offset、client、scroll.md"></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;本博客 &lt;a href=&quot;https://hjy-xh.github.io/&quot;&gt;hjy-xh&lt;/a&gt;，转载请申明出处&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink</summary>
       
     
     
