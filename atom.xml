@@ -187,38 +187,11 @@
   </entry>
   
   <entry>
-    <title>MobX记录</title>
-    <link href="http://example.com/2021/10/10/MobX%E8%AE%B0%E5%BD%95/"/>
-    <id>http://example.com/2021/10/10/MobX%E8%AE%B0%E5%BD%95/</id>
-    <published>2021-10-10T14:56:31.000Z</published>
-    <updated>2022-02-16T10:05:32.859Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>本博客 <a href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p></blockquote><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>简单、可扩展的状态管理</p><h2 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h2><ul><li><p>简单直接</p><ul><li>编写无模板的极简代码来精准描述意图</li></ul></li><li><p>轻松实现最优渲染</p><ul><li>所有对数据的变更和使用都会在运行时被追踪到，并构成一个截取所有状态和输出之间关系的依赖树。这样保证了那些依赖于状态的计算只有在真正需要的时候才会运行，就像React组件一样。无需使用记忆化或选择器之类容易出错的次优技巧来对组件进行手动优化。</li></ul></li><li><p>架构自由</p><ul><li>它可以让你在任意UI框架之外管理你的应用状态。这样会使你的代码低耦合、可移植和更加容易测试</li></ul></li></ul><h2 id="浏览器支持"><a href="#浏览器支持" class="headerlink" title="浏览器支持"></a>浏览器支持</h2><ul><li>Mobx &gt;= 5 版本运行在任何<code>支持 ES6 proxy</code>的浏览器。</li><li>Mobx 4 可以运行在任何支持ES5的浏览器上，而且也讲进行持续地维护。MobX 4 和 5 的API是相同的，并且语义上也能达到相同的效果，只是Mobx 4 存在一些局限性<ul><li>Observable 数组不是真正的数组，所以它们无法通过<code>Array.isArray()</code> 的检查。最常见的处理方法是在传递给第三方库之前，你经常需要先对其进行<code>.slice()</code>操作，从而得到一个浅拷贝的真正数组</li><li>向一个已存在的 observable 对象中添加属性不会被自动捕获。要么使用 observable 映射来替代，要么使用工具函数中方法来对想要动态添加属性的对象进行读/写/迭代</li></ul></li></ul><h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h2><ul><li>State(状态)</li></ul><p>状态是驱动应用的数据。</p><p>可以用任何数据结构来存储状态，如JS基本数据类型、引用类型、普通对象、类实例、数组和映射</p><p>通常有像待办事项列表数据这样的<code>领域特定状态</code>，还有像当前已选元素的<code>视图状态</code>（状态就像是有数据的excel表格）</p><ul><li>Action(动作)</li></ul><p>Action(动作)是任意可以改变State(状态)的代码,比如用户事件处理、后端推送数据处理、调度器事件处理等</p><p>使用Action可以更好地组织代码，并防止在无意中修改State</p><p>如果是在严格模式下使用 MobX的话，MobX 会强制只有在动作之中才可以修改状态</p><ul><li>Derivations(派生)</li></ul><p>任何来源是State并且不需要进一步交互的东西都是Derivation<br> 多种形式：</p><ul><li>用户界面</li><li>派生数据，比如剩下的待办事项的数量</li><li>后端集成，比如把变化发送到服务器端<br>两种类型：</li><li>Computed values（计算值） 它们是永远可以使用纯函数从当前可观察状态中衍生出的值</li><li>Reactions（反应）他们是当状态改变时需要自动发生的副作用 (命令式编程和响应式编程之间的桥梁，或者说得更明确一些，它们最终都需要实现I / O 操作)</li></ul><p>黄金法则：如果想创建一个基于当前状态的值时，使用<code>computed</code></p><h2 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h2><p>MobX使用单向数据流，利用Action改变State，进而更新所有受影响的View</p><p><img src="https://zh.mobx.js.org/assets/action-state-view.png"></p><ul><li>所有的Derivations将在State改变时自动且原子化的更新，引测不可能观察中间值</li><li>所有的Derivations默认将会同步更新，这意味着Action可以在State改变之后安全的直接获取computed值</li><li>Computed value的更新是惰性的，任何Computed value在需要它们的副作用发生之前都是不激活的</li><li>所有的Computed value都应该是纯函数，它们不应该修改State</li></ul><h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p>MobX使用<code>Object.defineProperty</code>来拦截对数据的访问，一旦值发生变化，就会调用<code>React</code>的<code>render</code>方法重新渲染视图或者触发<code>autorun</code></p><h2 id="常用API"><a href="#常用API" class="headerlink" title="常用API"></a>常用API</h2><ul><li><p>Autorun</p><ul><li>用法：autorun(effect: (reaction) =&gt; void)</li><li>说明：autorun 函数接受一个函数作为参数，每当该函数所观察的值发生变化时，它都应该运行。 当你自己创建 autorun 时，它也会运行一次</li></ul></li><li><p>Reaction</p><ul><li>用法：<ul><li>5：reaction(() =&gt; data, (data, reaction) =&gt; { sideEffect }, options?)</li><li>6：reaction(() =&gt; value, (value, previousValue, reaction) =&gt; { sideEffect }, options?)</li></ul></li><li>说明：<ul><li>reaction 类似于 autorun，但可以让你更加精细地控制要跟踪的可观察对象。 它接受两个函数作为参数：第一个，data 函数，其是被跟踪的函数并且其返回值将会作为第二个函数，effect 函数，的输入。 重要的是要注意，副作用只会对 data 函数中被访问过的数据做出反应，这些数据可能少于 effect 函数中实际使用的数据</li><li>一般的模式是在 data 函数中返回你在副作用中需要的所有数据， 并以这种方式更精确地控制副作用触发的时机。 与 autorun 不同，副作用在初始化时不会自动运行，而只会在 data 表达式首次返回新值之后运行</li></ul></li></ul></li><li><p>When</p><ul><li>用法：<ul><li>when(predicate: () =&gt; boolean, effect?: () =&gt; void, options?)</li><li>when(predicate: () =&gt; boolean, options?): Promise</li></ul></li><li>说明：when 会观察并运行给定的 predicate 函数，直到其返回 true。 一旦 predicate 返回了 true，给定的 effect 函数就会执行并且自动执行器函数将会被清理掉。</li></ul></li></ul><h2 id="集成React"><a href="#集成React" class="headerlink" title="集成React"></a>集成React</h2><p>MobX 可以独立于 React 运行, 但是他们通常是结合在一起使用</p><p>常用的两个包：</p><ul><li>mobx-react</li><li>mobx-react-lite</li></ul><p><code>mobx-react</code>中引用了<code>mobx-react-lite</code>包，它提供了很多在新项目中不再需要的特性，其中有：</p><ul><li>对于React class components的支持</li><li>Provider 和 inject ，MobX的这些东西在有React.createContext替代后变得不必要了</li><li>特殊的观察对象 propTypes</li></ul><p>要注意 mobx-react 是全量包，也会暴露 mobx-react-lite包中的任何方法,其中包含对函数组件的支持。 如果你使用 mobx-react，那就不要添加 mobx-react-lite 的依赖和引用了</p><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul><li>区分<code>computed</code>和<code>auturun</code><br>如果想响应式的产生一个可以被其它observer使用的值，使用<code>@compouted</code>;如果想要达到一个效果，使用<code>autorun</code>（打印日志，发起网络请求等这样命令式的副作用）</li></ul><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://cn.mobx.js.org/">MobX 中文文档</a></p><p><a href="https://mobx.js.org/README.html">MobX</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;本博客 &lt;a href=&quot;https://hjy-xh.github.io/&quot;&gt;hjy-xh&lt;/a&gt;，转载请申明出处&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;说明&quot;&gt;&lt;a href=&quot;#说明&quot; class=&quot;headerlink&quot; ti</summary>
-      
-    
-    
-    
-    <category term="技术" scheme="http://example.com/categories/%E6%8A%80%E6%9C%AF/"/>
-    
-    
-    <category term="MobX" scheme="http://example.com/tags/MobX/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Redux和Mobx的异同</title>
-    <link href="http://example.com/2021/09/29/Redux%E5%92%8CMobx%E7%9A%84%E5%BC%82%E5%90%8C/"/>
-    <id>http://example.com/2021/09/29/Redux%E5%92%8CMobx%E7%9A%84%E5%BC%82%E5%90%8C/</id>
-    <published>2021-09-29T11:53:01.000Z</published>
-    <updated>2022-01-25T08:35:08.154Z</updated>
+    <link href="http://example.com/2021/10/10/Redux%E5%92%8CMobx%E7%9A%84%E5%BC%82%E5%90%8C/"/>
+    <id>http://example.com/2021/10/10/Redux%E5%92%8CMobx%E7%9A%84%E5%BC%82%E5%90%8C/</id>
+    <published>2021-10-10T11:53:01.000Z</published>
+    <updated>2022-02-16T10:07:31.941Z</updated>
     
     <content type="html"><![CDATA[<blockquote><p>本博客 <a href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p></blockquote><h2 id="二者主要概念"><a href="#二者主要概念" class="headerlink" title="二者主要概念"></a>二者主要概念</h2><p><a href="https://hjy-xh.github.io/2021/09/13/MobX%E8%AE%B0%E5%BD%95/">MobX</a></p><p><a href="https://hjy-xh.github.io/2020/12/03/Redux%E8%AE%B0%E5%BD%95/">Redux</a></p><h2 id="函数式编程相关知识"><a href="#函数式编程相关知识" class="headerlink" title="函数式编程相关知识"></a>函数式编程相关知识</h2><p><a href="https://hjy-xh.github.io/2020/11/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89/">读书笔记:Javascript函数式编程指南（一）</a></p><p><a href="https://hjy-xh.github.io/2021/01/15/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/">读书笔记:Javascript函数式编程指南（二）</a></p><p><a href="https://hjy-xh.github.io/2021/03/05/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%89%EF%BC%89/">读书笔记:Javascript函数式编程指南（三）</a></p><p><a href="https://hjy-xh.github.io/2021/04/16/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0:Javascript%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%EF%BC%88%E5%9B%9B%EF%BC%89/">读书笔记:Javascript函数式编程指南（四）</a></p><h2 id="异同点"><a href="#异同点" class="headerlink" title="异同点"></a>异同点</h2><ul><li><p>设计思想：函数式 VS 面向对象</p><p><code>Redux</code>遵循函数式编程思想，<code>MobX</code>则更多从面向对象和响应式编程的角度来考虑问题</p><p>可以从<code>Redux</code>的<code>reducer</code>中看出来，它就是一个纯函数，只依赖入参：</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(state, action) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><code>MobX</code>将状态包装成可观察对象，一但状态对象变更，就重新渲染视图</p></li><li><p>对store管理：单一store VS 多个store</p><p><code>store</code>是应用管理数据的地方，在<code>Redux</code>中，应用的所有数据都集中在一个大的<code>store</code>中；<code>MobX</code>则通常是按照模块来将应用状态划分，在多个独立的<code>store</code>中管理</p></li><li><p>数据可变性：不可变 VS 可变</p><p><code>Redux</code>状态对象通常是不可变的，一般是在原来的状态对象基础上返回一个新的状态对象；<code>MobX</code>则可以直接使用新的值更新状态对象</p></li><li><p>整体差异</p><p><code>Redux</code>提供可以进行时间回溯的开发工具，同时因为它使用纯函数以及更少的抽象，让调试变得更加容易；<code>MobX</code>使用起来相对简单，但是其中有更多的抽象和封装，所以调试起来会更加复杂，同时结果也更难以预测</p></li></ul><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://cn.redux.js.org/">Redux 中文官网</a></p><p><a href="https://www.redux.org.cn/">Redux 中文文档</a></p><p><a href="https://juejin.cn/post/6844903562095362056">你需要Mobx还是Redux？</a></p><p><a href="https://tech.youzan.com/mobx_vs_redux/">我为什么从Redux迁移到了Mobx</a></p>]]></content>
     
@@ -237,6 +210,33 @@
     
     
     <category term="React" scheme="http://example.com/tags/React/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MobX记录</title>
+    <link href="http://example.com/2021/09/23/MobX%E8%AE%B0%E5%BD%95/"/>
+    <id>http://example.com/2021/09/23/MobX%E8%AE%B0%E5%BD%95/</id>
+    <published>2021-09-23T14:56:31.000Z</published>
+    <updated>2022-02-16T10:07:20.179Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>本博客 <a href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p></blockquote><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>简单、可扩展的状态管理</p><h2 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h2><ul><li><p>简单直接</p><ul><li>编写无模板的极简代码来精准描述意图</li></ul></li><li><p>轻松实现最优渲染</p><ul><li>所有对数据的变更和使用都会在运行时被追踪到，并构成一个截取所有状态和输出之间关系的依赖树。这样保证了那些依赖于状态的计算只有在真正需要的时候才会运行，就像React组件一样。无需使用记忆化或选择器之类容易出错的次优技巧来对组件进行手动优化。</li></ul></li><li><p>架构自由</p><ul><li>它可以让你在任意UI框架之外管理你的应用状态。这样会使你的代码低耦合、可移植和更加容易测试</li></ul></li></ul><h2 id="浏览器支持"><a href="#浏览器支持" class="headerlink" title="浏览器支持"></a>浏览器支持</h2><ul><li>Mobx &gt;= 5 版本运行在任何<code>支持 ES6 proxy</code>的浏览器。</li><li>Mobx 4 可以运行在任何支持ES5的浏览器上，而且也讲进行持续地维护。MobX 4 和 5 的API是相同的，并且语义上也能达到相同的效果，只是Mobx 4 存在一些局限性<ul><li>Observable 数组不是真正的数组，所以它们无法通过<code>Array.isArray()</code> 的检查。最常见的处理方法是在传递给第三方库之前，你经常需要先对其进行<code>.slice()</code>操作，从而得到一个浅拷贝的真正数组</li><li>向一个已存在的 observable 对象中添加属性不会被自动捕获。要么使用 observable 映射来替代，要么使用工具函数中方法来对想要动态添加属性的对象进行读/写/迭代</li></ul></li></ul><h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h2><ul><li>State(状态)</li></ul><p>状态是驱动应用的数据。</p><p>可以用任何数据结构来存储状态，如JS基本数据类型、引用类型、普通对象、类实例、数组和映射</p><p>通常有像待办事项列表数据这样的<code>领域特定状态</code>，还有像当前已选元素的<code>视图状态</code>（状态就像是有数据的excel表格）</p><ul><li>Action(动作)</li></ul><p>Action(动作)是任意可以改变State(状态)的代码,比如用户事件处理、后端推送数据处理、调度器事件处理等</p><p>使用Action可以更好地组织代码，并防止在无意中修改State</p><p>如果是在严格模式下使用 MobX的话，MobX 会强制只有在动作之中才可以修改状态</p><ul><li>Derivations(派生)</li></ul><p>任何来源是State并且不需要进一步交互的东西都是Derivation<br> 多种形式：</p><ul><li>用户界面</li><li>派生数据，比如剩下的待办事项的数量</li><li>后端集成，比如把变化发送到服务器端<br>两种类型：</li><li>Computed values（计算值） 它们是永远可以使用纯函数从当前可观察状态中衍生出的值</li><li>Reactions（反应）他们是当状态改变时需要自动发生的副作用 (命令式编程和响应式编程之间的桥梁，或者说得更明确一些，它们最终都需要实现I / O 操作)</li></ul><p>黄金法则：如果想创建一个基于当前状态的值时，使用<code>computed</code></p><h2 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h2><p>MobX使用单向数据流，利用Action改变State，进而更新所有受影响的View</p><p><img src="https://zh.mobx.js.org/assets/action-state-view.png"></p><ul><li>所有的Derivations将在State改变时自动且原子化的更新，引测不可能观察中间值</li><li>所有的Derivations默认将会同步更新，这意味着Action可以在State改变之后安全的直接获取computed值</li><li>Computed value的更新是惰性的，任何Computed value在需要它们的副作用发生之前都是不激活的</li><li>所有的Computed value都应该是纯函数，它们不应该修改State</li></ul><h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p>MobX使用<code>Object.defineProperty</code>来拦截对数据的访问，一旦值发生变化，就会调用<code>React</code>的<code>render</code>方法重新渲染视图或者触发<code>autorun</code></p><h2 id="常用API"><a href="#常用API" class="headerlink" title="常用API"></a>常用API</h2><ul><li><p>Autorun</p><ul><li>用法：autorun(effect: (reaction) =&gt; void)</li><li>说明：autorun 函数接受一个函数作为参数，每当该函数所观察的值发生变化时，它都应该运行。 当你自己创建 autorun 时，它也会运行一次</li></ul></li><li><p>Reaction</p><ul><li>用法：<ul><li>5：reaction(() =&gt; data, (data, reaction) =&gt; { sideEffect }, options?)</li><li>6：reaction(() =&gt; value, (value, previousValue, reaction) =&gt; { sideEffect }, options?)</li></ul></li><li>说明：<ul><li>reaction 类似于 autorun，但可以让你更加精细地控制要跟踪的可观察对象。 它接受两个函数作为参数：第一个，data 函数，其是被跟踪的函数并且其返回值将会作为第二个函数，effect 函数，的输入。 重要的是要注意，副作用只会对 data 函数中被访问过的数据做出反应，这些数据可能少于 effect 函数中实际使用的数据</li><li>一般的模式是在 data 函数中返回你在副作用中需要的所有数据， 并以这种方式更精确地控制副作用触发的时机。 与 autorun 不同，副作用在初始化时不会自动运行，而只会在 data 表达式首次返回新值之后运行</li></ul></li></ul></li><li><p>When</p><ul><li>用法：<ul><li>when(predicate: () =&gt; boolean, effect?: () =&gt; void, options?)</li><li>when(predicate: () =&gt; boolean, options?): Promise</li></ul></li><li>说明：when 会观察并运行给定的 predicate 函数，直到其返回 true。 一旦 predicate 返回了 true，给定的 effect 函数就会执行并且自动执行器函数将会被清理掉。</li></ul></li></ul><h2 id="集成React"><a href="#集成React" class="headerlink" title="集成React"></a>集成React</h2><p>MobX 可以独立于 React 运行, 但是他们通常是结合在一起使用</p><p>常用的两个包：</p><ul><li>mobx-react</li><li>mobx-react-lite</li></ul><p><code>mobx-react</code>中引用了<code>mobx-react-lite</code>包，它提供了很多在新项目中不再需要的特性，其中有：</p><ul><li>对于React class components的支持</li><li>Provider 和 inject ，MobX的这些东西在有React.createContext替代后变得不必要了</li><li>特殊的观察对象 propTypes</li></ul><p>要注意 mobx-react 是全量包，也会暴露 mobx-react-lite包中的任何方法,其中包含对函数组件的支持。 如果你使用 mobx-react，那就不要添加 mobx-react-lite 的依赖和引用了</p><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul><li>区分<code>computed</code>和<code>auturun</code><br>如果想响应式的产生一个可以被其它observer使用的值，使用<code>@compouted</code>;如果想要达到一个效果，使用<code>autorun</code>（打印日志，发起网络请求等这样命令式的副作用）</li></ul><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://cn.mobx.js.org/">MobX 中文文档</a></p><p><a href="https://mobx.js.org/README.html">MobX</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;本博客 &lt;a href=&quot;https://hjy-xh.github.io/&quot;&gt;hjy-xh&lt;/a&gt;，转载请申明出处&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;说明&quot;&gt;&lt;a href=&quot;#说明&quot; class=&quot;headerlink&quot; ti</summary>
+      
+    
+    
+    
+    <category term="技术" scheme="http://example.com/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+    <category term="MobX" scheme="http://example.com/tags/MobX/"/>
     
   </entry>
   
