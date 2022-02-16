@@ -17,18 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>书单 | 可乐加冰</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="书单">
-<meta property="og:url" content="http://example.com/books/index.html">
+  <title>React中Fiber的简单实现 | 可乐加冰</title>
+  <meta name="description" content="本博客 hjy-xh，转载请申明出处  传送门">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React中Fiber的简单实现">
+<meta property="og:url" content="http://example.com/2021/09/11/React%E4%B8%ADFiber%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/index.html">
 <meta property="og:site_name" content="可乐加冰">
+<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  传送门">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-08-07T06:13:07.340Z">
-<meta property="article:modified_time" content="2021-08-07T06:13:07.340Z">
+<meta property="article:published_time" content="2021-09-11T15:14:54.000Z">
+<meta property="article:modified_time" content="2022-02-16T10:05:10.131Z">
 <meta property="article:author" content="HJY">
+<meta property="article:tag" content="React">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/books/index.html">
+  <link rel="canonical" href="http://example.com/2021/09/11/React%E4%B8%ADFiber%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/index.html">
   
     <link rel="alternate" href="/atom.xml" title="可乐加冰" type="application/atom+xml">
   
@@ -45,7 +48,7 @@
 <meta name="generator" content="Hexo 5.4.0"></head>
 
 
-<body class="main-center no-sidebar" itemscope itemtype="http://schema.org/WebPage">
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
   <header class="header" itemscope itemtype="http://schema.org/WPHeader">
   <div class="slimContent">
     <div class="navbar-header">
@@ -324,40 +327,191 @@
 </aside>
 
   
-  <main class="main" role="main">
-  <article class="article article-links article-type-list" itemscope="">
-  <header class="article-header">
-    <h1 itemprop="title">书单</h1>
-    <p class="text-muted">个人收藏的书单推荐给大家 <a href="https://www.douban.com/people//" target="_blank">[我的豆瓣]</a></p>
-    <nav role="navigation" id="nav-main" class="okayNav">
-      <ul id="tabs">
-        <li><a id="reading-tab" href="javascript:show('reading')" rel="external">在读<span id="reading-total"></span></a></li>
-        <li><a id="wish-tab" href="javascript:show('wish')" rel="external">想读<span id="wish-total"></span></a></li>
-        <li><a id="read-tab" href="javascript:show('read')" rel="external">已读<span id="read-total"></span></a></li>
-      </ul>
-    </nav>
-  </header>
-  <div class="article-body">
-    <div id="loading">
-      <p>正在加载...</p>
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-React中Fiber的简单实现" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React中Fiber的简单实现
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2021/09/11/React%E4%B8%ADFiber%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/" class="article-date">
+	  <time datetime="2021-09-11T15:14:54.000Z" itemprop="datePublished">2021-09-11</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/React/" rel="tag">React</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2021/09/11/React%E4%B8%ADFiber%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 15(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
+	
+
+      </div>
     </div>
-    <div id="douban">
-      <div id="collections">
-        <div id="reading" class="row hide">
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p>本博客 <a target="_blank" rel="noopener" href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/HJY-xh/frame-course/blob/master/React/Fiber%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/Fiber%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0.md">传送门</a></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2021/09/11/React%E4%B8%ADFiber%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/" title="React中Fiber的简单实现" target="_blank" rel="external">http://example.com/2021/09/11/React中Fiber的简单实现/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/HJY-xh" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/HJY-xh" target="_blank"><span class="text-dark">可乐加冰</span><small class="ml-1x">Web Developer</small></a></h3>
+        <div>跑起来会有风</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2021/09/29/Redux%E5%92%8CMobx%E7%9A%84%E5%BC%82%E5%90%8C/" title="Redux和Mobx的异同"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2021/08/19/%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F/" title="前端模块化的前世今生"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="clearfix"></div>
-        <div id="wish" class="row hide">
-        </div>
-        <div class="clearfix"></div>
-        <div id="read" class="row hide">
-        </div>
-        <div class="clearfix"></div>
       </div>
     </div>
   </div>
-</article>
-
-  
+</div>
 
 
 
@@ -415,156 +569,39 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
-   <script>
-function show(id) {
-  document.getElementById('reading').classList.remove('active');
-  document.getElementById('read').classList.remove('active');
-  document.getElementById('wish').classList.remove('active');
-  document.getElementById('reading').classList.add('hide');
-  document.getElementById('read').classList.add('hide');
-  document.getElementById('wish').classList.add('hide');
 
-  var ele = document.getElementById(id);
-  ele.classList.remove('hide');
-  ele.classList.add('active');
-
-  document.getElementById('reading-tab').classList.remove('active');
-  document.getElementById('read-tab').classList.remove('active');
-  document.getElementById('wish-tab').classList.remove('active');
-  document.getElementById(id + '-tab').classList.add('active');
-};
-
-(function() {
-  var read = [];
-  var wish = [];
-  var reading = [];
-
-  // XHR 获取豆瓣书单数据，数据格式json
-  // function loadDoubanCollections() {
-  //   var xhr = new XMLHttpRequest();
-  //   // https://api.douban.com/v2/book/user/:name/collections
-  //   xhr.open('GET', 'http://7b1fa0.com1.z0.glb.clouddn.com/douban-20170429-1.json', true);
-
-  //   xhr.onload = function() {
-  //     // console.log(this);
-  //     if (this.status >= 200 && this.status < 300) {
-  //       var res = JSON.parse(this.response);
-  //       searchData = res;
-  //       onLoadDouban(searchData);
-  //     } else {
-  //       console.error(this.statusText);
-  //     }
-  //   };
-
-  //   xhr.onerror = function() {
-  //     console.error(this.statusText);
-  //   };
-
-  //   xhr.send();
-  // }
-  
-  // Ajax 获取豆瓣书单数据，数据格式json
-  function loadDoubanCollections() {
-    var _this = this;
-    // https://api.douban.com/v2/book/user/:name/collections?start=0&count=100
-    var url = "https://api.douban.com/v2/book/user//collections"
-    $.ajax({
-      url: url,
-      type: 'GET',
-      data: {
-        start:0, // 从哪一条记录开始
-        count:100, // 获取豆瓣书单数据条数
-        apikey:'' // 豆瓣apikey
-      },
-      dataType: 'JSONP', //here
-      success: function(data) {
-        // console.log(data);
-        onLoadDouban(data);
-      }
-    });
-  }
-
-  function onLoadDouban(data) {
-    if (data['count'] > 0) {
-      for (var i = 0; i < data['collections'].length; ++i) {
-        resolveBook(data['collections'][i]);
-      }
-    }
-    render();
-  }
-
-  function resolveBook(book) {
-    if (book['status'] == 'read') {
-      read.push(book);
-    }
-    if (book['status'] == 'wish') {
-      wish.push(book);
-    }
-    if (book['status'] == 'reading') {
-      reading.push(book);
-    }
-  }
-
-  function render() {
-    renderList(read, 'read');
-    renderList(wish, 'wish');
-    renderList(reading, 'reading');
-
-    document.getElementById('reading-total').innerHTML = '(' + reading.length + ')';
-    document.getElementById('read-total').innerHTML = '(' + read.length + ')';
-    document.getElementById('wish-total').innerHTML = '(' + wish.length + ')';
-
-    show('reading');
-    document.getElementById('loading').classList.add('hide');
-  }
-
-  function renderList(list, id) {
-    for (var i = 0; i < list.length; ++i) {
-      var h = renderBook(list[i]);
-      if (i > 0 && i % 4 == 3) {
-        h += '<div class="clearfix"></div>';
-      }
-      document.getElementById(id).innerHTML = document.getElementById(id).innerHTML + h;
-    }
-  }
-
-  function renderBook(book) {
-    var html = '<div class="col-sm-6 col-md-6"><div class="panel panel-default hover-grow"><div class="panel-body">'
-      + '<div class="media media-middle book book-' + book['status'] + '" itemscope itemtype="http://schema.org/Book">' 
-      + '<div class="media-left"><a class="media-middle" target="_blank" href="' + book.book.alt + '" rel="external nofollow noopener noreferrer"><img class="media-object" src="' + book.book.image + '" itemprop="image"/></a></div><div class="media-body">' 
-      + '<h3 class="media-heading" itemprop="name"><a target="_blank" href="' + book.book.alt + '" rel="external nofollow noopener noreferrer">' + book.book.title + '</a></h3>' 
-      + '<p class="meta text-nowrap-1x"><small itemprop="author">' + book.book.author[0] + '</small> / <small itemprop="datePublished">' + book.book.pubdate + '</small> / <small itemprop="ratingValue">' + book.book.rating.average + '分</small></p>' 
-      + '<p class="meta text-nowrap-1x">' + book.updated.substring(0, 10) + resolveRating(book.rating) + resolveTags(book.tags) + '</p>' 
-      + '<div class="comments text-muted text-nowrap-3x" itemprop="comment">' + (book.comment ? book.comment : '') + '</div>' 
-      + '</div>' + '</div>' + '</div>' + '</div>' + '</div>';
-    return html;
-  }
-
-  function resolveRating(rating) {
-    if (rating && rating.value) {
-      return ' / ' + rating.value + '星';
-    }
-    return '';
-  }
-
-  function resolveTags(tags) {
-    if (tags && tags.length > 0) {
-      var html = ' / ';
-      for (var i = 0; i < tags.length; ++i) {
-        html += tags[i] + ' ';
-      }
-      return html;
-    }
-    return '';
-  }
-
-  setTimeout(function() {
-    loadDoubanCollections();
-  }, 0)
-})()
-</script>
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: true,
+    appId: 'TrQDRIWsj1IVoHW4a4fCkpgl-gzGzoHsz',
+    appKey: '1emq1qCoboyjpC5ysr8uuzjf',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
 
 
 
