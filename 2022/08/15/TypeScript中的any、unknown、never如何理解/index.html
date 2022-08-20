@@ -17,22 +17,22 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>霍乱时期的爱情——读书笔记 | 可乐加冰</title>
-  <meta name="description" content="本博客 hjy-xh，转载请申明出处  我相信爱情是有许多模样的，街头巷尾里互相搀扶的老夫老妻，小家里过着平平淡淡日子的夫妇，婚礼上很累却非常甜蜜的新人，还有拉着彼此的手在暴雨天一路奔跑的情侣等。当然，有积极正面的，热情似火的爱，也必然有阴暗扭曲，卑劣粗俗的爱，这本书让我看到关于爱情更多的细枝末节。当年轻的阿里萨第一次见到费尔明娜，一生内心的纠葛就此开始。从最初的懵懂羞涩，在花园装作看书看诗集，">
+  <title>TypeScript中的any、unknown、never如何理解 | 可乐加冰</title>
+  <meta name="description" content="本博客 hjy-xh，转载请申明出处  any在TS中使用any类型，可以用来表示允许赋值给变量任意类型，这种方式与直接使用JS没有太大差别，无法享受到TS的类型检查，在可能出错的地方也不会发现错误。 any类型本质上是类型系统的一个逃逸舱，那我们在什么情况下会使用该类型呢？  无法确定当前类型时 逐步向TS迁移时  而在编写代码的过程中，明确知道类型的时候，有时为了偷懒，使用了any，这是一种">
 <meta property="og:type" content="article">
-<meta property="og:title" content="霍乱时期的爱情——读书笔记">
-<meta property="og:url" content="http://example.com/2020/04/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0--%E9%9C%8D%E4%B9%B1%E6%97%B6%E6%9C%9F%E7%9A%84%E7%88%B1%E6%83%85/index.html">
+<meta property="og:title" content="TypeScript中的any、unknown、never如何理解">
+<meta property="og:url" content="http://example.com/2022/08/15/TypeScript%E4%B8%AD%E7%9A%84any%E3%80%81unknown%E3%80%81never%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3/index.html">
 <meta property="og:site_name" content="可乐加冰">
-<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  我相信爱情是有许多模样的，街头巷尾里互相搀扶的老夫老妻，小家里过着平平淡淡日子的夫妇，婚礼上很累却非常甜蜜的新人，还有拉着彼此的手在暴雨天一路奔跑的情侣等。当然，有积极正面的，热情似火的爱，也必然有阴暗扭曲，卑劣粗俗的爱，这本书让我看到关于爱情更多的细枝末节。当年轻的阿里萨第一次见到费尔明娜，一生内心的纠葛就此开始。从最初的懵懂羞涩，在花园装作看书看诗集，">
+<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  any在TS中使用any类型，可以用来表示允许赋值给变量任意类型，这种方式与直接使用JS没有太大差别，无法享受到TS的类型检查，在可能出错的地方也不会发现错误。 any类型本质上是类型系统的一个逃逸舱，那我们在什么情况下会使用该类型呢？  无法确定当前类型时 逐步向TS迁移时  而在编写代码的过程中，明确知道类型的时候，有时为了偷懒，使用了any，这是一种">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-04-20T13:12:03.000Z">
-<meta property="article:modified_time" content="2021-08-07T05:59:13.567Z">
+<meta property="article:published_time" content="2022-08-15T13:06:41.000Z">
+<meta property="article:modified_time" content="2022-08-20T01:55:40.395Z">
 <meta property="article:author" content="HJY">
-<meta property="article:tag" content="读书笔记">
-<meta property="article:tag" content="文学">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="ES6">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/2020/04/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0--%E9%9C%8D%E4%B9%B1%E6%97%B6%E6%9C%9F%E7%9A%84%E7%88%B1%E6%83%85/index.html">
+  <link rel="canonical" href="http://example.com/2022/08/15/TypeScript%E4%B8%AD%E7%9A%84any%E3%80%81unknown%E3%80%81never%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3/index.html">
   
     <link rel="alternate" href="/atom.xml" title="可乐加冰" type="application/atom+xml">
   
@@ -331,14 +331,14 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="post-读书笔记--霍乱时期的爱情" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-TypeScript中的any、unknown、never如何理解" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      霍乱时期的爱情——读书笔记
+      TypeScript中的any、unknown、never如何理解
     </h1>
   
 
@@ -346,20 +346,20 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2020/04/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0--%E9%9C%8D%E4%B9%B1%E6%97%B6%E6%9C%9F%E7%9A%84%E7%88%B1%E6%83%85/" class="article-date">
-	  <time datetime="2020-04-20T13:12:03.000Z" itemprop="datePublished">2020-04-20</time>
+	<a href="/2022/08/15/TypeScript%E4%B8%AD%E7%9A%84any%E3%80%81unknown%E3%80%81never%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3/" class="article-date">
+	  <time datetime="2022-08-15T13:06:41.000Z" itemprop="datePublished">2022-08-15</time>
 	</a>
 </span>
         
   <span class="article-category">
     <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
   </span>
 
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a>, <a class="article-tag-link-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a>
+	<a class="article-tag-link-link" href="/tags/ES6/" rel="tag">ES6</a>, <a class="article-tag-link-link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
   </span>
 
 
@@ -372,10 +372,10 @@
 	</span>
 
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/04/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0--%E9%9C%8D%E4%B9%B1%E6%97%B6%E6%9C%9F%E7%9A%84%E7%88%B1%E6%83%85/#comments" class="article-comment-link">评论</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/08/15/TypeScript%E4%B8%AD%E7%9A%84any%E3%80%81unknown%E3%80%81never%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 948(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 842(字)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 3(分)</span>
@@ -388,7 +388,53 @@
         <blockquote>
 <p>本博客 <a target="_blank" rel="noopener" href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p>
 </blockquote>
-<p>我相信爱情是有许多模样的，街头巷尾里互相搀扶的老夫老妻，小家里过着平平淡淡日子的夫妇，婚礼上很累却非常甜蜜的新人，还有拉着彼此的手在暴雨天一路奔跑的情侣等。当然，有积极正面的，热情似火的爱，也必然有阴暗扭曲，卑劣粗俗的爱，这本书让我看到关于爱情更多的细枝末节。<br>当年轻的阿里萨第一次见到费尔明娜，一生内心的纠葛就此开始。从最初的懵懂羞涩，在花园装作看书看诗集，实则等待费尔明娜路过时的那一撇，那就是心动的第一个阶段吧。彼时费尔明娜乖巧懂事，对父亲言听计从，但在阿里萨鼓起勇气送出信件的那一天，她的心态悄然变化。虽然二人几乎没有或正式的面对面的对话，但是在信中从无话不谈到私定终身，看到这里我觉得有些荒诞，但也不可否认，在那个年代这是可能发生的事情，或许这不是靠谱的爱情，但它一定是两个少男少女勇敢无畏，憧憬爱情的表现。<br>纸里包不住火，洛伦索发现女儿的地下情，愤怒之余却也拿女儿没什么办法，只能带着女儿出去旅行一场，以期让她忘记阿里萨。在经历时间和空间的考验之后，费尔明娜在代笔门廊处看见阿里萨的第一眼果断决定放弃这一段长达数年的感情，她完全没有想到阿里萨是这般模样。我想这是爱情的一种残酷，发现自己朝思暮想的另一半因为某种不合的观念，失望占据内心，想要迫切希望离开，以逃避给自己带来的情感冲击。而阿里萨也因此陷入漫长的相思之苦，在无数个日日夜夜幻想着未来继续和费尔明娜生活下去的可能。<br>医生的出现，让故事更加戏剧化，他和阿里萨是完完全全两种不同的人。医生光鲜亮丽，才华横溢，医术高超，和阿里萨奇怪装束，一身为爱情诗歌所浸染的气息形成鲜明对比。费尔明娜嫁给了医生，甜蜜旅行之后是多年的不开心，期间偶尔穿插着过往蜜月的回忆。漫长岁月不过弹指间就过去了，阿里萨对她的感情日渐病态，一边心里装着她，一边勾搭成百上千的女人满足生理上需求。漫长岁月里，阿里萨也有那么几个中意的女人，奇怪的是他从来没有放弃一直盘踞在内心的念想，也从未对其他人提起，少年时的爱慕经受了五十多年岁月的考验，尽管这种感情面目全非，阿里萨还是坚持了下去，足够令人惊叹。<br>阿里萨终于等到医生死亡的消息，不像他想象中的体面离世，跌倒死亡让阿里萨没有把竞争对手比下去的快感。即便如此，暮年的他没有浪费太多时间，再次向费尔明娜表明心意，在坚持不懈的努力下，费尔明娜意识到自己是对阿里萨那一份特殊感情。最终在他们剩下的生命里借助霍乱的掩护，阿里萨如愿和费尔明娜一起在海上漂流了下去。</p>
+<h2 id="any"><a href="#any" class="headerlink" title="any"></a>any</h2><p>在TS中使用<code>any</code>类型，可以用来表示允许赋值给变量任意类型，这种方式与直接使用JS没有太大差别，无法享受到TS的类型检查，在可能出错的地方也不会发现错误。</p>
+<p><code>any</code>类型本质上是类型系统的一个逃逸舱，那我们在什么情况下会使用该类型呢？</p>
+<ul>
+<li>无法确定当前类型时</li>
+<li>逐步向TS迁移时</li>
+</ul>
+<p><strong>而在编写代码的过程中，明确知道类型的时候，有时为了偷懒，使用了<code>any</code>，这是一种不好的行为。</strong></p>
+<p>而以下种种原因，可能都会对我们是否使用<code>any</code>有影响：</p>
+<ul>
+<li>添加类型时，需要编写大量代码，而<code>any</code>工作量很少</li>
+<li>已经通过必要的运行时检查以防御性的方式编写了代码，以确保没有错误</li>
+<li>有些参数很难正确输入，但是<code>any</code>更容易</li>
+<li>不知道参数是什么</li>
+<li>类型增加了很多复杂性，有时<code>any</code>更简单</li>
+</ul>
+<p>使用<code>any</code>还会造成类型污染的问题：即<code>any</code>类型的对象会导致后续的属性类型都会变成<code>any</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj: any = &#123; </span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;Cola&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">obj.name = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="unknown"><a href="#unknown" class="headerlink" title="unknown"></a>unknown</h2><p>在TS的3.0版本中，引入了<code>unknown</code>类型，它可以这样理解成：**<code>unknown</code>类型是<code>any</code>的类型安全版本。**</p>
+<p>这意味着如果要在TS中使用<code>unknown</code>类型时，需要知道它所指的类型，也就自然地推导出使用该类型的变量前，需要对该变量的类型进行断言。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params">value: unknown</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// @ts-ignore: Object is of type &#x27;unknown&#x27;.</span></span><br><span class="line">  value.toFixed(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Type assertion:</span></span><br><span class="line">  (value <span class="keyword">as</span> number).toFixed(<span class="number">1</span>); <span class="comment">// OK</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 缩小为更具体的类型范围，包括 typeof 运算符，instanceof 运算符和自定义类型保护函数</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> value === <span class="string">&#x27;number&#x27;</span>) &#123;</span><br><span class="line">       value.toFixed(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>unknown</code>类型只能被赋值给<code>any</code>类型和<code>unknown</code>类型本身。</p>
+<p>因为只有能够保存任意类型值的容器才能保存<code>unknown</code> 类型的值，所以这个限制很合理。毕竟我们不知道变量中存储了什么类型的值。</p>
+<h2 id="never"><a href="#never" class="headerlink" title="never"></a>never</h2><p><code>never</code>类型表示的是那些永不存在的值的类型，<code>never</code>类型是任何类型的子类型，也可以赋值给任何类型。</p>
+<p>然而，没有类型是<code>never</code>的子类型或可以赋值给<code>never</code>类型（除了<code>never</code>本身之外）,<code>never</code>用于那些永不可发生的情况:</p>
+<ul>
+<li>一个从来不会有返回值的函数（如：如果函数内含有 <code>while(true) &#123;&#125;</code>）；</li>
+<li>一个总是会抛出错误的函数（如：<code>function foo() &#123; throw new Error(&#39;Not Implemented&#39;) &#125;</code>，foo 的返回类型是 never）；</li>
+</ul>
+<h3 id="与-void-的差异"><a href="#与-void-的差异" class="headerlink" title="与 void 的差异"></a>与 void 的差异</h3><p><code>void</code>表示没有任何类型，<code>never</code>表示永远不存在的值的类型</p>
+<h2 id="异同"><a href="#异同" class="headerlink" title="异同"></a>异同</h2><ul>
+<li><code>any</code>和<code>unknown</code>是TS中所谓的顶级类型：当把类型看作是值的集合时，any 和 unknown 是包含所有值的集合</li>
+<li><code>never</code>类型是TS中的底层类型：空集</li>
+</ul>
+<h2 id="以下或许是最佳实践"><a href="#以下或许是最佳实践" class="headerlink" title="以下或许是最佳实践"></a>以下或许是最佳实践</h2><ul>
+<li>如果不是有意忽略类型检查，不使用<code>any</code></li>
+<li>如果要用<code>any</code>，可以考虑用<code>unknown</code>代替（进行断言后使用）</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><p><a href="understanding-any-and-unknown-in-typescript-difference-between-never-and-void">understanding-any-and-unknown-in-typescript-difference-between-never-and-void</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://mariusschulz.com/blog/the-unknown-type-in-typescript">The unknown Type in TypeScript</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.51cto.com/article/676734.html">使用 TypeScript 中的 Any 类型前，你需要了解的一切</a></p>
+</li>
+</ul>
 
       
     </div>
@@ -398,7 +444,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://example.com/2020/04/20/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0--%E9%9C%8D%E4%B9%B1%E6%97%B6%E6%9C%9F%E7%9A%84%E7%88%B1%E6%83%85/" title="霍乱时期的爱情——读书笔记" target="_blank" rel="external">http://example.com/2020/04/20/读书笔记--霍乱时期的爱情/</a>
+      <a href="http://example.com/2022/08/15/TypeScript%E4%B8%AD%E7%9A%84any%E3%80%81unknown%E3%80%81never%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3/" title="TypeScript中的any、unknown、never如何理解" target="_blank" rel="external">http://example.com/2022/08/15/TypeScript中的any、unknown、never如何理解/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -444,13 +490,9 @@
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2020/04/26/MQTT%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/" title="MQTT协议详解"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2020/03/10/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB-XSS%E6%94%BB%E5%87%BB%E8%AF%A6%E8%A7%A3/" title="网络攻击-XSS攻击详解"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2022/02/19/%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3%E5%B8%B8%E8%A7%81%E7%9F%A5%E8%AF%86%E7%82%B9%E6%B1%87%E6%80%BB/" title="网络相关常见知识点汇总"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
