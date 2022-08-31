@@ -17,22 +17,22 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>围城——读书笔记 | 可乐加冰</title>
-  <meta name="description" content="本博客 hjy-xh，转载请申明出处  惊叹钱老的经典！借着小说揭露那个时代的病态，文笔犀利，辛辣讽刺。方鸿渐自己留洋归来，在有着前清举人称号的父亲，迂腐的母亲，惺惺作态的弟妹的大家庭中，代表着西式文化，与传统的中国文化进行了一场激烈的碰撞。还有和肝胆相照的赵辛楣，极具才气的苏小姐，道貌岸然的李梅亭等一系列个性鲜明人物的故事，道出世事无常，人性虚伪，也暗讽陈腐的旧中国包括代表西方文化的部分知识分">
+  <title>TypeScript中extends用法小结 | 可乐加冰</title>
+  <meta name="description" content="本博客 hjy-xh，转载请申明出处  extends关键字在TS中有多种用法，单独使用时，常见有以下几种情况  继承&#x2F;拓展 约束 条件判断  继承&#x2F;扩展单个&#x2F;多个接口这种用法和类的继承相似，看个🌰 12345678910111213interface Animal &amp;#123;    name: string;&amp;#125;&#x2F;&#x2F; Dog继承Animal并扩展一个run方法interface D">
 <meta property="og:type" content="article">
-<meta property="og:title" content="围城——读书笔记">
-<meta property="og:url" content="http://example.com/2020/02/09/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0--%E5%9B%B4%E5%9F%8E/index.html">
+<meta property="og:title" content="TypeScript中extends用法小结">
+<meta property="og:url" content="http://example.com/2022/08/22/TypeScript%E4%B8%ADextends%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93/index.html">
 <meta property="og:site_name" content="可乐加冰">
-<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  惊叹钱老的经典！借着小说揭露那个时代的病态，文笔犀利，辛辣讽刺。方鸿渐自己留洋归来，在有着前清举人称号的父亲，迂腐的母亲，惺惺作态的弟妹的大家庭中，代表着西式文化，与传统的中国文化进行了一场激烈的碰撞。还有和肝胆相照的赵辛楣，极具才气的苏小姐，道貌岸然的李梅亭等一系列个性鲜明人物的故事，道出世事无常，人性虚伪，也暗讽陈腐的旧中国包括代表西方文化的部分知识分">
+<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  extends关键字在TS中有多种用法，单独使用时，常见有以下几种情况  继承&#x2F;拓展 约束 条件判断  继承&#x2F;扩展单个&#x2F;多个接口这种用法和类的继承相似，看个🌰 12345678910111213interface Animal &amp;#123;    name: string;&amp;#125;&#x2F;&#x2F; Dog继承Animal并扩展一个run方法interface D">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-02-09T15:27:15.000Z">
-<meta property="article:modified_time" content="2022-01-11T07:51:44.822Z">
+<meta property="article:published_time" content="2022-08-22T14:12:31.000Z">
+<meta property="article:modified_time" content="2022-08-31T09:17:36.455Z">
 <meta property="article:author" content="HJY">
-<meta property="article:tag" content="读书笔记">
-<meta property="article:tag" content="文学">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="TypeScript">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/2020/02/09/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0--%E5%9B%B4%E5%9F%8E/index.html">
+  <link rel="canonical" href="http://example.com/2022/08/22/TypeScript%E4%B8%ADextends%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93/index.html">
   
     <link rel="alternate" href="/atom.xml" title="可乐加冰" type="application/atom+xml">
   
@@ -331,14 +331,14 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="post-读书笔记--围城" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-TypeScript中extends用法小结" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      围城——读书笔记
+      TypeScript中extends用法小结
     </h1>
   
 
@@ -346,20 +346,20 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2020/02/09/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0--%E5%9B%B4%E5%9F%8E/" class="article-date">
-	  <time datetime="2020-02-09T15:27:15.000Z" itemprop="datePublished">2020-02-09</time>
+	<a href="/2022/08/22/TypeScript%E4%B8%ADextends%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93/" class="article-date">
+	  <time datetime="2022-08-22T14:12:31.000Z" itemprop="datePublished">2022-08-22</time>
 	</a>
 </span>
         
   <span class="article-category">
     <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
   </span>
 
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a>, <a class="article-tag-link-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a>
+	<a class="article-tag-link-link" href="/tags/JavaScript/" rel="tag">JavaScript</a>, <a class="article-tag-link-link" href="/tags/TypeScript/" rel="tag">TypeScript</a>
   </span>
 
 
@@ -372,13 +372,13 @@
 	</span>
 
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/02/09/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0--%E5%9B%B4%E5%9F%8E/#comments" class="article-comment-link">评论</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/08/22/TypeScript%E4%B8%ADextends%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.9k(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.2k(字)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
 	
 
       </div>
@@ -388,9 +388,72 @@
         <blockquote>
 <p>本博客 <a target="_blank" rel="noopener" href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p>
 </blockquote>
-<p>惊叹钱老的经典！借着小说揭露那个时代的病态，文笔犀利，辛辣讽刺。<br>方鸿渐自己留洋归来，在有着前清举人称号的父亲，迂腐的母亲，惺惺作态的弟妹的大家庭中，代表着西式文化，与传统的中国文化进行了一场激烈的碰撞。还有和肝胆相照的赵辛楣，极具才气的苏小姐，道貌岸然的李梅亭等一系列个性鲜明人物的故事，道出世事无常，人性虚伪，也暗讽陈腐的旧中国包括代表西方文化的部分知识分子。<br>“城中的人想出去，城外的人想冲进来”，我想这话不仅仅只是说婚姻，生活也是如此。方鸿渐的一生都在城内外兜兜转转，恋爱跟着失恋，教书跟着被辞退，结婚跟着不快乐。<br>之后方鸿渐和孙柔嘉的结合，到底不是有情人终成眷属，步入婚姻，逐渐暴露出双方的真实，原生家庭带来的矛盾，经济上的窘迫，让两个人并不快乐。可以说这样婚姻是围城，不过也不能忽视现实。<br>在现实中我们也会深陷”围城”，大多时候都是我们自己造成的困扰和奇怪的想法，消极的想法总是让人感到悲观，要经常审视自己的内心。有些人快乐的时候很少，和生活一直在做抗争，有些人一直保持积极乐观的心态，带着极大的热情生活，这些人并非一直如此，状态相互转化间可见”围城”并非牢不可破，该破的是我们自己的想法。</p>
-<hr>
-<h3 id="围城—读书笔记2-3-2-10"><a href="#围城—读书笔记2-3-2-10" class="headerlink" title="围城—读书笔记2.3-2.10"></a>围城—读书笔记2.3-2.10</h3><h4 id="小范宝贝"><a href="#小范宝贝" class="headerlink" title="小范宝贝"></a>小范宝贝</h4><p>《围城》这本书，刚看时没有什么深刻的体会，但它可能经典就经典在随着故事情节的发展，人性的弱点与人生的荒凉慢慢的展现在了你的面前，甚至会使读者在方鸿渐的身上找到一丝情感的共鸣，像是人性的缩影，在他的身上体现的淋漓尽致。<br>故事以夕阳下海面上缓缓行驶的船只开头，在这艘船上方鸿渐与“半裸的”“局部真理的”鲍小姐有了一夜的情缘。而同时，同样留学归来的苏小姐也对他芳心暗许。苏文纨家室不错又是留样归来，长得也眉清目秀，可是方鸿渐到最后也没有喜欢上苏小姐，反而是对她的表妹唐晓芙可以说是一见钟情。钱钟书先生是这样描述唐晓芙的：唐小姐妩媚端正的圆脸，有两个浅酒涡。天生着一般女人要花钱费时、调脂和粉来仿造的好脸色，新鲜得使人见了忘掉口渴而又觉嘴馋，仿佛是好水果。她眼睛并不顶大，可是灵活温柔，反衬得许多女人的大眼睛只像政治家讲的大话，大而无当。古典学者看她说笑时露出的好牙齿，会诧异为什么古今中外诗人，都甘心变成女人头插的钗，腰束的带，身体睡的席，甚至脚下践踏的鞋，可是从没想到化作她的牙刷。她头发没烫，眉毛不镊，口红也没有擦，似乎安心遵守天生的限止，不要弥补造化的缺陷。总而言之，唐小姐是摩登文明社会里那桩罕物——一个真正的女孩子。这段话，真的是我在整本书中，见过的对女孩子最美好的描述了，唐小姐就像一朵红玫瑰，深深地插进了方鸿渐的心中。而这段感情最终也因为他自己的懦弱与退缩夭折在了那个下着大雨的午后。<br>如果说鲍小姐代表肉欲，苏小姐代表才情和家室，唐小姐代表初恋，那接下来出现的这位孙柔嘉则代表了婚姻。孙小姐出现时，一张寡淡的脸上有着些小的雀斑，这与唐小姐的外貌描述简直天差地别。而她一个女孩独自和4个男人一起出远门去大学教书，这种行为刚开始让我不太理解，可看到后面她父母的重男轻女，迫使她一个女孩子要不断的努力才能创造出属于自己的好生活。原以为她是一个乖巧甚至有些单纯的女生，可在她一步一步设下圈套，让方鸿渐慢慢走进自己婚姻的围城中时，让我觉得她实在心思深重，却也觉得她有些可怜。家庭和生活的压力逼迫她成长为了一个敏感、富有心计的女子。她与方鸿渐婚后也渐渐暴露出自己善妒、专横的一面。她过于聪明，每每吵架嘴上说着不想方鸿渐的朋友觉得她限制了他的生活，可他们有哪一次吵架不是孙柔嘉在限制他呢？在生活上、工作上，甚至是朋友的交往上。她很勇敢，她大胆的追求自己的幸福，选择了方鸿渐这在她看来是最好的选择，她拥有抗争人生，迎来幸福生活的勇气，可她选择的却未必是幸福的生活。他们的婚后生活打破了方鸿渐对婚姻的幻想，这是一段被掌控的婚姻，而方鸿渐在被生活不断打磨棱角的同时，也在不断的向他的婚姻做出妥协。可是这些妥协并不能改变他们不断的争吵、不断的发生矛盾的现状。<br>是啊，方鸿渐从来就不是一个会主动争取的人，他好像经不得一点挫折与麻烦。他总是在有了一点点退路后拔腿就跑，不愿意面对一点点的困难或者说努力一点点。考取文凭时是这样，与岳父岳母闹翻时是这样，大学教书时没有聘书也是这样。他也曾在年轻的时候意气风发，被大家吹捧、有女孩喜爱。那时他的身边围绕着的是苏小姐、赵先生、唐小姐、曹先生，这些人无一例外都是家世好，文化高，他也曾是这些人中的一员。但是在时间的细细打磨下，他慢慢露出了原本的样子。文凭是假的，家室也一般，性格又软弱，只有那一身的傲气还算真实。最后只能娶一个像孙柔嘉这样平凡的女生作为妻子，还说“也许这正是我所需要的”。他总是被迫的接受着，还反过来安慰自己也许一切都是最好的安排，真是一个可悲又可恨的人物。<br>方鸿渐有些小聪明，也比一般人有学识，可他的一生，在我看来的的确确是一场悲剧。他一生都无法走出自己的围城里。这个围城，不是别人给他造的，而是他的懦弱退缩加上他莫名的不肯低头的傲气，自己给自己设下的围城。</p>
+<p><code>extends</code>关键字在TS中有多种用法，单独使用时，常见有以下几种情况</p>
+<ul>
+<li>继承/拓展</li>
+<li>约束</li>
+<li>条件判断</li>
+</ul>
+<h2 id="继承-扩展"><a href="#继承-扩展" class="headerlink" title="继承/扩展"></a>继承/扩展</h2><h4 id="单个-多个接口"><a href="#单个-多个接口" class="headerlink" title="单个/多个接口"></a>单个/多个接口</h4><p>这种用法和类的继承相似，看个🌰</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Animal &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Dog继承Animal并扩展一个run方法</span></span><br><span class="line"><span class="keyword">interface</span> Dog <span class="keyword">extends</span> Animal &#123;</span><br><span class="line">    <span class="attr">run</span>: <span class="function">() =&gt;</span> <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> dog: Dog = &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;狗子&#x27;</span>,</span><br><span class="line">    <span class="attr">run</span>: <span class="function">() =&gt;</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>也支持多重继承</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Blackdog <span class="keyword">extends</span> Animal, Dog &#123;</span><br><span class="line">    <span class="attr">color</span>: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="扩展类的接口"><a href="#扩展类的接口" class="headerlink" title="扩展类的接口"></a>扩展类的接口</h4><p>除了上面的常见用法，接口还可以继承类的私有成员和受保护成员，而不仅仅是公共成员</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> state: <span class="built_in">boolean</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> Runnable <span class="keyword">extends</span> Animal &#123;</span><br><span class="line">    run(): <span class="built_in">void</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> <span class="keyword">extends</span> <span class="title">Animal</span> <span class="title">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="title">run</span>(<span class="params"></span>)</span> &#123; &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Animal</span> <span class="title">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="title">run</span>(<span class="params"></span>)</span> &#123; &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Error: 缺少属性 state</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Monkey</span> <span class="title">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="title">run</span>(<span class="params"></span>)</span> &#123; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><ul>
+<li>一个接口可以继承/扩展一个或多个现有接口</li>
+<li>一个接口也可以继承/扩展一个类。如果该类包含私有或受保护成员，则该接口只能由该类或其子类实现</li>
+</ul>
+<h2 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h2><p>此处说的约束，一般指泛型约束，即对泛型的类型进行约束控制</p>
+<p>在编写方法的时候，可能会需要对参数的类型做一些限制，比方说入参有一个<code>length</code>属性</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 没有约束</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getLength</span>&lt;<span class="title">T</span>&gt;(<span class="params">arg: T</span>): <span class="title">T</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Error: 类型“T”上不存在属性“length”</span></span><br><span class="line">    <span class="keyword">return</span> arg.length;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 进行约束</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getLength</span>&lt;<span class="title">T</span> <span class="title">extends</span> </span>&#123;length: <span class="built_in">number</span>&#125;&gt;(arg: T): <span class="built_in">number</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> arg.length;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="条件判断"><a href="#条件判断" class="headerlink" title="条件判断"></a>条件判断</h2><p>和三目表达式类似，看看官网的示例和说明</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SomeType <span class="keyword">extends</span> OtherType ? TrueType : FalseType;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>When the type on the left of the <code>extends</code> is assignable to the one on the right, then you’ll get the type in the first branch (the “true” branch); otherwise you’ll get the type in the latter branch (the “false” branch).</p>
+</blockquote>
+<p><strong>如果extends前面的类型能够赋值给extends后面的类型，那么表达式判断为真，否则为假</strong></p>
+<h4 id="常规使用"><a href="#常规使用" class="headerlink" title="常规使用"></a>常规使用</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> A1 &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> A2 &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="built_in">string</span></span><br><span class="line">    <span class="attr">age</span>: <span class="built_in">number</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// A的类型为string</span></span><br><span class="line"><span class="keyword">type</span> A = A2 <span class="keyword">extends</span> A1 ? <span class="built_in">string</span> : <span class="built_in">number</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> str: A = <span class="string">&#x27;this is string&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>A1，A2两个接口，满足A2的接口一定可以满足A1，所以条件为真，A的类型取string</p>
+<h4 id="结合泛型使用"><a href="#结合泛型使用" class="headerlink" title="结合泛型使用"></a>结合泛型使用</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> A1 = <span class="string">&#x27;x&#x27;</span> <span class="keyword">extends</span> <span class="string">&#x27;x&#x27;</span> ? <span class="built_in">string</span> : <span class="built_in">number</span>; <span class="comment">// string</span></span><br><span class="line"><span class="keyword">type</span> A2 = <span class="string">&#x27;x&#x27;</span> | <span class="string">&#x27;y&#x27;</span> <span class="keyword">extends</span> <span class="string">&#x27;x&#x27;</span> ? <span class="built_in">string</span> : <span class="built_in">number</span>; <span class="comment">// number</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> P&lt;T&gt; = T <span class="keyword">extends</span> <span class="string">&#x27;x&#x27;</span> ? <span class="built_in">string</span> : <span class="built_in">number</span>;</span><br><span class="line"><span class="keyword">type</span> A3 = P&lt;<span class="string">&#x27;x&#x27;</span> | <span class="string">&#x27;y&#x27;</span>&gt; <span class="comment">// ?</span></span><br></pre></td></tr></table></figure>
+
+<p>A1、A2的结果也就是常规的用法，很容易得出结果，但是A3结合了泛型，这里有一个<code>Distributive Conditional Types</code>的概念</p>
+<blockquote>
+<p>When conditional types act on a generic type, they become <em>distributive</em> when given a union type</p>
+</blockquote>
+<p><em>如果extends前面的参数是一个泛型类型，当传入该参数的是联合类型，则使用分配律计算最终的结果。分配律是指，将联合类型的联合项拆成单项，分别代入条件类型，然后将每个单项代入得到的结果再联合起来，得到最终的判断结果。</em></p>
+<p>以上面的A3为例，进行推导</p>
+<p>P<T>中T是一个泛型参数。在A3的定义中，给T传入的是’x’和’y’的联合类型’x’ | ‘y’，满足分配律，于是’x’和’y’被拆开，分别代入P<T></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">P&lt;<span class="string">&#x27;x&#x27;</span> | <span class="string">&#x27;y&#x27;</span>&gt; =&gt; P&lt;<span class="string">&#x27;x&#x27;</span>&gt; | P&lt;<span class="string">&#x27;y&#x27;</span>&gt;</span><br><span class="line"><span class="comment">// &#x27;x&#x27;代入得到</span></span><br><span class="line"><span class="string">&#x27;x&#x27;</span> <span class="keyword">extends</span> <span class="string">&#x27;x&#x27;</span> ? <span class="built_in">string</span> : <span class="function"><span class="params">number</span> =&gt;</span> <span class="built_in">string</span></span><br><span class="line"><span class="comment">// &#x27;y&#x27;代入得到</span></span><br><span class="line"><span class="string">&#x27;y&#x27;</span> <span class="keyword">extends</span> <span class="string">&#x27;x&#x27;</span> ? <span class="built_in">string</span> : <span class="function"><span class="params">number</span> =&gt;</span> <span class="built_in">number</span></span><br></pre></td></tr></table></figure>
+
+<p>然后将每一项代入得到的结果联合起来，得到string | number</p>
+<p>满足两个要点即可适用分配律：第一，参数是泛型类型，第二，代入参数的是联合类型</p>
+<h4 id="特殊的never"><a href="#特殊的never" class="headerlink" title="特殊的never"></a>特殊的never</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// never是所有类型的子类型</span></span><br><span class="line"><span class="keyword">type</span> A1 = <span class="built_in">never</span> <span class="keyword">extends</span> <span class="string">&#x27;x&#x27;</span> ? <span class="built_in">string</span> : <span class="built_in">number</span>; <span class="comment">// string</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> P&lt;T&gt; = T <span class="keyword">extends</span> <span class="string">&#x27;x&#x27;</span> ? <span class="built_in">string</span> : <span class="built_in">number</span>;</span><br><span class="line"><span class="keyword">type</span> A2 = P&lt;<span class="built_in">never</span>&gt; <span class="comment">// never</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>never被认为是空的联合类型</strong>，也就是说，没有联合项的联合类型，所以还是满足上面的分配律，然而因为没有联合项可以分配，所以<code>P&lt;T&gt;</code>的表达式其实根本就没有执行，所以A2的定义也就类似于永远没有返回的函数一样，是never类型的</p>
+<h4 id="防止条件判断中的分配"><a href="#防止条件判断中的分配" class="headerlink" title="防止条件判断中的分配"></a>防止条件判断中的分配</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> P&lt;T&gt; = [T] <span class="keyword">extends</span> [<span class="string">&#x27;x&#x27;</span>] ? <span class="built_in">string</span> : <span class="built_in">number</span>;</span><br><span class="line"><span class="keyword">type</span> A1 = P&lt;<span class="string">&#x27;x&#x27;</span> | <span class="string">&#x27;y&#x27;</span>&gt; <span class="comment">// number</span></span><br><span class="line"><span class="keyword">type</span> A2 = P&lt;<span class="built_in">never</span>&gt; <span class="comment">// string</span></span><br></pre></td></tr></table></figure>
+
+<p>在条件判断类型的定义中，将泛型参数使用<code>[]</code>括起来，即可阻断条件判断类型的分配，此时，传入参数T的类型将被当做一个整体，不再分配</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.typescripttutorial.net/typescript-tutorial/typescript-extend-interface/">How to Extend Interfaces in TypeScript</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.typescripttutorial.net/typescript-tutorial/typescript-generic-constraints/">TypeScript Generic Constraints</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/6998736350841143326">TS关键字extends用法总结</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.typescriptlang.org/docs/handbook/2/conditional-types.html">Conditional Types</a></li>
+</ul>
 
       
     </div>
@@ -400,7 +463,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://example.com/2020/02/09/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0--%E5%9B%B4%E5%9F%8E/" title="围城——读书笔记" target="_blank" rel="external">http://example.com/2020/02/09/读书笔记--围城/</a>
+      <a href="http://example.com/2022/08/22/TypeScript%E4%B8%ADextends%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93/" title="TypeScript中extends用法小结" target="_blank" rel="external">http://example.com/2022/08/22/TypeScript中extends用法小结/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -446,13 +509,9 @@
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2020/02/10/JavaScript%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E5%92%8C%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/" title="JavaScript的同步异步和执行机制"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2020/02/07/JavaScript%E4%B8%ADSet%E5%92%8CMap/" title="JavaScript中Set和Map"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2022/08/15/TypeScript%E4%B8%AD%E7%9A%84any%E3%80%81unknown%E3%80%81never%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3/" title="TypeScript中的any、unknown、never如何理解"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
