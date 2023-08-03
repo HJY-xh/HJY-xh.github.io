@@ -571,14 +571,14 @@
 
   
   <url>
-    <loc>http://example.com/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
+    <loc>http://example.com/tags/JavaScript/</loc>
     <lastmod>2023-08-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/tags/JavaScript/</loc>
+    <loc>http://example.com/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
     <lastmod>2023-08-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -613,6 +613,13 @@
   </url>
   
   <url>
+    <loc>http://example.com/tags/React/</loc>
+    <lastmod>2023-08-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/tags/NoSQL/</loc>
     <lastmod>2023-08-03</lastmod>
     <changefreq>daily</changefreq>
@@ -627,14 +634,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/React/</loc>
-    <lastmod>2023-08-03</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/tags/Redux/</loc>
+    <loc>http://example.com/tags/Java/</loc>
     <lastmod>2023-08-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -648,7 +648,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/Java/</loc>
+    <loc>http://example.com/tags/Redux/</loc>
     <lastmod>2023-08-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -656,13 +656,6 @@
   
   <url>
     <loc>http://example.com/tags/git/</loc>
-    <lastmod>2023-08-03</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/tags/CSS/</loc>
     <lastmod>2023-08-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -683,7 +676,21 @@
   </url>
   
   <url>
+    <loc>http://example.com/tags/CSS/</loc>
+    <lastmod>2023-08-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/</loc>
+    <lastmod>2023-08-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/JavaScript%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</loc>
     <lastmod>2023-08-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -711,20 +718,6 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/Chrome/</loc>
-    <lastmod>2023-08-03</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/tags/JavaScript%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</loc>
-    <lastmod>2023-08-03</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/</loc>
     <lastmod>2023-08-03</lastmod>
     <changefreq>daily</changefreq>
@@ -732,7 +725,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/Web%E5%AE%89%E5%85%A8/</loc>
+    <loc>http://example.com/tags/Chrome/</loc>
     <lastmod>2023-08-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -747,6 +740,13 @@
   
   <url>
     <loc>http://example.com/tags/%E6%96%87%E5%AD%A6/</loc>
+    <lastmod>2023-08-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/Web%E5%AE%89%E5%85%A8/</loc>
     <lastmod>2023-08-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
