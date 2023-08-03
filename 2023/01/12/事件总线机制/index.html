@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>事件总线机制 | 可乐加冰</title>
+  <meta name="description" content="本博客 hjy-xh，转载请申明出处  介绍事件总线(EventBus) 是一种消息传递的方式 它可以让两个没有关联的组件进行通信，起到数据传输的作用 举个例子，当module N发布了Event 1消息，订阅该消息的module 1就会收到相关消息（过程如下所示）  场景举例现在有一所学校，学校里面有一些事件发生，学生能够根据事件类型做出相应的动作 用代码表述 1234567891011121">
+<meta property="og:type" content="article">
+<meta property="og:title" content="事件总线机制">
+<meta property="og:url" content="http://example.com/2023/01/12/%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="可乐加冰">
+<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  介绍事件总线(EventBus) 是一种消息传递的方式 它可以让两个没有关联的组件进行通信，起到数据传输的作用 举个例子，当module N发布了Event 1消息，订阅该消息的module 1就会收到相关消息（过程如下所示）  场景举例现在有一所学校，学校里面有一些事件发生，学生能够根据事件类型做出相应的动作 用代码表述 1234567891011121">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/HJY-xh/pictures/master/pictures/202302071430325.png">
+<meta property="article:published_time" content="2023-01-12T14:19:22.000Z">
+<meta property="article:modified_time" content="2023-07-19T01:24:30.830Z">
+<meta property="article:author" content="HJY">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/HJY-xh/pictures/master/pictures/202302071430325.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2023/01/12/%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF%E6%9C%BA%E5%88%B6/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="可乐加冰" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/HJY-xh" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">可乐加冰</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanghai, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>跑起来会有风</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%8D%8F%E8%AE%AE/">协议</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">63</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">解决方案</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome/" rel="tag">Chrome</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">44</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">JavaScript、性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MobX/" rel="tag">MobX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NoSQL/" rel="tag">NoSQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/" rel="tag">Redux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag">Web安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">关系型数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E8%AE%AE/" rel="tag">协议</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/" rel="tag">思维导图</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">服务器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" rel="tag">编程原理相关</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" rel="tag">网络攻击</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CSS/" style="font-size: 13px;">CSS</a> <a href="/tags/Chrome/" style="font-size: 13px;">Chrome</a> <a href="/tags/ES6/" style="font-size: 13px;">ES6</a> <a href="/tags/Java/" style="font-size: 13px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/JavaScript%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13px;">JavaScript、性能优化</a> <a href="/tags/MobX/" style="font-size: 13px;">MobX</a> <a href="/tags/MongoDB/" style="font-size: 13px;">MongoDB</a> <a href="/tags/NoSQL/" style="font-size: 13px;">NoSQL</a> <a href="/tags/React/" style="font-size: 13.6px;">React</a> <a href="/tags/Redux/" style="font-size: 13px;">Redux</a> <a href="/tags/TypeScript/" style="font-size: 13.4px;">TypeScript</a> <a href="/tags/Web%E5%AE%89%E5%85%A8/" style="font-size: 13px;">Web安全</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/webpack/" style="font-size: 13px;">webpack</a> <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13px;">关系型数据库</a> <a href="/tags/%E5%8D%8F%E8%AE%AE/" style="font-size: 13px;">协议</a> <a href="/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/" style="font-size: 13.6px;">思维导图</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 13.8px;">文学</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 13px;">服务器</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 13.2px;">浏览器</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13px;">算法</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" style="font-size: 13px;">编程原理相关</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13.2px;">网络</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" style="font-size: 13.2px;">网络攻击</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.8px;">读书笔记</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">一月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">十一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">二月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/22/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" class="title">二进制数据处理（尚未完成）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-22T13:45:32.000Z" itemprop="datePublished">2023-03-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/01/12/%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF%E6%9C%BA%E5%88%B6/" class="title">事件总线机制</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-01-12T14:19:22.000Z" itemprop="datePublished">2023-01-12</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/12/22/%E6%9B%BF%E4%BB%A3chrome%E4%B8%AD%E7%9A%84Event.path/" class="title">替代chrome中的Event.path</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-12-22T09:39:41.000Z" itemprop="datePublished">2022-12-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/11/03/canvas%E6%B8%B2%E6%9F%93%E4%B8%8A%E4%B8%8B%E6%96%87%E8%AE%BE%E7%BD%AE%E5%A1%AB%E5%85%85%E6%A0%B7%E5%BC%8F%EF%BC%8C%E5%9C%A8%E5%AE%89%E5%8D%93%E6%9C%BA%E5%9E%8B%E4%B8%8A%E4%B8%8D%E7%94%9F%E6%95%88/" class="title">canvas渲染上下文设置填充样式，在安卓机型上不生效</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-11-03T08:50:03.000Z" itemprop="datePublished">2022-11-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/25/%E6%8E%A2%E7%A9%B6Safari%E5%AF%B9%E4%BA%8Ecanvas%E7%9A%84%E9%99%90%E5%88%B6/" class="title">探究Safari对于canvas的限制</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-25T03:32:52.000Z" itemprop="datePublished">2022-10-25</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-事件总线机制" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      事件总线机制
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/01/12/%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF%E6%9C%BA%E5%88%B6/" class="article-date">
+	  <time datetime="2023-01-12T14:19:22.000Z" itemprop="datePublished">2023-01-12</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/JavaScript/" rel="tag">JavaScript</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/01/12/%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF%E6%9C%BA%E5%88%B6/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.7k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 7(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p>本博客 <a target="_blank" rel="noopener" href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p>
+</blockquote>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>事件总线(EventBus) 是一种消息传递的方式</p>
+<p>它可以让两个没有关联的组件进行通信，起到数据传输的作用</p>
+<p>举个例子，当<code>module N</code>发布了<code>Event 1</code>消息，订阅该消息的<code>module 1</code>就会收到相关消息（过程如下所示）</p>
+<p><img src="https://raw.githubusercontent.com/HJY-xh/pictures/master/pictures/202302071430325.png"></p>
+<h2 id="场景举例"><a href="#场景举例" class="headerlink" title="场景举例"></a>场景举例</h2><p>现在有一所学校，学校里面有一些事件发生，学生能够根据事件类型做出相应的动作</p>
+<p>用代码表述</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// EventBus就是事件总线，这里可以思考一下它应该具备什么功能以及如何编写</span></span><br><span class="line"><span class="keyword">let</span> EB = <span class="keyword">new</span> EventBus();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 学生对事件类型做出的反应</span></span><br><span class="line">EB.$on(<span class="string">&#x27;上课&#x27;</span>, <span class="function">(<span class="params">name</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">`学生<span class="subst">$&#123;name&#125;</span>到上课地点`</span>);</span><br><span class="line">&#125;)</span><br><span class="line">EB.$on(<span class="string">&quot;教室上课&quot;</span>, <span class="function">(<span class="params">name, course</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">`学生<span class="subst">$&#123;name&#125;</span>去教室上<span class="subst">$&#123;course&#125;</span>课`</span>);</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">let</span> id = EB.$on(<span class="string">&quot;户外上课&quot;</span>, <span class="function">(<span class="params">name, course</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">`学生<span class="subst">$&#123;name&#125;</span>去户外上<span class="subst">$&#123;course&#125;</span>课`</span>);</span><br><span class="line">&#125;)</span><br><span class="line">EB.$once(<span class="string">&quot;献血&quot;</span>, <span class="function">(<span class="params">name</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">`学生<span class="subst">$&#123;name&#125;</span>去献血`</span>);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 学校中事件发生</span></span><br><span class="line">EB.$emit(<span class="string">&#x27;上课&#x27;</span>, <span class="string">&#x27;张三&#x27;</span>); <span class="comment">// 学生张三到上课地点</span></span><br><span class="line">EB.$emit(<span class="string">&#x27;上课&#x27;</span>, <span class="string">&#x27;李四&#x27;</span>); <span class="comment">// 学生李四到上课地点</span></span><br><span class="line">EB.$emit(<span class="string">&#x27;教室上课&#x27;</span>, <span class="string">&#x27;张三&#x27;</span>, <span class="string">&#x27;编程&#x27;</span>); <span class="comment">// 学生张三去教室上编程课</span></span><br><span class="line">EB.$emit(<span class="string">&#x27;户外上课&#x27;</span>, <span class="string">&#x27;张三&#x27;</span>, <span class="string">&#x27;田径&#x27;</span>); <span class="comment">// 学生张三去户外上田径课</span></span><br><span class="line">EB.$off(<span class="string">&#x27;户外上课&#x27;</span>, id);</span><br><span class="line">EB.$emit(<span class="string">&#x27;户外上课&#x27;</span>, <span class="string">&#x27;李四&#x27;</span>, <span class="string">&#x27;足球&#x27;</span>);</span><br><span class="line">EB.$emit(<span class="string">&#x27;献血&#x27;</span>, <span class="string">&#x27;王五&#x27;</span>); <span class="comment">// 学生王五去献血</span></span><br><span class="line">EB.$emit(<span class="string">&#x27;献血&#x27;</span>, <span class="string">&#x27;马六&#x27;</span>);</span><br><span class="line"><span class="comment">// console.log(EB)</span></span><br><span class="line">EB.$clear()</span><br><span class="line"><span class="comment">// console.log(EB)</span></span><br></pre></td></tr></table></figure>
+
+<p>从上面的代码可以大概了解到，事件总线应该具备五种方法，对应着下一部分的API设计</p>
+<h2 id="API设计"><a href="#API设计" class="headerlink" title="API设计"></a>API设计</h2><ul>
+<li>发布消息（emit）<ul>
+<li>能够表示消息类型，可能还携带参数</li>
+</ul>
+</li>
+<li>订阅消息（on）<ul>
+<li>能够知道具体的消息类型，并执行回调，回调的参数就是发布消息时携带的参数</li>
+</ul>
+</li>
+<li>取消订阅（off）<ul>
+<li>能够知道具体的消息类型，取消订阅该消息类型，即回调函数不再执行</li>
+</ul>
+</li>
+<li>仅订阅一次消息（once）<ul>
+<li>能够知道具体的消息类型，执行一次回调后，再次接收相同消息，不再执行回调</li>
+</ul>
+</li>
+<li>清除某个或所有事件（clear）<ul>
+<li>如果指定了某个消息类型，则清除该消息类型的回调，否则全部清除</li>
+</ul>
+</li>
+</ul>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><h4 id="基础实现（仅包含订阅和发布）"><a href="#基础实现（仅包含订阅和发布）" class="headerlink" title="基础实现（仅包含订阅和发布）"></a>基础实现（仅包含订阅和发布）</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EventBus</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="title">constructor</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.eventObj = &#123;&#125;; <span class="comment">// interface EveneObj &#123; [name: string]: Function[] &#125;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $on(name, callback) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">this</span>.eventObj[name]) &#123;</span><br><span class="line">           <span class="comment">// 如果尚未注册，用数组来收集回调函数</span></span><br><span class="line">            <span class="built_in">this</span>.eventObj[name] = [];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">this</span>.eventObj[name].push(callback);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $emit(name) &#123;</span><br><span class="line">        <span class="keyword">const</span> eventList = <span class="built_in">this</span>.eventObj[name];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> callback <span class="keyword">of</span> eventList) &#123;</span><br><span class="line">           <span class="comment">// 执行回调</span></span><br><span class="line">            callback(<span class="built_in">arguments</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> EB = <span class="keyword">new</span> EventBus();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅事件</span></span><br><span class="line">EB.$on(<span class="string">&#x27;上课&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">&quot;该上课了&quot;</span>);</span><br><span class="line">&#125;)</span><br><span class="line">EB.$on(<span class="string">&quot;上课&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">&quot;做笔记&quot;</span>);</span><br><span class="line">&#125;)</span><br><span class="line">EB.$on(<span class="string">&quot;下课&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">&quot;下课啦！&quot;</span>);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布事件</span></span><br><span class="line">EB.$emit(<span class="string">&#x27;上课&#x27;</span>);</span><br><span class="line">EB.$emit(<span class="string">&#x27;下课&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="如何在发布消息时携带参数"><a href="#如何在发布消息时携带参数" class="headerlink" title="如何在发布消息时携带参数"></a>如何在发布消息时携带参数</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$on(name, callback) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">this</span>.eventObj[name]) &#123;</span><br><span class="line">       <span class="built_in">this</span>.eventObj[name] = [];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">this</span>.eventObj[name].push(callback);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$emit(name, ...args) &#123;</span><br><span class="line">    <span class="keyword">const</span> eventList = <span class="built_in">this</span>.eventObj[name];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> callback <span class="keyword">of</span> eventList) &#123;</span><br><span class="line">      callback(...args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="一次订阅"><a href="#一次订阅" class="headerlink" title="一次订阅"></a>一次订阅</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 添加新的数据结构</span></span><br><span class="line"><span class="built_in">this</span>.onceObj = &#123;&#125;; <span class="comment">// interface OnceEventObj &#123; [key: string]: Function[] &#125;</span></span><br><span class="line"></span><br><span class="line">$once(eventName, callback) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">this</span>.onceObj[eventName]) &#123;</span><br><span class="line">      <span class="built_in">this</span>.onceObj[eventName] = []</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">this</span>.onceObj[eventName].push(callback)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="取消订阅"><a href="#取消订阅" class="headerlink" title="取消订阅"></a>取消订阅</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里引入一个id参数，标识每个回调，同时修改eventObj的结构</span></span><br><span class="line"><span class="comment">// interface EventObj &#123; [key: string]: &#123; [id: number]: Function &#125; &#125;</span></span><br><span class="line">$off(eventName, id) &#123;</span><br><span class="line">    <span class="keyword">if</span> (id) &#123;</span><br><span class="line">        <span class="comment">// 传入了id则删除对应的回调</span></span><br><span class="line">        <span class="keyword">delete</span> <span class="built_in">this</span>.eventObj[eventName][id];</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">Object</span>.keys(<span class="built_in">this</span>.eventObj[eventName]).length) &#123;</span><br><span class="line">          <span class="keyword">delete</span> <span class="built_in">this</span>.eventObj[eventName];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 否则删除整个事件的所有回调</span></span><br><span class="line">        <span class="keyword">delete</span> <span class="built_in">this</span>.eventObj[eventName];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="清除事件"><a href="#清除事件" class="headerlink" title="清除事件"></a>清除事件</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$clear(eventName: string = <span class="string">&#x27;&#x27;</span>) &#123;</span><br><span class="line">    <span class="comment">// 未提供事件名称，默认清除所有事件</span></span><br><span class="line">    <span class="keyword">if</span> (!eventName) &#123;</span><br><span class="line">        <span class="built_in">this</span>.eventObj = &#123;&#125;;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 清除指定事件</span></span><br><span class="line">    <span class="keyword">delete</span> <span class="built_in">this</span>.eventObj[eventName];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="终版（TS版本）"><a href="#终版（TS版本）" class="headerlink" title="终版（TS版本）"></a>终版（TS版本）</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> EventObj &#123;</span><br><span class="line">    [key: <span class="built_in">string</span>]: &#123; [id: <span class="built_in">number</span>]: <span class="built_in">Function</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> OnceEventObj &#123;</span><br><span class="line">    [key: <span class="built_in">string</span>]: <span class="built_in">Function</span>[]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EventBus</span> </span>&#123;</span><br><span class="line">    <span class="attr">eventObj</span>: EventObj</span><br><span class="line">    <span class="comment">/** 每个函数的ID */</span></span><br><span class="line">    <span class="attr">callbcakId</span>: <span class="built_in">number</span></span><br><span class="line">    <span class="attr">onceObj</span>: OnceEventObj</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="title">constructor</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.eventObj = &#123;&#125;;</span><br><span class="line">        <span class="built_in">this</span>.callbcakId = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">this</span>.onceObj = &#123;&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $on(eventName: <span class="built_in">string</span>, <span class="attr">callback</span>: <span class="built_in">Function</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">this</span>.eventObj[eventName]) &#123;</span><br><span class="line">            <span class="built_in">this</span>.eventObj[eventName] = &#123;&#125;;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">const</span> id = <span class="built_in">this</span>.callbcakId++;</span><br><span class="line">        <span class="built_in">this</span>.eventObj[eventName][id] = callback;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $emit(eventName: <span class="built_in">string</span>, ...args: <span class="built_in">any</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> eventList = <span class="built_in">this</span>.eventObj[eventName];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> id <span class="keyword">in</span> eventList) &#123;</span><br><span class="line">            <span class="keyword">typeof</span> eventList[id] === <span class="string">&#x27;function&#x27;</span> &amp;&amp; eventList[id](...args);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">const</span> onceEvent = <span class="built_in">this</span>.onceObj[eventName];</span><br><span class="line">        <span class="keyword">if</span> (onceEvent) &#123;</span><br><span class="line">            onceEvent.forEach(<span class="function">(<span class="params">callback</span>) =&gt;</span> callback(...args));</span><br><span class="line">            <span class="keyword">delete</span> <span class="built_in">this</span>.onceObj[eventName];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $off(eventName: <span class="built_in">string</span>, <span class="attr">id</span>: <span class="built_in">number</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (id) &#123;</span><br><span class="line">            <span class="comment">// 传入了id则删除对应的回调</span></span><br><span class="line">            <span class="keyword">delete</span> <span class="built_in">this</span>.eventObj[eventName][id];</span><br><span class="line">            <span class="keyword">if</span> (!<span class="built_in">Object</span>.keys(<span class="built_in">this</span>.eventObj[eventName]).length) &#123;</span><br><span class="line">                <span class="keyword">delete</span> <span class="built_in">this</span>.eventObj[eventName];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 否则删除整个事件的所有回调</span></span><br><span class="line">            <span class="keyword">delete</span> <span class="built_in">this</span>.eventObj[eventName];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $once(eventName: <span class="built_in">string</span>, <span class="attr">callback</span>: <span class="built_in">Function</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">this</span>.onceObj[eventName]) &#123;</span><br><span class="line">            <span class="built_in">this</span>.onceObj[eventName] = [];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">this</span>.onceObj[eventName].push(callback);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $clear(eventName: <span class="built_in">string</span> = <span class="string">&#x27;&#x27;</span>) &#123;</span><br><span class="line">        <span class="comment">// 未提供事件名称，默认清除所有事件</span></span><br><span class="line">        <span class="keyword">if</span> (!eventName) &#123;</span><br><span class="line">            <span class="built_in">this</span>.eventObj = &#123;&#125;;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 清除指定事件</span></span><br><span class="line">        <span class="keyword">delete</span> <span class="built_in">this</span>.eventObj[eventName];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> EB = <span class="keyword">new</span> EventBus();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅事件</span></span><br><span class="line">EB.$on(<span class="string">&#x27;上课&#x27;</span>, <span class="function">(<span class="params">name: <span class="built_in">string</span></span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">`学生<span class="subst">$&#123;name&#125;</span>到上课地点`</span>);</span><br><span class="line">&#125;)</span><br><span class="line">EB.$on(<span class="string">&quot;教室上课&quot;</span>, <span class="function">(<span class="params">name: <span class="built_in">string</span>, course: <span class="built_in">string</span></span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">`学生<span class="subst">$&#123;name&#125;</span>去教室上<span class="subst">$&#123;course&#125;</span>课`</span>);</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">let</span> id = EB.$on(<span class="string">&quot;户外上课&quot;</span>, <span class="function">(<span class="params">name: <span class="built_in">string</span>, course: <span class="built_in">string</span></span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">`学生<span class="subst">$&#123;name&#125;</span>去户外上<span class="subst">$&#123;course&#125;</span>课`</span>);</span><br><span class="line">&#125;)</span><br><span class="line">EB.$once(<span class="string">&quot;献血&quot;</span>, <span class="function">(<span class="params">name: <span class="built_in">string</span></span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.info(<span class="string">`学生<span class="subst">$&#123;name&#125;</span>去献血`</span>);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布事件</span></span><br><span class="line">EB.$emit(<span class="string">&#x27;上课&#x27;</span>, <span class="string">&#x27;张三&#x27;</span>);</span><br><span class="line">EB.$emit(<span class="string">&#x27;上课&#x27;</span>, <span class="string">&#x27;李四&#x27;</span>);</span><br><span class="line">EB.$emit(<span class="string">&#x27;教室上课&#x27;</span>, <span class="string">&#x27;张三&#x27;</span>, <span class="string">&#x27;编程&#x27;</span>);</span><br><span class="line">EB.$emit(<span class="string">&#x27;户外上课&#x27;</span>, <span class="string">&#x27;张三&#x27;</span>, <span class="string">&#x27;田径&#x27;</span>);</span><br><span class="line">EB.$off(<span class="string">&#x27;户外上课&#x27;</span>, id);</span><br><span class="line">EB.$emit(<span class="string">&#x27;户外上课&#x27;</span>, <span class="string">&#x27;李四&#x27;</span>, <span class="string">&#x27;足球&#x27;</span>);</span><br><span class="line">EB.$emit(<span class="string">&#x27;献血&#x27;</span>, <span class="string">&#x27;王五&#x27;</span>);</span><br><span class="line">EB.$emit(<span class="string">&#x27;献血&#x27;</span>, <span class="string">&#x27;马六&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(EB)</span><br><span class="line">EB.$clear()</span><br><span class="line"><span class="built_in">console</span>.log(EB)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="为什么不被推荐使用"><a href="#为什么不被推荐使用" class="headerlink" title="为什么不被推荐使用"></a>为什么不被推荐使用</h2><p>事件总线使用起来非常简单，但是！</p>
+<ul>
+<li>随着事件的推移，注册的事件可能越来越多，如果没有及时清理相关事件，整个对象占用的内存会越来越大</li>
+<li>当逻辑变得复杂时大量使用事件总线，会让数据流混乱，难以预测，这样在调试代码时难以定位或修改</li>
+</ul>
+<h2 id="替代方式"><a href="#替代方式" class="headerlink" title="替代方式"></a>替代方式</h2><ul>
+<li>状态提升<ul>
+<li>有时我们需要在兄弟组件间传递数据，这种情况可以把共享<em>状态提升</em>到最近的共同父组件中去</li>
+</ul>
+</li>
+<li>使用状态管理工具<ul>
+<li>主流前端开发框架都有相应的状态管理方案，比如redux、mobx、Vuex</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2023/01/12/%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF%E6%9C%BA%E5%88%B6/" title="事件总线机制" target="_blank" rel="external">http://example.com/2023/01/12/事件总线机制/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/HJY-xh" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/HJY-xh" target="_blank"><span class="text-dark">可乐加冰</span><small class="ml-1x">Web Developer</small></a></h3>
+        <div>跑起来会有风</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/03/22/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" title="二进制数据处理（尚未完成）"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/12/22/%E6%9B%BF%E4%BB%A3chrome%E4%B8%AD%E7%9A%84Event.path/" title="替代chrome中的Event.path"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2023 HJY
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: true,
+    appId: 'TrQDRIWsj1IVoHW4a4fCkpgl-gzGzoHsz',
+    appKey: '1emq1qCoboyjpC5ysr8uuzjf',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
