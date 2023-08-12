@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>HTTPS工作原理和流程 | 可乐加冰</title>
+  <meta name="description" content="本博客 hjy-xh，转载请申明出处  HTTP 存在的问题提到 HTTP ，大家的第一印象就是不安全，那它到底是哪里不安全呢？ 先说说 HTTP 的基本信息：它属于应用层的协议， 基于TCP&#x2F;IP，通过 TCP 协议进行传输，依靠 IP 协议进行寻址 网络中的数据是以包的形式在网络模型各层之间传递的，而 HTTP 的数据报文在这些层之间都是没有加密的明文，那么它就会引发以下的一些问题：  内容">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTPS工作原理和流程">
+<meta property="og:url" content="http://example.com/2023/05/13/HTTPS%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%92%8C%E6%B5%81%E7%A8%8B/index.html">
+<meta property="og:site_name" content="可乐加冰">
+<meta property="og:description" content="本博客 hjy-xh，转载请申明出处  HTTP 存在的问题提到 HTTP ，大家的第一印象就是不安全，那它到底是哪里不安全呢？ 先说说 HTTP 的基本信息：它属于应用层的协议， 基于TCP&#x2F;IP，通过 TCP 协议进行传输，依靠 IP 协议进行寻址 网络中的数据是以包的形式在网络模型各层之间传递的，而 HTTP 的数据报文在这些层之间都是没有加密的明文，那么它就会引发以下的一些问题：  内容">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/HJY-xh/pictures/master/pictures/202308121754920.png">
+<meta property="article:published_time" content="2023-05-13T13:37:42.000Z">
+<meta property="article:modified_time" content="2023-08-12T09:54:24.731Z">
+<meta property="article:author" content="HJY">
+<meta property="article:tag" content="HTTP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/HJY-xh/pictures/master/pictures/202308121754920.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2023/05/13/HTTPS%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%92%8C%E6%B5%81%E7%A8%8B/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="可乐加冰" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/HJY-xh" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">可乐加冰</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Web Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanghai, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>跑起来会有风</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%8D%8F%E8%AE%AE/">协议</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a><span class="category-list-count">76</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">解决方案</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><span class="category-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CDN/" rel="tag">CDN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Chrome/" rel="tag">Chrome</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DNS/" rel="tag">DNS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a><span class="tag-list-count">48</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">JavaScript、性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MobX/" rel="tag">MobX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NoSQL/" rel="tag">NoSQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/" rel="tag">Redux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TCP/" rel="tag">TCP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag">Web安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">关系型数据库</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%8F%E8%AE%AE/" rel="tag">协议</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/" rel="tag">思维导图</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E5%AD%A6/" rel="tag">文学</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">服务器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" rel="tag">浏览器</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" rel="tag">编程原理相关</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" rel="tag">网络攻击</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a><span class="tag-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/CDN/" style="font-size: 13px;">CDN</a> <a href="/tags/CSS/" style="font-size: 13.17px;">CSS</a> <a href="/tags/Chrome/" style="font-size: 13px;">Chrome</a> <a href="/tags/DNS/" style="font-size: 13px;">DNS</a> <a href="/tags/ES6/" style="font-size: 13px;">ES6</a> <a href="/tags/HTTP/" style="font-size: 13.33px;">HTTP</a> <a href="/tags/Java/" style="font-size: 13px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 14px;">JavaScript</a> <a href="/tags/JavaScript%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13px;">JavaScript、性能优化</a> <a href="/tags/MobX/" style="font-size: 13px;">MobX</a> <a href="/tags/MongoDB/" style="font-size: 13px;">MongoDB</a> <a href="/tags/NoSQL/" style="font-size: 13px;">NoSQL</a> <a href="/tags/React/" style="font-size: 13.67px;">React</a> <a href="/tags/Redux/" style="font-size: 13px;">Redux</a> <a href="/tags/TCP/" style="font-size: 13px;">TCP</a> <a href="/tags/TypeScript/" style="font-size: 13.33px;">TypeScript</a> <a href="/tags/Vue/" style="font-size: 13px;">Vue</a> <a href="/tags/Web%E5%AE%89%E5%85%A8/" style="font-size: 13px;">Web安全</a> <a href="/tags/git/" style="font-size: 13px;">git</a> <a href="/tags/webpack/" style="font-size: 13px;">webpack</a> <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 13px;">关系型数据库</a> <a href="/tags/%E5%8D%8F%E8%AE%AE/" style="font-size: 13px;">协议</a> <a href="/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/" style="font-size: 13.5px;">思维导图</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13px;">性能优化</a> <a href="/tags/%E6%96%87%E5%AD%A6/" style="font-size: 13.83px;">文学</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 13px;">服务器</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 13.17px;">浏览器</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 13px;">算法</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3/" style="font-size: 13px;">编程原理相关</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13.17px;">网络</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E6%94%BB%E5%87%BB/" style="font-size: 13.17px;">网络攻击</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 13.83px;">读书笔记</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">五月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">四月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">三月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/12/">十二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/11/">十一月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/09/">九月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">三月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">一月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">十二月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">十一月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">十月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/09/">九月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/07/">七月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">六月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">二月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">十二月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">九月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/05/22/Vue%E5%92%8CReact%E5%8C%BA%E5%88%AB/" class="title">Vue 和 React 区别</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-05-22T12:45:44.000Z" itemprop="datePublished">2023-05-22</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/05/13/HTTPS%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%92%8C%E6%B5%81%E7%A8%8B/" class="title">HTTPS工作原理和流程</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-05-13T13:37:42.000Z" itemprop="datePublished">2023-05-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/04/20/HTTP2%E6%96%B0%E7%89%B9%E6%80%A7/" class="title">HTTP2新特性</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-20T14:43:25.000Z" itemprop="datePublished">2023-04-20</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/04/10/HTTP%E7%9A%84%E6%BC%94%E5%8F%98/" class="title">HTTP的演变</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-04-10T11:33:44.000Z" itemprop="datePublished">2023-04-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/03/22/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" class="title">二进制数据处理（尚未完成）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-03-22T13:45:32.000Z" itemprop="datePublished">2023-03-22</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-HTTPS工作原理和流程" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      HTTPS工作原理和流程
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2023/05/13/HTTPS%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%92%8C%E6%B5%81%E7%A8%8B/" class="article-date">
+	  <time datetime="2023-05-13T13:37:42.000Z" itemprop="datePublished">2023-05-13</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/HTTP/" rel="tag">HTTP</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/05/13/HTTPS%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%92%8C%E6%B5%81%E7%A8%8B/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.3k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 7(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <blockquote>
+<p>本博客 <a target="_blank" rel="noopener" href="https://hjy-xh.github.io/">hjy-xh</a>，转载请申明出处</p>
+</blockquote>
+<h2 id="HTTP-存在的问题"><a href="#HTTP-存在的问题" class="headerlink" title="HTTP 存在的问题"></a>HTTP 存在的问题</h2><p>提到 HTTP ，大家的第一印象就是不安全，那它到底是哪里不安全呢？</p>
+<p>先说说 HTTP 的基本信息：它属于应用层的协议， 基于TCP/IP，通过 TCP 协议进行传输，依靠 IP 协议进行寻址</p>
+<p>网络中的数据是以包的形式在网络模型各层之间传递的，而 HTTP 的数据报文在这些层之间都是没有加密的明文，那么它就会引发以下的一些问题：</p>
+<ul>
+<li>内容可能被窃听<br>  通信时，中间会经历很多个阶段，而每个阶段报文内容都有可能会被窃听</li>
+<li>无法验证接收报文的完整性（可能会被篡改）<br>  无法验证接收到报文是否被篡改，比如说被删除了一部分或者新增了一部分</li>
+<li>没有验证通信双方的身份（可能被冒充）<br>  无法判断请求是来自何方，出自谁手</li>
+</ul>
+<h2 id="什么是-HTTPS？"><a href="#什么是-HTTPS？" class="headerlink" title="什么是 HTTPS？"></a>什么是 HTTPS？</h2><p>HTTPS 中的 S 代表“安全”。HTTPS 使用 TLS（或 SSL）来加密HTTP 请求和响应</p>
+<p>TLS 使用一种称为公钥加密的技术：密钥有两个，即公钥和私钥，其中公钥通过服务器的 SSL 证书与客户端设备共享。当客户端打开与服务器的连接时，这两个设备使用公钥和私钥商定新的密钥（称为会话密钥），以加密它们之间的后续通信。</p>
+<p>然后，所有 HTTP 请求和响应都使用这些会话密钥进行加密，使任何截获通信的人都只能看到随机字符串，而不是明文</p>
+<h2 id="HTTPS-做了什么？"><a href="#HTTPS-做了什么？" class="headerlink" title="HTTPS 做了什么？"></a>HTTPS 做了什么？</h2><p>HTTPS 解决了 HTTP 存在的问题，也就是它解决了三个问题：</p>
+<ul>
+<li>加密：HTTPS 通过对数据加密来使其免受窃听者对数据的监听，这就意味着当用户在浏览网站时，没有人能够监听他和网站之间的信息交换，或者跟踪用户的活动，访问记录等，从而窃取用户信息</li>
+<li>数据一致性：数据在传输的过程中不会被窃听者所修改，用户发送的数据会完整的传输到服务端，保证用户发的是什么，服务器接收的就是什么</li>
+<li>身份认证：是指确认对方的真实身份，也就是证明你是你（可以比作人脸识别），它可以防止中间人攻击并建立用户信任。</li>
+</ul>
+<p>HTTPS 采用混合加密机制，也就是对称加密与非对称加密混用来实现加密机制</p>
+<p>首先得先了解几个概念：</p>
+<ul>
+<li>加密：将明文变换为密文的过程</li>
+<li>解密：加密的逆过程，即由密文恢复出原明文的过程</li>
+<li>密钥：指某个用来完成加密、解密、完整性验证等密码学应用的秘密信息</li>
+<li>对称加密：加密和解密采用同一个密钥</li>
+<li>非对称加密：加密和解密的时候采用的是不同的密钥</li>
+</ul>
+<h3 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h3><p>非对称加密相比对称加密更加复杂，效率更低，在前端业务中一般都是存在大量的 HTTP 请求，所以非对称加密的低效是无法被接受的。此外，非对称加密的场景只在服务端保存私钥，也就是说一对公私钥只能单向传输数据，因此可以用来确认通信安全以及服务端返回证书。确认安全之后，传输数据采用的就是速度更快的对称加密，因此可以简单记忆如下阶段：</p>
+<ul>
+<li>证书交换验证阶段–&gt;非对称加密<ul>
+<li>客户端发起 HTTPS 请求</li>
+<li>服务端返回 HTTPS 证书</li>
+<li>客户端验证证书是否合法，不合法则提示警告</li>
+</ul>
+</li>
+<li>数据传输阶段–&gt;对称加密<ul>
+<li>当证书验证合法后，在本地生成随机密码串</li>
+<li>通过公钥加密随机密码串，并把结果传给服务器端</li>
+<li>服务端通过撕咬对接机密码解密</li>
+<li>服务端通过客户端传入的随机密码穿构建对称加密算法，对返回结果内容进行加密后传输</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据完整性"><a href="#数据完整性" class="headerlink" title="数据完整性"></a>数据完整性</h3><p>确保数据完整性，也就意味着数据安全没有被第三方篡改，这时候就需要通过 <strong>数字签名</strong></p>
+<p>数字签名是一段由发送者生成的特殊加密校验码，用于传输过程中确认报文的完整性。数字签名涉及到了两种技术：非对称加密 和 数字摘要。生成数字摘要的算法通过 MD5 和 SHA 这种不可逆算法，将不定长的报文内容提取出定长的数字摘要</p>
+<p>假设现在有通信双方A和B，两者之间使用两套非对称加密机制</p>
+<p>现在A向B发消息，那么，如果在发送过程中，有人修改了里面密文消息，B拿到的密文，解密之后得到明文，并非A所发送的，信息不正确</p>
+<p>要解决两个问题</p>
+<ul>
+<li>A的身份认证</li>
+<li>A发送的消息完整性</li>
+</ul>
+<p>那么就要进行以下操作：</p>
+<ul>
+<li>将明文进行摘要运算后得到摘要（消息完整性）</li>
+<li>再将摘要用A的私钥加密（身份认证），得到数字签名，将密文和数字签名一块发给B</li>
+<li>B收到报文后，使用相同的摘要算法提取出摘要，将数字签名用A的公钥进行解密后，得到正确的摘要</li>
+</ul>
+<h3 id="证书"><a href="#证书" class="headerlink" title="证书"></a>证书</h3><p>上面加密的过程也存在一个问题，安全的本质是使用密钥进行加密。但是如果密钥本身就有问题，那么安全也就无从谈起，因此这个密钥必须是通信双方认可的。这个工作不能交给客户端做，也不能服务端做，一半交给第三方权威机构 – 数字证书认证机构（CA，Certificate Authority）</p>
+<p>认证机关的公开密钥必须安全地转交给客户端，使用通信方式是，如何安全转交是一件很困难的事，因此多数浏览器发布版本时，都会是现在内置常用认证机关的公钥</p>
+<p>浏览器是如何确保 CA 证书的合法性？<br>浏览器发起 HTTPS 请求时，服务器会返回网站的 SSL 证书，浏览器需要对证书做以下验证：</p>
+<ul>
+<li>验证域名、有效期等信息</li>
+<li>判断证书来源是否合法<ul>
+<li>每份签发证书都可以根据验证链查找到对应的根证书，操作系统、浏览器会在本地存储权威机构的根证书，利用本地根证书可以对对应机构签发证书完成来源验证</li>
+</ul>
+</li>
+<li>判断证书是否被篡改<ul>
+<li>需要与 CA 服务器进行校验</li>
+</ul>
+</li>
+<li>判断证书是否已吊销<ul>
+<li>通过CRL（Certificate Revocation List 证书注销列表）和 OCSP（Online Certificate Status Protocol 在线证书状态协议）实现，其中 OCSP 可用于第3步中以减少与 CA 服务器的交互，提高验证效率</li>
+</ul>
+</li>
+</ul>
+<h2 id="HTTPS-工作流程"><a href="#HTTPS-工作流程" class="headerlink" title="HTTPS 工作流程"></a>HTTPS 工作流程</h2><p>HTTPS 的整个通信过程可以分为两大阶段：</p>
+<ul>
+<li>证书验证</li>
+<li>数据传输阶段<ul>
+<li>非对称加密</li>
+<li>对称加密</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/HJY-xh/pictures/master/pictures/202308121754920.png"></p>
+<ul>
+<li>客户端请求 HTTPS 网址，然后连接到 server 的 443 端口 (HTTPS 默认端口，类似于 HTTP 的80端口)</li>
+<li>服务器响应客户端请求，将证书传递给客户端，证书包含公钥和大量其他信息，比如证书颁发机构信息，公司信息和证书有效期等</li>
+<li>客户端解析证书并对其进行验证<ul>
+<li>如果证书不是可信机构颁布，或者证书中的域名与实际域名不一致，或者证书已经过期，就会向访问者显示一个警告，由其选择是否还要继续通信</li>
+<li>如果证书没有问题，客户端就会从服务器证书中取出服务器的公钥A。然后客户端还会生成一个随机码 KEY，并使用公钥A将其加密</li>
+</ul>
+</li>
+<li>客户端把加密后的随机码 KEY 发送给服务器，作为后面对称加密的密钥</li>
+<li>服务器在收到随机码 KEY 之后会使用私钥B将其解密<br>  经过以上这些步骤，客户端和服务器终于建立了安全连接，完美解决了对称加密的密钥泄露问题，接下来就可以用对称加密愉快地进行通信了</li>
+<li>双方使用对称加密愉快地传输所有数据</li>
+</ul>
+<h2 id="HTTPS-绝对安全吗"><a href="#HTTPS-绝对安全吗" class="headerlink" title="HTTPS 绝对安全吗"></a>HTTPS 绝对安全吗</h2><p>HTTPS 也会被抓包，只不过内容被加密过</p>
+<p>但是用户可以主动对证书进行授权，如果用户授权通过，那么代理软件是可以对传输内容进行解密的</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2023/05/13/HTTPS%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%92%8C%E6%B5%81%E7%A8%8B/" title="HTTPS工作原理和流程" target="_blank" rel="external">http://example.com/2023/05/13/HTTPS工作原理和流程/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/HJY-xh" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/HJY-xh" target="_blank"><span class="text-dark">可乐加冰</span><small class="ml-1x">Web Developer</small></a></h3>
+        <div>跑起来会有风</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/05/22/Vue%E5%92%8CReact%E5%8C%BA%E5%88%AB/" title="Vue 和 React 区别"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2023/04/20/HTTP2%E6%96%B0%E7%89%B9%E6%80%A7/" title="HTTP2新特性"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/HJY-xh" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        &copy; 2023 HJY
+        
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: true,
+    appId: 'TrQDRIWsj1IVoHW4a4fCkpgl-gzGzoHsz',
+    appKey: '1emq1qCoboyjpC5ysr8uuzjf',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
